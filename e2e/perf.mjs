@@ -3,6 +3,7 @@
 //            node e2e/perf.mjs cdp
 //   Browser: npm run engine & npm run dev; node e2e/perf.mjs browser
 import { chromium } from "@playwright/test";
+import { launchChromium } from "./browser.mjs";
 import { writeFileSync } from "node:fs";
 
 const mode = process.argv[2] ?? "cdp";
@@ -15,7 +16,7 @@ if (mode === "cdp") {
   await page.reload();
   await page.waitForTimeout(2500);
 } else {
-  browser = await chromium.launch({ channel: "msedge" });
+  browser = await launchChromium();
   page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
   await page.goto(process.env.APP_URL ?? "http://localhost:1420/");
 }

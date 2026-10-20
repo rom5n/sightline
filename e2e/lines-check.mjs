@@ -1,9 +1,9 @@
 // Visual check of chart lines at 125 % scaling on a production build, plus canvas opacity.
 //   APP_URL=http://127.0.0.1:4173/ [MODEL=…] [PRESET=…] [THEME=dark|light] node e2e/lines-check.mjs <out-dir>
-import { chromium } from "@playwright/test";
+import { launchChromium } from "./browser.mjs";
 
 const out = process.argv[2] ?? ".";
-const browser = await chromium.launch({ channel: "msedge" });
+const browser = await launchChromium();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1.25 });
 const model = process.env.MODEL ?? "LogisticRegression", preset = process.env.PRESET ?? "moons";
 await page.addInitScript((t) => localStorage.setItem("sightline.settings", JSON.stringify({ theme: t, lang: "en", firstRunDone: true })), process.env.THEME ?? "dark");

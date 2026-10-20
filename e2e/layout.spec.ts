@@ -1,7 +1,8 @@
 // Layout regression test: no text overflows or is clipped on the main screens, in Russian and in
 // the dev-only long-string mode (every string ~40 % longer), at the smallest and a large window.
 // Truncation with an ellipsis is allowed only where the full text is available in a title.
-import { expect, test, type Page } from "@playwright/test";
+import type { Page } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { auditOverflow } from "./overflow.mjs";
 import { openModel } from "./helpers";
 

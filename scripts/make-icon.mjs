@@ -4,7 +4,7 @@
 //
 // Writes docs/icon/sightline.svg (+ -small.svg), src-tauri/icons/png/<n>x<n>.png (16 … 1024),
 // src-tauri/icons/{32x32,64x64,128x128,128x128@2x,icon}.png, icon.ico (16–256) and icon.icns.
-import { chromium } from "@playwright/test";
+import { launchChromium } from "../e2e/browser.mjs";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const MARK = (stroke) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
@@ -23,7 +23,7 @@ mkdirSync("src-tauri/icons/png", { recursive: true });
 writeFileSync("docs/icon/sightline.svg", FULL);
 writeFileSync("docs/icon/sightline-small.svg", SMALL);
 
-const b = await chromium.launch({ channel: "msedge" });
+const b = await launchChromium();
 const p = await b.newPage({ viewport: { width: 1024, height: 1024 }, deviceScaleFactor: 1 });
 const png = {};
 for (const n of SIZES) {

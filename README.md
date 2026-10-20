@@ -134,7 +134,7 @@ cd engine && .venv/bin/python -m mypy    # strict mypy
 cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings
 ```
 
-Playwright uses Microsoft Edge on Windows and Playwright's Chromium elsewhere (`npx playwright install chromium`). The [CI workflow](.github/workflows/ci.yml) runs all of these on Linux, Windows and macOS for every push and pull request (the UI tests on Linux).
+Playwright runs only its bundled Chromium (`npx playwright install chromium`) with a temporary profile, password manager off — never a system Edge or Chrome (see `e2e/browser.mjs`). The [CI workflow](.github/workflows/ci.yml) runs all of these on Linux, Windows and macOS for every push and pull request (the UI tests on Linux).
 
 ## Releasing
 

@@ -1,6 +1,6 @@
 // Every Handbook chapter renders in both languages: formulas without KaTeX errors, the code block,
 // the "Try it" button, no leftover placeholders — and no text overflow (the layout audit).
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { auditOverflow } from "./overflow.mjs";
 
 const CHAPTERS = ["intro", "LinearRegression", "LogisticRegression", "Ridge", "Lasso", "ElasticNet", "SGDClassifier",

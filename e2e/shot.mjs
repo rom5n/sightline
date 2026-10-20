@@ -1,12 +1,12 @@
 // Dev helper: screenshots of app states at a given size for visual review.
 // usage: node e2e/shot.mjs <out-dir> [width] [height] [script-name]
-import { chromium } from "@playwright/test";
+import { launchChromium } from "./browser.mjs";
 import { writeFileSync } from "node:fs";
 import { auditOverflow } from "./overflow.mjs";
 const [out = "shots", W = "1440", H = "900", only = ""] = process.argv.slice(2);
 // AUDIT=1: after every screenshot, list text that overflows or is clipped (written to audit.json)
 const audits = {};
-const browser = await chromium.launch({ channel: "msedge" });
+const browser = await launchChromium();
 const page = await browser.newPage({ viewport: { width: Number(W), height: Number(H) }, deviceScaleFactor: 1 });
 const theme = process.env.THEME ?? "dark", lang = process.env.LANG_UI ?? "en";
 await page.addInitScript(([t, l]) => localStorage.setItem("sightline.settings", JSON.stringify({ theme: t, lang: l, firstRunDone: true })), [theme, lang]);

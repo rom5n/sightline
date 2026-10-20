@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { home, openModel, tab, trainToEnd, usePreset } from "./helpers";
 
 test("home lists 22 models, filters and searches", async ({ page }) => {

@@ -66,7 +66,8 @@ export function Insights() {
           <div>
             <div className="stt hd"><div>{t("ins.feature")}</div><div>{t("ins.mean")}</div><div>{t("ins.std")}</div><div>{t("ins.min")}</div><div>{t("ins.max")}</div></div>
             {st.features.map((f) => (
-              <div className="stt" key={f.name}><div title={f.name}>{f.name}</div><div>{fmt(f.mean)}</div><div>{fmt(f.std)}</div><div>{fmt(f.min)}</div><div>{fmt(f.max)}</div></div>
+              <div className="stt" key={f.name}><div title={f.name}>{f.name}</div>
+                {[f.mean, f.std, f.min, f.max].map((v, i) => <div key={i} title={String(v)}>{statNum(v, f.std)}</div>)}</div>
             ))}
             {st.categorical.map((c) => (
               <div className="hint" key={c.name} style={{ padding: "6px 0" }}><span className="mono">{c.name}</span>: {Object.entries(c.counts).map(([v, n]) => `${v} ${n}`).join(" · ")}</div>
@@ -181,6 +182,17 @@ export function Insights() {
       </div>
     </div>
   );
+}
+
+/**
+ * Stats cell: decimals follow the feature's spread, so a mean of −0.0027 next to a spread of 0.5
+ * reads "0.00" instead of a wide "−2.7e-3" (the exact value is in the cell's title).
+ */
+function statNum(v: number, spread: number): string {
+  if (!Number.isFinite(v) || Math.abs(v) >= 1000) return fmt(v);
+  const d = Math.min(4, Math.max(2, 1 - Math.floor(Math.log10(spread || 1))));
+  const s = v.toFixed(d);
+  return (/^-0\.0+$/.test(s) ? s.slice(1) : s).replace("-", "−");
 }
 
 function Fragment({ label, row }: { label: string; row: number[] }) {

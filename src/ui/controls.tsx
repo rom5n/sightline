@@ -249,7 +249,7 @@ export function DeltaChip({ value, digits = 2 }: { value: number | null; digits?
   return (
     <AnimatePresence mode="popLayout" initial={false}>
       {delta && (
-        <motion.span key={delta.k} className="tag mono" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+        <motion.span key={delta.k} className="tag mono" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
           transition={MICRO} style={{ height: 20, marginLeft: "auto", color: delta.d >= 0 ? "var(--acc-t)" : "var(--warn)" }}>
           {delta.d >= 0 ? "+" : "−"}{Math.abs(delta.d).toFixed(digits)}
         </motion.span>

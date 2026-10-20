@@ -1,6 +1,6 @@
 // Records the README's live-training GIF: MLPClassifier learning "Circles", then converts it with ffmpeg.
 // usage (dev server + engine running, ffmpeg on PATH): node e2e/gif.mjs [out.gif]
-import { chromium } from "@playwright/test";
+import { launchChromium } from "./browser.mjs";
 import { execFileSync } from "node:child_process";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
@@ -8,7 +8,7 @@ import { join } from "node:path";
 
 const out = process.argv[2] ?? "docs/screenshots/training.gif";
 const dir = mkdtempSync(join(tmpdir(), "sightline-gif-"));
-const browser = await chromium.launch({ channel: process.platform === "win32" ? "msedge" : undefined });
+const browser = await launchChromium();
 const page = await browser.newPage({ viewport: { width: 1280, height: 800 } });
 await page.addInitScript(() => localStorage.setItem("sightline.settings", JSON.stringify({ theme: "dark", lang: "en", firstRunDone: true })));
 await page.goto(process.env.APP_URL ?? "http://localhost:1420/");

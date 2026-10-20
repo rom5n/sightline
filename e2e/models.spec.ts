@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { home, openModel, tab, trainToEnd, usePreset } from "./helpers";
 
 // Every model trains on real data, shows its visual, its Loss-panel state and a "How it decides" walk.
