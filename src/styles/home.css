@@ -1,0 +1,37 @@
+.home-main { width: 100%; max-width: 1400px; margin: 0 auto; padding: 16px 32px 56px; display: flex; flex-direction: column; gap: 32px; }
+.home-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 20px; }
+.home-head h1 { font-size: 32px; line-height: 1.15; font-weight: 600; letter-spacing: -0.01em; }
+.home-head p { margin: 0; font-size: 15px; color: var(--ink2); }
+.srch { display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 14px; border-radius: 12px; width: min(440px, 100%); }
+.srch input { all: unset; flex: 1; font: 400 14px var(--font); color: var(--ink); }
+.srch input::placeholder { color: var(--ink3); }
+.srch:focus-within { border-color: var(--line2); box-shadow: 0 0 0 3px var(--acc-soft); }
+.grp-head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.grp-head h2 { font-size: 18px; font-weight: 600; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 12px; }
+.cards.recent { grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr)); }
+.card { all: unset; box-sizing: border-box; display: flex; gap: 14px; padding: 12px; color: inherit; border-radius: 14px; cursor: pointer; transition: border-color .15s, background-color .15s, box-shadow .15s; }
+.card:hover { border-color: var(--line2); background: var(--chip2); box-shadow: 0 10px 30px rgba(0, 0, 0, .18); }
+.card:focus-visible { outline: 2px solid var(--acc-t); outline-offset: 2px; }
+.pvb { width: 84px; height: 66px; flex: none; border-radius: 10px; background: var(--solid); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; }
+.pv { width: 80px; height: 54px; }
+.pv .ln { fill: none; vector-effect: non-scaling-stroke; }
+.pv .f0 { fill: var(--c0); } .pv .f1 { fill: var(--c1); } .pv .f2 { fill: var(--c2); } .pv .f3 { fill: var(--c3); }
+.pv .fa { fill: var(--acc-t); } .pv .fi { fill: var(--ink3); } .pv .fs { fill: var(--solid); }
+.pv .s0 { stroke: var(--c0); } .pv .s1 { stroke: var(--c1); } .pv .sa { stroke: var(--acc-t); } .pv .si { stroke: var(--ink3); } .pv .sk { stroke: var(--ink); }
+.pv .w1 { stroke-width: 1; } .pv .w15 { stroke-width: 1.5; } .pv .w2 { stroke-width: 2; }
+.pv .dsh { stroke-dasharray: 3 3; } .pv .o2 { opacity: .18; } .pv .o5 { opacity: .5; }
+.card .cname { font: 600 13px var(--mono); color: var(--ink); overflow-wrap: anywhere; }
+.cfacts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 2px 8px; margin: 4px 0 0; font-size: 12px; line-height: 1.4; color: var(--ink3); }
+.cfacts dt { font-weight: 600; color: var(--ink2); }
+.cfacts dd { margin: 0; }
+.cfacts .pro { color: var(--acc-t); text-align: center; }
+.cfacts .con { color: var(--warn); text-align: center; }
+/* model cards: the description opens from the round "i" in the corner */
+.cardw { position: relative; display: flex; }
+.cardw > .card { flex: 1; padding-right: 40px; }
+.cardw > .inf { position: absolute; top: 10px; right: 10px; width: 24px; height: 24px; border-radius: 50%; border: 1px solid var(--line2); }
+.mtip { display: flex; flex-direction: column; gap: 6px; }
+.mtip p { margin: 0; color: var(--ink2); }
+.banner { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 18px 22px; }
+.empty-search { padding: 40px; text-align: center; color: var(--ink3); }

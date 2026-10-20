@@ -1,0 +1,39 @@
+[project]
+name = "sightline-engine"
+version = "1.0.0"
+requires-python = ">=3.12,<3.13"
+# exact pins: the Handbook text and the schema tests are checked against these versions
+dependencies = [
+  "fastapi==0.148.0",
+  "uvicorn[standard]==0.54.0",
+  "scikit-learn==1.9.1",
+  "catboost==1.2.10",
+  "numpy==2.5.4",
+  "scipy==1.18.1",
+  "pandas==3.0.6",
+  "msgpack==1.2.3",
+  "pydantic==2.14.1",
+]
+
+[dependency-groups]
+dev = [
+  "pytest==9.1.1",
+  "httpx==0.28.1",
+  "mypy==2.4.0",
+  "pandas-stubs==3.0.5.260914",
+  "pyinstaller==6.22.3",
+]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+ignore_missing_imports = true
+warn_unused_ignores = false
+disallow_any_generics = false
+disallow_subclassing_any = false
+disallow_untyped_calls = false
+files = ["sightline_engine"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+filterwarnings = ["ignore::DeprecationWarning", "ignore::FutureWarning"]

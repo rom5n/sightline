@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Lint and tests (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+
+      - name: TypeScript build, locale files, version numbers
+        run: |
+          npm run build
+          npm run check:i18n
+          npm run check:version
+
+      - uses: astral-sh/setup-uv@v6
+      - name: Python environment (pinned)
+        working-directory: engine
+        shell: bash
+        run: |
+          uv venv --python 3.12 .venv
+          if [ "$RUNNER_OS" = Windows ]; then py=.venv/Scripts/python.exe; else py=.venv/bin/python; fi
+          uv pip install --python "$py" -r requirements.lock
+
+      - name: mypy (strict)
+        working-directory: engine
+        shell: bash
+        run: |
+          if [ "$RUNNER_OS" = Windows ]; then py=.venv/Scripts/python.exe; else py=.venv/bin/python; fi
+          "$py" -m mypy
+
+      # every adapter, the server, and every Handbook code example (tests/test_handbook.py runs them)
+      - name: Engine tests and Handbook code
+        run: npm run test:engine
+
+      - name: Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+      - name: Rust (clippy)
+        run: cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets -- -D warnings
+
+  e2e:
+    name: UI tests (Playwright)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - uses: astral-sh/setup-uv@v6
+      - name: Python environment (pinned)
+        working-directory: engine
+        run: |
+          uv venv --python 3.12 .venv
+          uv pip install --python .venv/bin/python -r requirements.lock
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces
+          path: test-results/
+          retention-days: 7

@@ -1,0 +1,41 @@
+# dependencies
+node_modules/
+engine/.venv/
+
+# build output
+dist/
+src-tauri/target/
+src-tauri/gen/
+engine/build/
+engine/dist/
+
+# caches and test output
+__pycache__/
+*.pyc
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+catboost_info/
+test-results/
+playwright-report/
+*.log
+
+# local settings and secrets
+.env
+.env.*
+*.pfx
+*.p12
+*.key
+*.pem
+.claude/settings.local.json
+
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# other
+PLAN.md
+TASKS.md
+CLAUDE.md

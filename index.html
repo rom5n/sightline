@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sightline</title>
+    <script>
+      // Paint the right theme before React loads (no flash).
+      try {
+        var s = JSON.parse(localStorage.getItem("sightline.settings") || "{}");
+        var t = s.theme || "system";
+        if (t === "system") t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        document.documentElement.dataset.theme = t;
+        document.documentElement.lang = s.lang || "en";
+      } catch (e) { document.documentElement.dataset.theme = "dark"; }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

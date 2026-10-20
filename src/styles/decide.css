@@ -1,0 +1,35 @@
+.dec { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 380px; grid-template-rows: minmax(0, 1fr); gap: 12px; padding: 0 16px 16px; min-height: 0; }
+.dec-main { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+/* short windows (720 px) and long languages: the step visual scrolls inside its panel instead of growing the page */
+.dec-body { overflow-y: auto; overflow-x: hidden; grid-template-rows: minmax(0, 1fr); }
+/* each column fits the panel and scrolls on its own, so the plot never runs past the window */
+.dec-body > * { min-height: 0; overflow-y: auto; overflow-x: hidden; }
+.dec-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px; border-bottom: 1px solid var(--line); }
+.dec-body { height: 100%; min-height: 0; display: grid; gap: 22px; padding: 18px 22px 22px; }
+.blk { transition: opacity .25s; }
+.blk.off { opacity: .22; }
+.blk.cur { opacity: 1; }
+.dcard { padding: 16px 18px; border-radius: 14px; background: var(--solid2); border: 1px solid var(--line); transition: border-color .25s, box-shadow .25s, opacity .25s; }
+.dcard.cur { border-color: var(--acc-t); box-shadow: 0 0 0 3px var(--acc-soft); }
+.wfr { display: grid; grid-template-columns: 150px minmax(0, 1fr) 64px; align-items: center; gap: 12px; min-height: 34px; }
+.wbar { position: relative; height: 14px; border-radius: 3px; background: var(--chip); overflow: hidden; }
+.wbar i { position: absolute; top: 0; bottom: 0; border-radius: 3px; transform-origin: left; }
+.st { all: unset; box-sizing: border-box; width: 100%; display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 2px 12px; padding: 10px 12px; border-radius: 12px; cursor: pointer; }
+.st:focus-visible { outline: 2px solid var(--acc-t); }
+.st .num { grid-row: span 2; width: 28px; height: 28px; border-radius: 50%; border: 1.5px solid var(--line2); display: flex; align-items: center; justify-content: center; font: 600 12px var(--mono); color: var(--ink2); transition: background-color .2s; }
+.st .tt { font-size: 14px; font-weight: 600; color: var(--ink); }
+.st .sh { font-size: 13px; color: var(--ink3); overflow-wrap: anywhere; }
+.st.done .num { background: var(--chip2); border-color: transparent; }
+.st.cur { background: var(--chip); box-shadow: inset 0 0 0 1px var(--line2); }
+.st.cur .num { background: var(--acc); border-color: transparent; color: var(--acc-ink); }
+.st.todo .tt, .st.todo .sh { opacity: .55; }
+.st .det { grid-column: 2; margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: var(--solid); border: 1px solid var(--line); font-size: 13px; line-height: 1.5; color: var(--ink2); }
+.pg { flex: 1; height: 4px; border-radius: 2px; background: var(--chip2); position: relative; overflow: hidden; }
+.pg i { position: absolute; inset: 0; background: var(--acc); transform-origin: left; }
+.drow { display: grid; grid-template-columns: 96px minmax(0, 1fr) 52px; gap: 10px; align-items: center; height: 34px; padding: 0 8px; border-radius: 8px; transition: background-color .25s; }
+.drow.best { background: var(--acc-soft); }
+.tree-mini { display: flex; flex-direction: column; gap: 5px; padding: 7px 8px; border-radius: 8px; background: var(--solid); border: 1px solid var(--line); }
+.wf { display: grid; grid-template-columns: 110px minmax(0, 1fr) 56px; align-items: center; gap: 8px; min-height: 22px; font: 500 12px var(--mono); color: var(--ink2); }
+.thr { position: relative; height: 58px; margin: 0 8px; }
+.pulse-dot { position: absolute; left: 0; top: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--acc); box-shadow: 0 0 12px 4px var(--acc-soft); pointer-events: none; will-change: transform; }
+.bells { position: relative; height: 70px; }

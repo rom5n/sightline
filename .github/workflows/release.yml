@@ -1,0 +1,178 @@
+name: Release
+
+# Push a tag like v1.2.0 to build every installer and publish them as a GitHub Release.
+# Re-running (the whole workflow, a failed job, or "Run workflow" with the same tag) is safe:
+# the release is updated in place and assets with the same name are replaced.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to build again, e.g. v1.0.0
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ inputs.tag || github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  TAG: ${{ inputs.tag || github.ref_name }}
+
+jobs:
+  build:
+    name: Build (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: windows-x64
+            os: windows-latest
+            bundles: msi,nsis
+          - name: macos-arm64
+            os: macos-latest
+            bundles: dmg
+          - name: macos-x64
+            os: macos-15-intel
+            bundles: dmg
+          - name: linux-x64
+            # the oldest supported Ubuntu, so the AppImage runs on older glibc too
+            os: ubuntu-22.04
+            bundles: deb,rpm,appimage
+    runs-on: ${{ matrix.os }}
+    env:
+      # signing switches on only when these secrets exist (see README → Releasing)
+      WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
+      WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+      SECRET_APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+      SECRET_APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+      SECRET_APPLE_SIGNING_IDENTITY: ${{ secrets.APPLE_SIGNING_IDENTITY }}
+      SECRET_APPLE_ID: ${{ secrets.APPLE_ID }}
+      SECRET_APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+      SECRET_APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG }}
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Tag matches the version in package.json
+        run: node scripts/version.mjs --tag "${{ env.TAG }}"
+
+      - uses: astral-sh/setup-uv@v6
+      - name: Python environment (pinned)
+        working-directory: engine
+        shell: bash
+        run: |
+          uv venv --python 3.12 .venv
+          if [ "$RUNNER_OS" = Windows ]; then py=.venv/Scripts/python.exe; else py=.venv/bin/python; fi
+          uv pip install --python "$py" -r requirements.lock
+
+      - name: Linux build dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.1-dev libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev libfuse2 file
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: src-tauri
+
+      - name: Windows code signing (only with secrets)
+        if: runner.os == 'Windows' && env.WINDOWS_CERTIFICATE != ''
+        shell: pwsh
+        run: |
+          [IO.File]::WriteAllBytes("$env:RUNNER_TEMP\cert.pfx", [Convert]::FromBase64String($env:WINDOWS_CERTIFICATE))
+          $pw = ConvertTo-SecureString $env:WINDOWS_CERTIFICATE_PASSWORD -AsPlainText -Force
+          $cert = Import-PfxCertificate -FilePath "$env:RUNNER_TEMP\cert.pfx" -CertStoreLocation Cert:\CurrentUser\My -Password $pw
+          Remove-Item "$env:RUNNER_TEMP\cert.pfx"
+          @{ bundle = @{ windows = @{ certificateThumbprint = $cert.Thumbprint; digestAlgorithm = "sha256"; timestampUrl = "http://timestamp.digicert.com" } } } |
+            ConvertTo-Json -Depth 5 | Set-Content -Encoding utf8 "$env:RUNNER_TEMP\signing.json"
+          "SIGN_CONFIG=$env:RUNNER_TEMP\signing.json" | Out-File -Append -Encoding utf8 $env:GITHUB_ENV
+
+      - name: macOS signing and notarization (only with secrets)
+        if: runner.os == 'macOS' && env.SECRET_APPLE_CERTIFICATE != ''
+        run: |
+          {
+            echo "APPLE_CERTIFICATE=$SECRET_APPLE_CERTIFICATE"
+            echo "APPLE_CERTIFICATE_PASSWORD=$SECRET_APPLE_CERTIFICATE_PASSWORD"
+            echo "APPLE_SIGNING_IDENTITY=$SECRET_APPLE_SIGNING_IDENTITY"
+            if [ -n "$SECRET_APPLE_ID" ]; then
+              echo "APPLE_ID=$SECRET_APPLE_ID"
+              echo "APPLE_PASSWORD=$SECRET_APPLE_PASSWORD"
+              echo "APPLE_TEAM_ID=$SECRET_APPLE_TEAM_ID"
+            fi
+          } >> "$GITHUB_ENV"
+
+      - name: Engine (PyInstaller)
+        run: npm run build:engine
+
+      - name: App and installers (Tauri)
+        shell: bash
+        run: npx tauri build --config src-tauri/tauri.bundle.json ${SIGN_CONFIG:+--config "$SIGN_CONFIG"} --bundles "${{ matrix.bundles }}"
+
+      - name: Collect installers
+        shell: bash
+        run: |
+          mkdir out
+          cd src-tauri/target/release/bundle
+          find . -maxdepth 2 -type f \( -name '*.msi' -o -name '*-setup.exe' -o -name '*.dmg' -o -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' \) -exec cp {} ../../../../out/ \;
+          ls -la ../../../../out
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.name }}
+          path: out/*
+          if-no-files-found: error
+
+  release:
+    name: Publish the GitHub Release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: ${{ env.TAG }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          path: assets
+          merge-multiple: true
+
+      - name: Checksums
+        working-directory: assets
+        run: sha256sum -- * | tee SHA256SUMS.txt
+
+      - name: Release notes from commits
+        run: |
+          prev=$(git describe --tags --abbrev=0 --match 'v*' "$TAG^" 2>/dev/null || true)
+          {
+            echo "## Changes"
+            echo
+            if [ -n "$prev" ]; then git log --no-merges --pretty='- %s (%h)' "$prev..$TAG"; else git log --no-merges --pretty='- %s (%h)' "$TAG"; fi
+            echo
+            echo "## Install"
+            echo
+            echo "Windows: \`Sightline_*_x64-setup.exe\` (or the \`.msi\`). macOS: the \`.dmg\` for your Mac (\`aarch64\` = Apple Silicon, \`x64\` = Intel)."
+            echo "Linux: \`.AppImage\`, \`.deb\` or \`.rpm\`. Builds without signing secrets are unsigned — see the README for how to open them."
+            echo
+            echo "Check a download with \`sha256sum -c SHA256SUMS.txt --ignore-missing\`."
+          } > notes.md
+          cat notes.md
+
+      - name: Create or update the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --title "Sightline $TAG" --notes-file notes.md
+          else
+            gh release create "$TAG" --verify-tag --title "Sightline $TAG" --notes-file notes.md
+          fi
+          gh release upload "$TAG" assets/* --clobber

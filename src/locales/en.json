@@ -1,0 +1,1514 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "close": "Close",
+    "loading": "Loading…"
+  },
+  "win": {
+    "minimize": "Minimize",
+    "maximize": "Maximize",
+    "restore": "Restore",
+    "close": "Close"
+  },
+  "engine": {
+    "starting": "Engine starting…",
+    "warming": "Warming up the trainer…",
+    "restarting": "Restarting the trainer…"
+  },
+  "theme": {
+    "dark": "dark",
+    "light": "light",
+    "system": "follow Windows"
+  },
+  "nav": {
+    "main": "Main",
+    "sections": "Sections",
+    "models": "Models",
+    "datasets": "Datasets",
+    "views": "Views",
+    "workspace": "Workspace",
+    "data": "Data",
+    "insights": "Insights",
+    "decide": "How it decides",
+    "language": "Interface language",
+    "theme": "Theme: {{current}}. Switch to {{next}}",
+    "help": "Help",
+    "backToModels": "Back to all models",
+    "backToWorkspace": "Back to workspace",
+    "handbook": "Handbook",
+    "openChapter": "Open the Handbook chapter for {{model}}"
+  },
+  "help": {
+    "title": "Help",
+    "intro": "Pick a model, give it data and press Train. Every chart can be panned (drag), zoomed (wheel) and reset (double-click). Click the plot to add a point, drag a point to move it.",
+    "kSpace": "Train, pause or continue",
+    "kStep": "One step (paused)",
+    "kReset": "Reset the model",
+    "kMax": "Maximize the panel under the pointer",
+    "kSteps": "Back / next step in How it decides",
+    "kDelete": "Delete a point on the plot",
+    "kPerf": "Show the FPS and timing overlay",
+    "guided": "Start the guided run"
+  },
+  "time": {
+    "now": "just now",
+    "min_one": "{{count}} min ago",
+    "min_other": "{{count}} min ago",
+    "hour_one": "{{count}} h ago",
+    "hour_other": "{{count}} h ago",
+    "yesterday": "yesterday",
+    "day_one": "{{count}} day ago",
+    "day_other": "{{count}} days ago"
+  },
+  "home": {
+    "title": "Choose a model",
+    "subtitle": "Pick one, give it data, press Train and watch what it learns. Each card shows the picture you will see inside.",
+    "search": "Search: tree, neighbours, clustering…",
+    "searchLabel": "Search models",
+    "filter": "Filter by task",
+    "all": "All",
+    "recent": "Recently used",
+    "rows_one": "{{count}} row",
+    "rows_other": "{{count}} rows",
+    "noMatch": "No model matches “{{q}}”.",
+    "useWhen": "Use for",
+    "about": "About {{name}}",
+    "pro": "Strength",
+    "con": "Weakness"
+  },
+  "first": {
+    "title": "New to machine learning? Start here.",
+    "body": "A 2-minute guided run: LogisticRegression learns to separate Two moons while you watch the border move. “Recently used” fills up once you’ve trained something.",
+    "skip": "Skip, I’ll explore",
+    "start": "Start the guided run"
+  },
+  "guide": {
+    "label": "Guided run",
+    "step": "Step {{n}} of {{total}}",
+    "next": "Next",
+    "done": "Done",
+    "skip": "Skip",
+    "viz": {
+      "title": "Watch the border move",
+      "body": "The shade shows how sure the model is. The thick line is where it switches between classes; the dashed one is where it was 10 steps ago."
+    },
+    "loss": {
+      "title": "Loss goes down",
+      "body": "Loss measures how wrong the model is on the training points. Lower is better. When it flattens out, training has converged."
+    },
+    "params": {
+      "title": "Change a parameter",
+      "body": "Drag C to 0.01, then to 100. The model retrains instantly — compare how smooth or tight the border becomes."
+    },
+    "metric": {
+      "title": "Check it on new data",
+      "body": "Accuracy is measured on points the model never saw during training. That is the honest score."
+    }
+  },
+  "task": {
+    "regression": "Regression",
+    "classification": "Classification",
+    "clustering": "Clustering",
+    "reduction": "Dimensionality reduction",
+    "reductionShort": "Dim. reduction",
+    "regressionLong": "Regression",
+    "classificationLong": "Classification",
+    "clusteringLong": "Clustering",
+    "reductionLong": "Dimensionality reduction"
+  },
+  "family": {
+    "linear": "Linear",
+    "trees": "Trees",
+    "svm": "Support vectors",
+    "neighbors": "Neighbours",
+    "bayes": "Naive Bayes",
+    "neural": "Neural network",
+    "clustering": "Clustering",
+    "reduction": "Projection"
+  },
+  "groups": {
+    "linear": {
+      "title": "Linear models",
+      "desc": "Draw a straight line or a flat border through the data. Fast and easy to read."
+    },
+    "trees": {
+      "title": "Trees and ensembles",
+      "desc": "Ask yes/no questions about features. Ensembles combine many trees into one answer."
+    },
+    "other": {
+      "title": "Other classifiers",
+      "desc": "Different ideas of “similar”: margins, neighbours, probabilities, neurons."
+    },
+    "unsupervised": {
+      "title": "Unsupervised",
+      "desc": "No target column. Find groups, or a simpler view of the data."
+    }
+  },
+  "models": {
+    "LinearRegression": {
+      "desc": "Predicts a number as a weighted sum of the features — the line or plane with the smallest squared error.",
+      "keywords": "line ols least squares",
+      "when": "a first baseline for any number; roughly straight trends",
+      "pro": "instant and fully readable: one weight per feature",
+      "con": "can't bend to curves; outliers pull it hard"
+    },
+    "LogisticRegression": {
+      "desc": "Classifies with a straight border: a weighted sum of the features goes through a sigmoid to become a probability.",
+      "keywords": "logit border probability",
+      "when": "a classification baseline; classes split by a line or plane",
+      "pro": "honest probabilities and readable weights",
+      "con": "only straight borders unless you add features"
+    },
+    "Ridge": {
+      "desc": "Linear regression with an L2 penalty: big weights cost extra, so all weights shrink towards zero.",
+      "keywords": "l2 regularization",
+      "when": "many correlated features, or more features than rows",
+      "pro": "stable when features are correlated",
+      "con": "keeps every feature — no weight becomes exactly 0"
+    },
+    "Lasso": {
+      "desc": "Linear regression with an L1 penalty that pushes weak weights to exactly zero, so it also selects features.",
+      "keywords": "l1 sparse feature selection",
+      "when": "you suspect only a few features matter",
+      "pro": "built-in feature selection, a sparse model",
+      "con": "among correlated features keeps one almost at random"
+    },
+    "ElasticNet": {
+      "desc": "Linear regression with both L1 and L2 penalties: shrinks every weight and zeroes some; l1_ratio sets the mix.",
+      "keywords": "l1 l2 mix",
+      "when": "many features, some correlated, and you want a sparse model",
+      "pro": "Lasso's selection with Ridge's stability",
+      "con": "two penalties (alpha, l1_ratio) to tune"
+    },
+    "SGDClassifier": {
+      "desc": "A linear classifier trained by stochastic gradient descent: it nudges the weights after every small batch of points.",
+      "keywords": "stochastic gradient descent svm hinge",
+      "when": "very large or streaming data",
+      "pro": "scales to millions of rows, learns online",
+      "con": "sensitive to feature scaling and step size"
+    },
+    "DecisionTreeClassifier": {
+      "desc": "Asks yes/no questions about one feature at a time (x ≤ threshold?) and answers with the majority class of the leaf it reaches.",
+      "keywords": "tree questions splits",
+      "when": "you need rules a person can read",
+      "pro": "readable, no scaling needed",
+      "con": "a deep tree memorises noise"
+    },
+    "RandomForestClassifier": {
+      "desc": "Many decision trees, each grown on a bootstrap sample with random feature choices; the forest averages their probabilities.",
+      "keywords": "forest bagging trees ensemble",
+      "when": "a strong default for tabular data",
+      "pro": "accurate and robust with little tuning",
+      "con": "hundreds of trees are hard to explain"
+    },
+    "ExtraTreesClassifier": {
+      "desc": "A forest whose split thresholds are drawn at random (the best random one is kept); the trees' probabilities are averaged.",
+      "keywords": "extremely randomized trees forest",
+      "when": "forest-level accuracy, faster, on noisy data",
+      "pro": "fast to train, low variance",
+      "con": "smoother borders can miss sharp edges"
+    },
+    "GradientBoostingClassifier": {
+      "desc": "Adds shallow trees one by one; each new tree is fitted to the loss gradient, correcting what the ensemble still gets wrong.",
+      "keywords": "boosting gbm trees",
+      "when": "tabular data where top accuracy matters",
+      "pro": "very accurate on structured data",
+      "con": "slow, sequential, overfits without tuning"
+    },
+    "HistGradientBoostingClassifier": {
+      "desc": "Gradient boosting that first bins each feature into ≤ 255 buckets, so finding splits is fast; stops early on its own.",
+      "keywords": "boosting histogram lightgbm",
+      "when": "larger tabular data (10 000+ rows)",
+      "pro": "much faster than classic boosting; handles missing values",
+      "con": "binning loses detail on small data"
+    },
+    "AdaBoostClassifier": {
+      "desc": "Trains stumps in turn, giving more weight to the points earlier ones got wrong; the final vote is weighted by each stump's accuracy.",
+      "keywords": "boosting stumps adaptive",
+      "when": "clean data where simple rules add up",
+      "pro": "few parameters, big gain over one stump",
+      "con": "noisy labels get ever more weight"
+    },
+    "BaggingClassifier": {
+      "desc": "Trains copies of one base model (a tree by default) on bootstrap samples and averages their predictions.",
+      "keywords": "bootstrap ensemble vote",
+      "when": "an unstable model needs to be steadier",
+      "pro": "cuts variance without changing the model",
+      "con": "doesn't fix bias: weak models stay weak"
+    },
+    "SVC": {
+      "desc": "Finds the border with the widest margin between classes; a kernel lets the border curve, and only the support vectors decide.",
+      "keywords": "svm support vector machine margin kernel",
+      "when": "small to medium data with complex, clean borders",
+      "pro": "strong in high dimensions, flexible kernels",
+      "con": "slow beyond ~10 000 rows; needs scaling"
+    },
+    "KNeighborsClassifier": {
+      "desc": "Keeps the training points; for a new point it finds the k nearest and takes their (optionally distance-weighted) vote.",
+      "keywords": "knn neighbours nearest",
+      "when": "small data with irregular borders",
+      "pro": "no training; follows any border shape",
+      "con": "slow predictions on big data; needs scaling"
+    },
+    "GaussianNB": {
+      "desc": "Models each feature as a bell curve per class, independently; multiplies the likelihoods by the class prior and picks the largest.",
+      "keywords": "naive bayes gaussian probability",
+      "when": "very little data or a fast baseline",
+      "pro": "trains instantly, works with few rows",
+      "con": "the independence assumption makes it overconfident"
+    },
+    "MLPClassifier": {
+      "desc": "A neural network: layers of neurons take weighted sums through a nonlinearity; backpropagation tunes the weights to cut log-loss.",
+      "keywords": "neural network perceptron deep",
+      "when": "curved or complex patterns with enough data",
+      "pro": "can learn almost any border",
+      "con": "needs scaling and tuning; a black box"
+    },
+    "KMeans": {
+      "desc": "Groups points into k clusters: each point joins its nearest center, each center moves to its points' mean, repeated until stable.",
+      "keywords": "clustering centers groups",
+      "when": "k compact, roughly round groups",
+      "pro": "simple and fast, even on big data",
+      "con": "you choose k; fails on stretched clusters"
+    },
+    "DBSCAN": {
+      "desc": "Grows clusters from dense areas: a point with enough neighbours within eps is a core; points reachable from cores join, the rest are noise.",
+      "keywords": "density clustering noise",
+      "when": "clusters of any shape, with outliers",
+      "pro": "no cluster count needed; flags noise",
+      "con": "one eps for all densities"
+    },
+    "PCA": {
+      "desc": "Rotates the data onto new axes ordered by variance and keeps the first few — a linear projection that loses the least spread.",
+      "keywords": "principal components projection reduction",
+      "when": "seeing or compressing many correlated features",
+      "pro": "fast, deterministic, removes redundancy",
+      "con": "only linear structure; axes are hard to name"
+    },
+    "CatBoostClassifier": {
+      "desc": "Gradient boosting on symmetric trees (one question per level); reads categorical columns as text via ordered target statistics.",
+      "keywords": "catboost boosting categorical gbdt yandex",
+      "when": "tabular data with categorical columns",
+      "pro": "strong defaults; categories without one-hot",
+      "con": "a large library; slower trees on categories"
+    },
+    "CatBoostRegressor": {
+      "desc": "CatBoost for numbers: symmetric boosted trees minimise RMSE, and categorical columns are read natively.",
+      "keywords": "catboost boosting regression categorical",
+      "when": "predicting numbers from tables with categories",
+      "pro": "accurate out of the box, handles categories and gaps",
+      "con": "far less readable than a linear model"
+    }
+  },
+  "presets": {
+    "moons": {
+      "name": "Two moons",
+      "desc": "Two interlocking half-circles",
+      "task": "Classification · 2"
+    },
+    "blobs": {
+      "name": "Blobs",
+      "desc": "Round groups around centers",
+      "task": "Classification · Clustering"
+    },
+    "circles": {
+      "name": "Concentric circles",
+      "desc": "A ring around a smaller ring",
+      "task": "Classification · 2"
+    },
+    "linear": {
+      "name": "Linear with noise",
+      "desc": "A straight trend plus random scatter",
+      "task": "Regression"
+    },
+    "spirals": {
+      "name": "Spirals",
+      "desc": "Two arms winding around the center",
+      "task": "Classification · 2–3"
+    },
+    "xor": {
+      "name": "XOR",
+      "desc": "Opposite corners share a class",
+      "task": "Classification · 2"
+    }
+  },
+  "fitBadge": {
+    "any": "Pick a model to see how well this fits",
+    "reg_good": "Good fit for regression models",
+    "reg_only": "For regression models only",
+    "class_only": "For regression models only",
+    "cluster_blobs": "Good fit — clear groups",
+    "dbscan_shapes": "Good fit — DBSCAN follows shapes",
+    "cluster_shapes": "KMeans makes round groups — shapes get cut",
+    "pca_any": "Works — PCA ignores the labels",
+    "most_models": "Good fit for most models",
+    "linear_moons": "Curved border — linear models get ~87%",
+    "linear_circles": "No straight line can split this — try it",
+    "linear_xor": "Classic case where linear models fail",
+    "linear_spirals": "Hard — needs MLP, trees or KNN",
+    "spirals_hard": "Hard, but this model can get there",
+    "flexible_ok": "Good fit — this model bends"
+  },
+  "ds": {
+    "rows_one": "{{count}} row",
+    "rows_other": "{{count}} rows",
+    "features_one": "{{count}} feature",
+    "features_other": "{{count}} features",
+    "classes_one": "{{count}} class",
+    "classes_other": "{{count}} classes",
+    "heldOut": "25% held out for test",
+    "targetIgnored": "target ignored"
+  },
+  "params": {
+    "title": "Parameters",
+    "dataset": "Dataset",
+    "change": "Change",
+    "noData": "No data yet — pick a preset.",
+    "main": "Main parameters",
+    "retrain": "Changes retrain from scratch",
+    "refit": "Changes refit instantly",
+    "restart": "Changes restart training",
+    "locked": "Locked while training",
+    "advanced": "Advanced",
+    "more_one": "{{count}} more",
+    "more_other": "{{count}} more",
+    "reset": "Reset to defaults",
+    "resetLayout": "Reset layout",
+    "about": "About {{name}}",
+    "default": "Default: {{v}}",
+    "custom": "number",
+    "layer": "Layer",
+    "fewer": "Fewer neurons in layer {{i}}",
+    "priorsNorm": "Rescaled to sum to 1."
+  },
+  "paramTips": {
+    "LogisticRegression": {
+      "C": "C is the inverse strength of regularization. Regularization penalizes large weights. Small C = strong penalty: a calm border that single points barely move. Big C = weak penalty: the model tries to get every point right and can overfit. Default 1.0 — try 0.01 and 100 and compare the border.",
+      "max_iter": "Each iteration is one step of the optimizer. Training stops earlier when the border stops moving (converged).",
+      "class_weight": "With 'balanced', mistakes on a rare class cost more, so the model can't just ignore it."
+    },
+    "DecisionTreeClassifier": {
+      "max_depth": "Depth = how many questions in a row. Depth 1 is a single cut. Deep trees carve tiny boxes around single points — great on training data, worse on new data."
+    },
+    "KMeans": {
+      "n_clusters": "KMeans always returns exactly k groups. Watch the silhouette score: it tells you whether this k splits the data well."
+    },
+    "MLPClassifier": {
+      "hidden_layer_sizes": "Each number is one hidden layer and how many neurons it has. More neurons can draw more complex borders but need more data and time."
+    }
+  },
+  "adv": {
+    "title": "Advanced settings",
+    "sub_one": "{{model}} · {{count}} parameter",
+    "sub_other": "{{model}} · {{count}} parameters",
+    "close": "Close advanced settings",
+    "intro": "You rarely need these. Every value has a safe default — change one at a time and watch what the loss does.",
+    "filter": "Filter, e.g. momentum",
+    "filterLabel": "Filter parameters",
+    "changed_one": "{{count}} changed",
+    "changed_other": "{{count}} changed",
+    "settings_one": "{{count}} setting",
+    "settings_other": "{{count}} settings",
+    "none": "No parameter matches.",
+    "resetAll": "Reset all to defaults",
+    "apply": "Apply and retrain",
+    "changedFrom": "Changed from the default {{v}}.",
+    "sec": {
+      "solver": "Solver",
+      "optimizer": "Optimizer",
+      "stop": "When to stop",
+      "repro": "Reproducibility",
+      "other": "Other",
+      "shape": "Tree shape",
+      "sampling": "Sampling",
+      "split": "Data split",
+      "cat": "Categories"
+    },
+    "splitSeed": "Train/test split seed",
+    "splitHint": "Which 25% of the rows are held out for testing (stratified by class). Change it to see how much the score depends on the split.",
+    "changed": "changed"
+  },
+  "unit": {
+    "iteration": "iteration",
+    "epoch": "epoch",
+    "level": "level",
+    "trees": "trees",
+    "stage": "stage",
+    "none": "step",
+    "iterationPlural": "iterations",
+    "epochPlural": "epochs",
+    "levelPlural": "levels",
+    "treesPlural": "trees",
+    "stagePlural": "stages",
+    "nonePlural": "steps",
+    "iterationNom": "iteration",
+    "epochNom": "epoch",
+    "levelNom": "level",
+    "treesNom": "trees",
+    "stageNom": "stage",
+    "noneNom": "step"
+  },
+  "status": {
+    "training": "Training · {{unitNom}} {{n}}",
+    "paused": "Paused at {{unit}} {{n}}",
+    "fitting": "Fitting… {{p}}%",
+    "converged": "Converged at {{unit}} {{n}}",
+    "earlyStop": "Stopped early at {{unit}} {{n}}",
+    "maxIter": "Stopped at the limit ({{n}})",
+    "fitted": "Fitted in one step",
+    "treeFitted": "Fitted · depth {{d}} · {{l}} leaves",
+    "doneAt": "Done · {{n}} {{unit}}"
+  },
+  "viz": {
+    "boundary": "Decision boundary",
+    "boundaryTip": "Every spot of the plane is coloured by the class the model would predict there. The stronger the colour, the surer the model.",
+    "tree": "Tree structure",
+    "treeTip": "Read top to bottom: each box asks a yes/no question about one feature. Leaves give the answer. Click a box to see its region.",
+    "boundaryNet": "Decision boundary + network",
+    "boundaryNetTip": "Left: the border the network draws. Right: the network itself — hover a point to see which neurons fire.",
+    "kmeans": "Clusters and centers",
+    "kmeansTip": "Each point joins its nearest center; each center moves to the middle of its points. Repeat until nothing moves.",
+    "dbscan": "Clusters and noise",
+    "dbscanTip": "Dense crowds become clusters. Points with too few neighbours are noise (hollow rings).",
+    "pca": "2D projection",
+    "pcaTip": "The data, turned so the two directions with the most spread become the axes. Arrows show how the original features point.",
+    "regLine": "Regression line",
+    "regLineTip": "The line is the model’s prediction for every x. Points are the real values.",
+    "regSurface": "Prediction surface",
+    "regSurfaceTip": "Colour = predicted value at that spot. Thin lines join spots with the same prediction.",
+    "aboutLabel": "About this view",
+    "layers": "Plot layers",
+    "probability": "Probability",
+    "borderOnly": "Border only",
+    "view": "View",
+    "treeTab": "Tree",
+    "regionsTab": "Regions",
+    "layout": "Layout",
+    "both": "Both",
+    "boundaryTab": "Boundary",
+    "networkTab": "Network",
+    "regions": "Regions",
+    "paths": "Center paths",
+    "pointsOnly": "Points only",
+    "kmeansNote": "No target used — colours are the groups it found, not true classes.",
+    "trainFirst": "Train the model first",
+    "classes": "Classes",
+    "class": "Class {{cls}}",
+    "addClass": "Class for new points",
+    "addAs": "Click the plot to add a {{cls}} point",
+    "shade": "Shade = how sure the model is",
+    "shadeScore": "Shade = decision score (squashed)",
+    "borderNow": "border now",
+    "tenAgo": "10 steps ago",
+    "centerKey": "center (mean of its points)",
+    "pathKey": "where each center moved, iteration by iteration",
+    "noiseKey": "noise: too few neighbours",
+    "lineKey": "the model’s prediction",
+    "valueKey": "Colour = predicted value",
+    "pcaKey": "PC1 → most spread · PC2 → next",
+    "pcaPlane": "PCA view of {{n}} features · {{p}}% of spread",
+    "pcaPlaneTip": "More than 2 features: the plane shows the first two principal components. The model still uses all features.",
+    "editHint": "Click: add · drag: move · Alt+click: delete"
+  },
+  "plot": {
+    "aria": "Plot of {{x}} and {{y}}. Arrow keys pan, + and − zoom, 0 resets.",
+    "noWebgl": "This plot needs WebGL 2, which is not available."
+  },
+  "tip": {
+    "point": "Point #{{id}}",
+    "true": "true: {{cls}}",
+    "model": "model",
+    "pred": "P({{cls}}) = {{p}} → {{verdict}}",
+    "predScore": "{{cls}} (score {{p}}) → {{verdict}}",
+    "predValue": "predicts {{v}}",
+    "correct": "correct",
+    "wrong": "wrong",
+    "testPoint": "Test point — hidden during training",
+    "trainPoint": "Training point",
+    "explain": "Explain this point step by step"
+  },
+  "states": {
+    "noData": "No data yet",
+    "noDataBody": "A model learns from examples. Pick a ready-made shape — it takes one click.",
+    "choosePreset": "Choose a preset",
+    "generate": "Generate data",
+    "buildTable": "Build a table",
+    "quickPreset": "Not sure? Load {{preset}} now.",
+    "pressTrain": "Press <b>Train</b> to watch the model draw its border",
+    "lossNoData": "Loss appears here once training starts",
+    "lossOff": "Training is off until the data fits the model",
+    "lossIdle": {
+      "loss": "Loss will fall here as it learns. Lower is better.",
+      "inertia": "Inertia will drop here as the centers move.",
+      "boost": "The error per stage will appear here.",
+      "trees": "Accuracy as trees are added will appear here.",
+      "depth": "Accuracy by depth will appear here.",
+      "onestep": "A summary of what was learned will appear here.",
+      "onestep_reg": "R² and the errors will appear here.",
+      "knn": "Accuracy for each k will appear here.",
+      "pca": "Variance per component will appear here."
+    }
+  },
+  "compat": {
+    "fixes_one": "One way to fix it",
+    "fixes_other": "{{count}} ways to fix it",
+    "needs_features": {
+      "title": "There are no feature columns",
+      "body": "Every column is the target. Add at least one column the model can learn from."
+    },
+    "missing_values": {
+      "title": "The data has empty cells",
+      "body": "Column <span class=\"mono\">{{column}}</span> has {{count}} empty cell(s). Models can’t train on empty cells."
+    },
+    "too_few_rows": {
+      "title": "Too few rows to learn from",
+      "body": "There are only {{rows}} rows. Use at least 10 so there is something to learn and something to test on."
+    },
+    "needs_two_features": {
+      "title": "PCA needs at least two features",
+      "body": "With one feature there is nothing to squeeze. Load data with more columns."
+    },
+    "no_target": {
+      "title": "No target column",
+      "body": "<span class=\"mono\">{{model}}</span> learns to predict a column. Pick which column is the target."
+    },
+    "needs_category_target": {
+      "title": "<span class=\"mono\">{{model}}</span> predicts categories, but your target is a number",
+      "body": "The target column <span class=\"mono\">{{target}}</span> holds numbers like 7.3. A classifier needs labels from a fixed list."
+    },
+    "needs_numeric_target": {
+      "title": "<span class=\"mono\">{{model}}</span> predicts numbers, but your target is a category",
+      "body": "The target column <span class=\"mono\">{{target}}</span> holds labels — {{values}}. Linear regression can only output a number like 7.3, so it can’t learn labels."
+    },
+    "one_class": {
+      "title": "Only one class in the target",
+      "body": "Every row has the same label, so there is nothing to tell apart."
+    },
+    "too_many_classes": {
+      "title": "Too many classes ({{count}})",
+      "body": "Sightline shows up to {{max}} classes so every one keeps its own colour and shape."
+    },
+    "class_too_small": {
+      "title": "Class {{cls}} has a single row",
+      "body": "Each class needs at least two rows so one can go to the test set."
+    }
+  },
+  "fix": {
+    "colHint": " — for example <span class=\"mono\">{{c}}</span>",
+    "switch_model": {
+      "text": "<b>Switch to {{model}}</b> — made for this kind of target.",
+      "btn": "Switch model"
+    },
+    "change_target": {
+      "text": "<b>Change the target</b> — pick a column that fits{{column}}.",
+      "btn": "Change target"
+    },
+    "preset": {
+      "text": "<b>Try ready-made data</b> — load the “{{preset}}” preset.",
+      "btn": "Use preset"
+    },
+    "edit_table": {
+      "text": "<b>Fix the table</b> — fill or drop the problem cells.",
+      "btn": "Open the table"
+    }
+  },
+  "ctl": {
+    "train": "Train",
+    "training": "Training…",
+    "continue": "Continue training",
+    "again": "Train again",
+    "fitting": "Fitting…",
+    "pause": "Pause",
+    "step": "Step",
+    "plusLevel": "+1 level",
+    "reset": "Reset",
+    "speed": "Speed",
+    "replaySpeed": "Replay speed",
+    "growth": "Growth replay",
+    "replay": "Replay",
+    "scrub": "Scrub through the recorded frames",
+    "depthOf": "depth {{d}} / {{n}}",
+    "stoppedEarly": "{{n}} · stopped early",
+    "oneStep": "one step",
+    "fitProgress": "Fitting the model",
+    "cancel": "Cancel",
+    "addData": "Add data first",
+    "fixData": "Fix the data first",
+    "noPause": "Nothing to pause: fitted in one go",
+    "noPauseTree": "Nothing to pause: a tree is built in one pass",
+    "noStep": "Nothing to step: fitted in one go",
+    "pauseFirst": "Pause first to step one {{unit}}",
+    "stepTitle": "Advance one {{unit}}",
+    "stepTree": "Replay the growth one level at a time",
+    "unit": {
+      "iteration": "Iteration",
+      "epoch": "Epoch",
+      "level": "Level",
+      "trees": "Trees",
+      "stage": "Stage",
+      "none": "Fit"
+    }
+  },
+  "loss": {
+    "about": "What is shown here?",
+    "loss": "Loss",
+    "lossTip": "Loss measures how wrong the model is: 0 would be perfect. Solid = training points, dashed = test points. If the dashed line rises while the solid one falls, the model starts to memorise noise.",
+    "logloss": "log-loss",
+    "objective": "objective",
+    "sgd": "{{loss}} loss",
+    "perEpoch": "log-loss per epoch",
+    "lowerBetter": "lower is better",
+    "higherBetter": "higher is better",
+    "train": "train",
+    "test": "test",
+    "validation": "validation",
+    "inertia": "Inertia",
+    "inertiaKey": "instead of loss",
+    "inertiaHint": "total squared distance from points to their center · lower = tighter groups",
+    "inertiaTip": "KMeans has no loss. Inertia = total squared distance from points to their center; it only goes down.",
+    "convergedTol": "converged · centers moved < tol",
+    "boost": "Error per boosting stage",
+    "boostTip": "Each stage adds one small tree. When validation stops improving, more trees only memorise noise.",
+    "errorRate": "error rate",
+    "bestStage": "best stage {{n}}",
+    "earlyStop": "early stop at {{n}}",
+    "trees": "Accuracy as trees are added",
+    "treesTip": "Trees are trained independently, so there is no loss to follow. The curve shows the forest getting steadier as it grows.",
+    "treesKey": "test accuracy",
+    "nTrees": "{{n}} trees {{v}}",
+    "firstTrees": "{{n}} trees: {{v}}",
+    "oobKey": "dashed = out-of-bag accuracy",
+    "depth": "Fitted in one step",
+    "depthTip": "A tree is built in a single pass. The bars replay how accuracy changed as the tree grew deeper.",
+    "onestep": "Fitted in one step",
+    "onestepTip": "Fitted with one call — nothing to animate. Shows what was learned instead of a curve.",
+    "onestepReg": "Fitted in one step · errors",
+    "onestepRegTip": "Solved with one formula — no iterations. Errors bunched around 0 mean a good fit; a lopsided shape means a missed pattern.",
+    "knn": "Nothing to train · try k",
+    "knnTip": "KNN just stores the training points. Instead of a loss, see how the number of neighbours changes the score.",
+    "knnKey": "test accuracy for each k",
+    "bestK": "best k = {{k}}",
+    "pca": "Variance kept per component",
+    "pcaTip": "PCA has no loss. Each bar is the share of the data’s spread one component holds.",
+    "pcaText": "The {{n}} kept components hold <b>{{p}}%</b> of the data’s spread.",
+    "ms": "{{ms}} ms",
+    "doneIn": "Done in {{ms}} ms — nothing to animate",
+    "fitting": "Fitting…",
+    "treeText": "A tree has no training curve: it is built in a single pass, so there is no loss falling over time. The chart shows how accuracy changed as the tree grew deeper.",
+    "treeReplay": "Press <b>+1 level</b> to replay the growth.",
+    "byDepth": "Accuracy by depth",
+    "depthN": "depth {{d}}",
+    "class": "class",
+    "prior": "prior",
+    "mean": "mean {{f}}",
+    "svcText": "<b>{{sv}}</b> of {{n}} training points became support vectors — only they shape the border.",
+    "svcRing": "Ringed points on the plot are the support vectors.",
+    "dbText": "Found <b>{{c}}</b> clusters, <b>{{noise}}</b> noise points, {{core}} core points.",
+    "clusterN": "cluster {{i}}",
+    "noise": "noise",
+    "residuals": "Residuals (real − predicted)",
+    "rmse": "RMSE per tree"
+  },
+  "metric": {
+    "accuracy": "accuracy",
+    "r2": "R²",
+    "silhouette": "silhouette",
+    "variance": "variance kept",
+    "accuracyTitle": "Accuracy",
+    "accuracyAbout": "What is accuracy?",
+    "accuracyTip": "the share of test points the model labels correctly. 0.87 means 87 of every 100. Test points were hidden during training, so this is how the model does on new data.",
+    "accuracyAfter": "accuracy after training",
+    "r2Title": "R²",
+    "r2About": "What is R²?",
+    "r2Tip": "how much of the target’s variation the model explains. 1 is perfect, 0 is no better than always guessing the average. Measured on test points.",
+    "r2After": "R² after training",
+    "silhouetteTitle": "Silhouette score",
+    "silhouetteAbout": "What is the silhouette score?",
+    "silhouetteTip": "how well each point sits in its own group compared with the nearest other group. From −1 (wrong group) to 1 (clearly separated). Above 0.5 is a good split.",
+    "silhouetteAfter": "silhouette after training",
+    "varianceTitle": "Variance kept",
+    "varianceAbout": "What is variance kept?",
+    "varianceTip": "the share of the data’s spread the kept components still hold. 1.0 = nothing lost.",
+    "varianceAfter": "share kept after fitting",
+    "onTest": "on {{n}} test points",
+    "onTestR2": "on {{n}} test points",
+    "rising": "rising",
+    "falling": "falling",
+    "silGood": "groups are well separated",
+    "silOk": "groups overlap a little",
+    "silWeak": "groups overlap a lot",
+    "silNone": "needs at least 2 groups",
+    "varSub": "with {{n}} components",
+    "train": "train",
+    "logloss": "log-loss",
+    "objective": "objective",
+    "tenAgo": "10 {{unit}} ago",
+    "leaves": "leaves",
+    "inertia": "inertia",
+    "groups": "groups",
+    "clusters": "clusters",
+    "noise": "noise"
+  },
+  "panel": {
+    "maximize": "Maximize panel",
+    "restore": "Restore panel",
+    "popout": "Open in a separate window"
+  },
+  "net": {
+    "title": "Network",
+    "about": "How to read the network",
+    "tip": "Columns are layers. Lines are weights: solid accent = positive, dashed = negative, thicker = bigger. Fill = how strongly a neuron fires for the hovered point.",
+    "empty": "The network appears after the first epoch.",
+    "input": "Input",
+    "output": "Output",
+    "hidden": "Hidden {{i}}",
+    "pos": "positive weight",
+    "neg": "negative",
+    "fill": "fill = how strongly a neuron fires for point #{{id}}",
+    "hoverHint": "hover a point to see which neurons fire",
+    "graphLabel": "Network graph"
+  },
+  "regions": {
+    "title": "Regions it carved",
+    "about": "About regions",
+    "tip": "Every leaf owns a box of the plane. Select a node in the tree to outline its box.",
+    "cut": "Every split is a straight cut parallel to an axis.",
+    "selected": "Outlined: the region of node {{id}}."
+  },
+  "tree": {
+    "aria": "Decision tree, depth {{depth}}, {{leaves}} leaves",
+    "yes": "yes",
+    "no": "no",
+    "leaf": "Leaf → {{cls}}",
+    "leafStat": "{{n}} samples · {{k}} {{cls}}",
+    "nodeStat": "{{n}} samples · {{crit}} {{imp}}",
+    "truncated": "Showing the first 511 of {{n}} nodes",
+    "folded": "+{{n}} more nodes",
+    "expand": "Click to expand this subtree"
+  },
+  "data": {
+    "title": "Get data",
+    "source": "Data source",
+    "presets": "Presets",
+    "table": "Build a table",
+    "generator": "Generator",
+    "presetsHint": "One click to a ready-made shape. Tweak the 2–3 settings that matter, then use it.",
+    "importCsv": "Import CSV",
+    "useTable": "Use this table",
+    "use": "Use this data",
+    "inUse": "In use · Regenerate"
+  },
+  "table": {
+    "column": "Column",
+    "row": "Row",
+    "undo": "Undo",
+    "redo": "Redo",
+    "export": "Export CSV",
+    "size": "{{rows}} rows · {{cols}} columns",
+    "targetIs": "Target: {{name}}",
+    "target": "Target",
+    "numeric": "Numeric",
+    "category": "Category",
+    "text": "text",
+    "numbers": "numbers",
+    "addRow": "Add row",
+    "missing": "{{count}} empty cell(s) in <span class=\"mono\">{{col}}</span> (row {{rows}}). Models can’t train on empty cells.",
+    "fillMean": "Fill with column mean",
+    "fillMode": "Fill with most common",
+    "dropRow": "Drop row",
+    "settings": "Column settings",
+    "name": "Name",
+    "type": "Type",
+    "typeHint": "Numeric = numbers you can compare (weight). Category = labels from a fixed list (colour).",
+    "valuesAre": "Category values are",
+    "numbersHint": "Use “Numbers” for codes like 1, 2, 3 that are labels, not amounts.",
+    "allowed": "Allowed values",
+    "count": "count",
+    "removeValue": "Remove {{v}}",
+    "value": "Value",
+    "addValue": "Add a value (Enter)",
+    "oneHot": "Text categories are turned into numbers automatically (one-hot) before training.",
+    "useTarget": "Use as target",
+    "targetHint": "The target is what the model learns to predict. Only one column can be the target — now it is <span class=\"mono\">{{name}}</span>.",
+    "noTarget": "No target yet: the table can be used by KMeans, DBSCAN and PCA.",
+    "readyFor": "What this table is ready for",
+    "readyUnsup": "Clustering and PCA (no target)",
+    "readyClass_one": "Classification · {{count}} class",
+    "readyClass_other": "Classification · {{count}} classes",
+    "readyClassHint": "Works with all 13 classifiers. The 4 regression models need a numeric target; KMeans, DBSCAN and PCA ignore the target.",
+    "readyReg": "Regression · numeric target",
+    "readyRegHint": "Works with the 4 regression models. Classifiers need a category target.",
+    "deleteColumn": "Delete column",
+    "deleteRow": "Delete row {{n}}",
+    "rowMenu": "Double-click to delete the row",
+    "rowN": "row {{n}}",
+    "empty": "empty",
+    "notNumber": "Not a number"
+  },
+  "gen": {
+    "rows": "Number of rows",
+    "fill": "How columns are filled",
+    "random": "Random",
+    "rules": "Rules per column",
+    "fillHint": "Random fills every column with noise. Rules let you set a range, a distribution or a list of values for each one.",
+    "columns_one": "Columns · {{count}}",
+    "columns_other": "Columns · {{count}}",
+    "seed": "seed",
+    "newSeed": "New random seed",
+    "colName": "Column name",
+    "removeCol": "Remove {{name}}",
+    "dist": "Distribution",
+    "uniform": "Uniform",
+    "normal": "Normal",
+    "mean": "mean",
+    "std": "std",
+    "min": "min",
+    "max": "max",
+    "normalHint": "Bell shape: most values near the mean, few far away.",
+    "uniformHint": "Flat: every value in the range is equally likely.",
+    "valueName": "Value",
+    "weight": "Weight",
+    "removeValue": "Remove value",
+    "value": "Value",
+    "targetTag": "Category · {{classes}}",
+    "labelsFrom": "Labels come from",
+    "ruleOn": "A rule on {{a}}, {{b}}",
+    "shape": "Border shape",
+    "line": "Straight line",
+    "circle": "Circle",
+    "ruleLine": "B if {{a}} + {{b}} > 0, else A",
+    "ruleCircle": "B if inside the circle around ({{a}}, {{b}}), else A",
+    "ruleXor": "B if {{a}} and {{b}} have the same sign, else A",
+    "noise": "Noise level · labels flipped at random",
+    "noiseHint": "0% = a perfectly clean border. More noise makes the task harder and more realistic.",
+    "addColumn": "Add column",
+    "generate": "Generate {{n}} rows",
+    "preview": "Preview",
+    "balanced": "balanced",
+    "unbalanced": "unbalanced",
+    "dashed": "dashed = the rule’s border · points on the wrong side = noise",
+    "more": "… {{n}} more rows"
+  },
+  "ins": {
+    "stats": "Basic stats",
+    "statsAbout": "About the basic stats",
+    "statsTip": "mean = typical value · std = typical distance from the mean · min / max = the extremes.",
+    "feature": "feature",
+    "mean": "mean",
+    "std": "std",
+    "min": "min",
+    "max": "max",
+    "statsHint": "mean = typical value · std = how far values usually sit from the mean",
+    "balance": "Class balance",
+    "balanceAbout": "About class balance",
+    "balanceTip": "How many rows each class has.",
+    "balanced": "balanced",
+    "unbalanced": "unbalanced",
+    "balanceHint": "If one class were much smaller, accuracy could look good while the model ignores it. Then try class_weight='balanced'.",
+    "outliers": "Outliers",
+    "outliersAbout": "How outliers are found",
+    "outliersTip": "A value is an outlier when it lies more than 1.5 × IQR below the first quartile or above the third.",
+    "showOnPlots": "Show on plots",
+    "outliersHint": "Points more than 1.5 × IQR outside the middle half of a feature.",
+    "noOutliers": "No outliers found.",
+    "remove": "Remove",
+    "removeAll_one": "Remove {{count}} outlier",
+    "removeAll_other": "Remove all {{count}} outliers",
+    "high": "{{f}} far above the rest",
+    "low": "{{f}} far below the rest",
+    "pair": "Pair plot",
+    "pairAbout": "How to read a pair plot",
+    "pairTip": "Each cell plots one feature against another. Hover a point to find it in every cell.",
+    "pairHint": "Diagonal: how each feature is spread (histogram, stacked by class). Off-diagonal: every pair of features plotted against each other.",
+    "pairFirst4": "Showing the first 4 numeric features.",
+    "outlier": "outlier",
+    "noNumeric": "No numeric features to plot.",
+    "spread": "How spread out",
+    "boxAbout": "How to read a box plot",
+    "boxTip": "The box covers the middle half of the values; the line inside is the median; whiskers reach the furthest normal values.",
+    "boxHalf": "box = middle half",
+    "range": "range",
+    "median": "median",
+    "sameScale": "Same scale for every row: {{lo}} to {{hi}}.",
+    "meaning": "What this means for training",
+    "spreadText": "<span class=\"mono\">{{wide}}</span> spreads about <b>{{r}}×</b> wider than <span class=\"mono\">{{narrow}}</span>. Models that measure distance (KNN, SVC) and neural networks can over-weight the wider feature.",
+    "scale": "Scale features before training",
+    "scaleHint": "Uses StandardScaler: every feature gets mean 0 and std 1. Trees don’t need it.",
+    "corr2": "Correlation {{a}} ↔ {{b}}",
+    "corr": "Correlation",
+    "corrHint": "−1 … 1. Near 0: knowing one feature tells you little about the other.",
+    "editTable": "Edit the table"
+  },
+  "decide": {
+    "title": "How it decides",
+    "stepOf": "step {{s}} of {{n}}",
+    "back": "Back",
+    "next": "Next step",
+    "autoplay": "Play all steps automatically",
+    "another": "Pick another point",
+    "clickHint": "or click any point on the plot",
+    "loading": "Asking the model…",
+    "trainFirst": "Train the model first",
+    "trainFirstBody": "Then pick any point and follow the model’s reasoning step by step.",
+    "toWorkspace": "Go to the workspace",
+    "trueClass": "true class {{cls}}",
+    "trueValue": "true value {{v}}",
+    "noLabel": "no label (unsupervised)",
+    "right": "and the point really is {{cls}}.",
+    "wrongIs": "but the point is actually {{cls}}.",
+    "left": "go left",
+    "right_": "go right",
+    "correct": "The prediction is correct.",
+    "incorrect": "The prediction is wrong for this point.",
+    "scaledNote": " (values after scaling)",
+    "where": "Where the point sits",
+    "borderZ": "border = where z = 0",
+    "weighted": "Weighted sum",
+    "intercept": "intercept b",
+    "sumZ": "sum z",
+    "barsHint": "Orange bars push toward {{b}}, blue bars toward {{a}}.",
+    "sigTitle": "Sigmoid: turn z into a probability",
+    "signTitle": "Sign: which side of the border",
+    "probRule": "{{p}} vs 0.5 threshold → class {{cls}}",
+    "signRule": "z = {{z}} → class {{cls}}",
+    "scorePer": "One score per class",
+    "softmax": "Softmax: scores → probabilities",
+    "pickBiggest": "The biggest probability wins",
+    "compare": "Compare with the real value",
+    "predicted": "predicted",
+    "real": "real",
+    "error": "error",
+    "thePoint": "The point",
+    "logistic": {
+      "1": {
+        "title": "Read the features",
+        "short": "{{feats}}",
+        "detail": "The model only sees these numbers{{scaled}}. It knows nothing else about the point."
+      },
+      "2": {
+        "title": "Multiply by the weights",
+        "short": "each feature × its learned weight",
+        "detail": "During training the model learned {{ws}}. A big weight means that feature matters a lot."
+      },
+      "3": {
+        "title": "Add them up",
+        "short": "z = {{sum}} = {{z}}",
+        "detail": "Add the products and the intercept. z above 0 means “{{b}} side of the border”, below 0 means “{{a}} side”. Here z = {{z}}."
+      },
+      "5": {
+        "title": "Pick the class",
+        "short": "{{prob}} {{pcmp}} 0.5 → class {{pick}}",
+        "detail": "If P({{b}}) is at least 0.5 the answer is {{b}}, otherwise {{a}}. The model says {{pick}} — {{verdict}}"
+      }
+    },
+    "sigmoid": {
+      "4": {
+        "title": "Squash with the sigmoid",
+        "short": "σ({{z}}) = {{prob}}",
+        "detail": "The sigmoid bends any number into a probability between 0 and 1. z = 0 becomes 0.5; the further z is from 0, the surer the model. z = {{z}} gives P({{b}}) = {{prob}}."
+      }
+    },
+    "sign": {
+      "4": {
+        "title": "Look at the sign of z",
+        "short": "z = {{z}} {{cmp}} 0",
+        "detail": "With the {{loss}} loss there is no probability: only the side of the border counts. Positive z → {{b}}, negative → {{a}}."
+      }
+    },
+    "sgd": {
+      "1": {
+        "title": "Read the features",
+        "short": "{{feats}}",
+        "detail": "SGDClassifier draws a straight border like logistic regression. It only sees these numbers{{scaled}}."
+      },
+      "2": {
+        "title": "Multiply by the weights",
+        "short": "each feature × its weight",
+        "detail": "The weights were learned a few samples at a time: {{ws}}."
+      },
+      "3": {
+        "title": "Add them up",
+        "short": "z = {{sum}} = {{z}}",
+        "detail": "z is the signed distance-like score to the border. Here z = {{z}}."
+      },
+      "5": {
+        "title": "Pick the class",
+        "short": "→ class {{pick}}",
+        "detail": "The model says {{pick}} — {{verdict}}"
+      }
+    },
+    "multi": {
+      "1": {
+        "title": "Read the features",
+        "short": "{{feats}}",
+        "detail": "The model only sees these numbers. With {{k}} classes it keeps one set of weights per class."
+      },
+      "2": {
+        "title": "One score per class",
+        "short": "{{zs}}",
+        "detail": "Each class multiplies the features by its own weights and adds its intercept."
+      },
+      "3": {
+        "title": "Softmax",
+        "short": "{{probs}}",
+        "detail": "Softmax turns the scores into probabilities that sum to 1. Bigger score → bigger share."
+      },
+      "4": {
+        "title": "Pick the class",
+        "short": "→ class {{pick}}",
+        "detail": "The class with the biggest probability wins: {{pick}} — {{verdict}}"
+      }
+    },
+    "multiSgd": {
+      "3": {
+        "title": "Compare the scores",
+        "short": "{{zs}}",
+        "detail": "One-vs-rest: each class has its own border; the class with the highest score wins."
+      }
+    },
+    "reg": {
+      "1": {
+        "title": "Read the features",
+        "short": "{{feats}}",
+        "detail": "The model only sees these numbers."
+      },
+      "2": {
+        "title": "Multiply by the weights",
+        "short": "{{ws}}",
+        "detail": "Each weight says how much the prediction changes when that feature grows by 1."
+      },
+      "3": {
+        "title": "Add the intercept",
+        "short": "ŷ = {{sum}} = {{y}}",
+        "detail": "The sum is the prediction — there is no squashing for regression."
+      },
+      "4": {
+        "title": "Compare with the truth",
+        "short": "real {{truth}} · error {{err}}",
+        "detail": "The error (real − predicted) is what training tried to make small, on average, across all points."
+      }
+    },
+    "tree": {
+      "1": {
+        "title": "Start at the root",
+        "short": "all {{n}} training points begin here",
+        "detail": "The root asks the most useful first question: {{q}}? It was picked because no other single cut separates the classes better."
+      },
+      "2": {
+        "title": "Answer: {{q}}?",
+        "short": "{{f}} = {{v}} → yes → {{dir}}{{leaf}}",
+        "detail": "{{f}} = {{v}} is not above the threshold, so the point follows the “yes” branch. {{n}} training points reached this node."
+      },
+      "3": {
+        "title": "Answer: {{q}}?",
+        "short": "{{f}} = {{v}} → no → {{dir}}{{leaf}}",
+        "detail": "{{f}} = {{v}} is above the threshold, so the point follows the “no” branch. {{n}} training points reached this node."
+      },
+      "4": {
+        "title": "Read the leaf",
+        "short": "{{k}} of {{n}} points here are {{cls}} → {{cls}} ({{pct}}%)",
+        "detail": "A leaf doesn’t calculate anything. It reports the majority class of the training points that ended up in it ({{mix}}) — {{verdict}}"
+      },
+      "noQ": "no question",
+      "toLeaf": " → reach a leaf",
+      "cuts": "Each question cuts the plane",
+      "rootQ": "Question at the root",
+      "qN": "Question {{n}}",
+      "isQ": "Is {{q}} ?",
+      "answered": "{{q}} ?  {{v}} → “{{ans}}”",
+      "leafReached": "Leaf reached",
+      "predict": "Predict class {{cls}}",
+      "leafText": "{{mix}} → majority {{cls}}. Confidence {{pct}}%."
+    },
+    "km": {
+      "1": {
+        "title": "Locate the point",
+        "short": "{{x}}",
+        "detail": "KMeans has no labels to learn from. It only knows where this point is and where the {{k}} centers ended up after {{rounds}} rounds of training."
+      },
+      "2": {
+        "title": "Measure distances",
+        "short": "straight-line distance to every center",
+        "detail": "It measures the ordinary straight-line distance from the point to each of the {{k}} centers — the dashed lines."
+      },
+      "3": {
+        "title": "Pick the nearest center",
+        "short": "center {{best}} is closest: {{bd}}",
+        "detail": "Smallest distance wins. Center {{best}} is {{bd}} away; the runner-up, center {{second}}, is {{sd}} away — {{clear}}"
+      },
+      "4": {
+        "title": "Join that group",
+        "short": "point → group {{best}}",
+        "detail": "The point takes group {{best}}’s colour and shape. There is no probability here: KMeans gives a hard yes/no assignment."
+      },
+      "clear": "a clear choice.",
+      "close": "a close call.",
+      "dist": "Distance to each center",
+      "shorter": "shorter = closer",
+      "center": "center {{i}}",
+      "formula": "distance = √((x1 − c1)² + (x2 − c2)²)",
+      "how": "How the groups were found",
+      "h1": "Every point joins its nearest center — exactly what you see on the left.",
+      "h2": "Each center moves to the average position of its points.",
+      "h3": "Repeat until the centers stop moving. Here that took {{n}} rounds.",
+      "join": "Joins group {{i}}",
+      "group": "Group {{i}}"
+    },
+    "mlp": {
+      "1": {
+        "title": "Feed in the features",
+        "short": "{{x}}",
+        "detail": "The input neurons simply hold the point’s feature values."
+      },
+      "2": {
+        "title": "Hidden layer {{l}}",
+        "short": "{{fire}} of {{n}} neurons fire",
+        "detail": "Each neuron multiplies its inputs by its own weights, adds a bias, then applies {{act}}. {{next}}"
+      },
+      "3": {
+        "title": "Output neuron",
+        "short": "z = {{z}} → {{p}}",
+        "detail": "The output layer ({{oa}}) turns the last hidden layer into class probabilities."
+      },
+      "4": {
+        "title": "Decide",
+        "short": "→ class {{pick}} ({{p}})",
+        "detail": "The biggest probability wins: {{pick}} — {{verdict}}"
+      },
+      "first": "Each neuron reacts to one direction in the plane.",
+      "deeper": "Combining several straight cuts is how the network draws curved borders.",
+      "features_one": "{{count}} feature",
+      "features_other": "{{count}} features",
+      "features": "{{n}} features",
+      "legend": "thicker = bigger weight · fill = how strongly the neuron fires · dashed ring = output 0",
+      "m1": "Step 1 · inputs",
+      "m1a": "no maths yet — the inputs are just the feature values",
+      "m1n": "The network only sees these numbers.",
+      "mh": "Hidden layer {{l}}",
+      "neuron": "neuron {{i}}: sum = {{s}} → {{a}}",
+      "reluNote": "relu keeps positive sums and turns negative ones into 0.",
+      "actNote": "{{act}} squashes each sum smoothly.",
+      "mo": "Output",
+      "outNote": "One output neuron is enough for two classes; more classes use softmax.",
+      "md": "Decision"
+    },
+    "forest": {
+      "1": {
+        "title": "Send the point down every tree",
+        "short": "{{n}} trees answer independently",
+        "detail": "Each tree was trained on a random slice of the data, so they disagree a little."
+      },
+      "2": {
+        "title": "Each tree answers",
+        "short": "{{votes}} of {{n}} trees say {{pick}}",
+        "detail": "Every tree gives its own probability for each class."
+      },
+      "3": {
+        "title": "Average the answers",
+        "short": "average P({{pick}}) = {{p}}",
+        "detail": "A soft vote: the probabilities are averaged, which smooths out single trees’ mistakes."
+      },
+      "4": {
+        "title": "Highest average wins",
+        "short": "→ class {{pick}}",
+        "detail": "The class with the highest average wins: {{pick}} — {{verdict}}"
+      },
+      "each": "Each tree’s answer",
+      "showing": "Showing {{k}} of {{n}}. Each number is that tree’s P({{cls}}).",
+      "avg": "average P({{cls}})",
+      "wins": "Highest average wins"
+    },
+    "boost": {
+      "1": {
+        "title": "Start from the base guess",
+        "short": "base = {{base}}",
+        "detail": "Before any tree, the guess comes from the class shares in the training data."
+      },
+      "2": {
+        "title": "Each small tree adds a correction",
+        "short": "{{n}} corrections",
+        "detail": "Every tree was trained on the mistakes left by the trees before it, so each nudges the score."
+      },
+      "3": {
+        "title": "Add everything up",
+        "short": "score = {{score}}",
+        "detail": "The corrections add up into one raw score."
+      },
+      "4": {
+        "title": "Squash the score",
+        "short": "σ({{score}}) = {{p}} → {{pick}}",
+        "detail": "The sigmoid turns the score into a probability: {{pick}} — {{verdict}}"
+      },
+      "base": "base guess",
+      "tree": "tree {{i}}",
+      "rest": "trees {{a}}–{{b}}",
+      "score": "score",
+      "title": "Corrections add up",
+      "titleMulti": "Corrections for class {{cls}}",
+      "hint": "Orange pushes toward the second class, blue toward the first.",
+      "squash": "σ({{s}}) = {{p}}",
+      "softmax": "softmax over the class scores"
+    },
+    "boostMulti": {
+      "4": {
+        "title": "Softmax over the scores",
+        "short": "→ {{pick}} ({{p}})",
+        "detail": "Each class has its own score; softmax turns them into probabilities. {{pick}} — {{verdict}}"
+      }
+    },
+    "ada": {
+      "1": {
+        "title": "Each model votes",
+        "short": "{{n}} weak models",
+        "detail": "Each weak tree votes for one class. Its say grows with how accurate it was during training."
+      },
+      "2": {
+        "title": "Weigh the votes",
+        "short": "{{share}}",
+        "detail": "The votes are added up, weighted by each model’s say."
+      },
+      "3": {
+        "title": "Biggest share wins",
+        "short": "→ class {{pick}}",
+        "detail": "The class with the biggest weighted share wins: {{pick}} — {{verdict}}"
+      },
+      "title": "Strongest {{n}} voters",
+      "hint": "Bar = the model’s say (weight). Colour = the class it votes for.",
+      "share": "Weighted vote share",
+      "pick": "Biggest share wins"
+    },
+    "knn": {
+      "1": {
+        "title": "Measure the distance to every training point",
+        "short": "straight-line distance",
+        "detail": "KNN stores the training points and measures how far each one is from this point.{{self}}"
+      },
+      "2": {
+        "title": "Keep the {{k}} closest",
+        "short": "ringed on the plot",
+        "detail": "Only the k nearest neighbours matter; everything else is ignored."
+      },
+      "3": {
+        "title": "They vote",
+        "short": "{{votes}}",
+        "detail": "Each neighbour votes for its class{{weighted}}."
+      },
+      "4": {
+        "title": "Majority wins",
+        "short": "→ class {{pick}} ({{p}})",
+        "detail": "{{same}} of {{k}} neighbours agree: {{pick}} — {{verdict}}"
+      },
+      "weighted": ", closer neighbours count more",
+      "self": " This is a training point, so its nearest neighbour is itself.",
+      "ringed": "ringed = the k nearest",
+      "closest": "{{k}} nearest neighbours",
+      "vote": "The vote",
+      "majority": "Majority wins"
+    },
+    "svc": {
+      "1": {
+        "title": "Compare with each support vector",
+        "short": "{{nsv}} of {{n}} training points",
+        "detail": "Only the support vectors — points on or inside the margin — shape the border. The kernel ({{kernel}}) measures how similar the point is to each."
+      },
+      "2": {
+        "title": "Weighted sum = signed distance",
+        "short": "{{sum}} + b ({{b}}) = {{dec}}",
+        "detail": "Each support vector pulls toward its class, weighted by what it learned. The sum is the decision value."
+      },
+      "3": {
+        "title": "The sign picks the side",
+        "short": "{{dec}} → {{side}}",
+        "detail": "Positive → one side of the border, negative → the other: {{pick}} — {{verdict}}"
+      },
+      "ringed": "ringed = support vectors ({{n}} of {{of}})",
+      "compare": "Strongest pulls",
+      "rest": "all other SVs",
+      "sum": "decision value",
+      "sign": "decision value {{v}}",
+      "ovr": "Score per class (one-vs-rest)",
+      "biggest": "The biggest score wins"
+    },
+    "svcMulti": {
+      "2": {
+        "title": "One score per class",
+        "short": "{{dec}}",
+        "detail": "With more classes, each class gets its own decision score."
+      },
+      "3": {
+        "title": "Biggest score wins",
+        "short": "→ {{pick}}",
+        "detail": "{{pick}} — {{verdict}}"
+      }
+    },
+    "nb": {
+      "1": {
+        "title": "Start from the class shares",
+        "short": "priors {{pri}}",
+        "detail": "Before looking at the point, each class is as likely as it was in the training data."
+      },
+      "2": {
+        "title": "How typical is each feature?",
+        "short": "{{x}}",
+        "detail": "For each class, a bell curve per feature says how typical this value is. Features are treated separately — that’s the “naive” part."
+      },
+      "3": {
+        "title": "Multiply",
+        "short": "prior × likelihoods",
+        "detail": "Multiply the prior by every feature’s likelihood, separately for each class."
+      },
+      "4": {
+        "title": "Rescale to sum to 1",
+        "short": "{{post}}",
+        "detail": "Dividing by the total gives probabilities. {{pick}} — {{verdict}}"
+      },
+      "priors": "Class shares (priors)",
+      "normalize": "Multiply, then rescale to sum to 1"
+    },
+    "db": {
+      "1": {
+        "title": "Draw a circle of radius eps",
+        "short": "eps = {{eps}}",
+        "detail": "DBSCAN looks at the neighbourhood of radius eps around the point."
+      },
+      "2": {
+        "title": "Count the points inside",
+        "short": "{{count}} points (itself included)",
+        "detail": "The point needs at least {{ms}} points within eps to be a dense core point."
+      },
+      "3": {
+        "title": "Core, border or noise?",
+        "short": "{{status}}",
+        "detail": "Enough neighbours → core. Fewer, but next to a core point → border. Neither → noise."
+      },
+      "4": {
+        "title": "Join the cluster it touches",
+        "short": "→ {{label}}",
+        "detail": "Core and border points join the cluster of the core points they connect to."
+      },
+      "5": {
+        "title": "Marked as noise",
+        "short": "→ noise",
+        "detail": "Too few neighbours and no core point nearby: DBSCAN leaves it out of every cluster."
+      },
+      "core": "core point",
+      "border": "border point",
+      "noise": "noise",
+      "coreText": "It has enough neighbours within eps, so it anchors a cluster.",
+      "borderText": "Not dense enough itself, but within eps of a core point.",
+      "noiseText": "Not dense enough and no core point within eps.",
+      "cluster": "Cluster {{i}}",
+      "noiseLbl": "Noise",
+      "count": "Points within eps",
+      "need": "needs ≥ {{m}} within {{eps}} to be core",
+      "result": "Result",
+      "circle": "circle = eps around the point",
+      "noCircle": "ringed = neighbours within eps (measured in model space)",
+      "trainingOnly": "DBSCAN has no predict(): these steps explain training points only."
+    },
+    "pca": {
+      "1": {
+        "title": "Center the point",
+        "short": "subtract the mean",
+        "detail": "PCA first moves the data so its average sits at 0.{{whiten}}"
+      },
+      "2": {
+        "title": "Project onto component 1",
+        "short": "PC1 = {{pc1}}",
+        "detail": "A dot product with the first component — the direction with the most spread."
+      },
+      "3": {
+        "title": "Project onto component 2",
+        "short": "PC2 = {{pc2}}",
+        "detail": "A second dot product gives the vertical position on the plot."
+      },
+      "whiten": " With whiten on, each score is then divided by that component’s spread.",
+      "where": "Where the point lands",
+      "center": "Center the point",
+      "dot": "Dot product with PC{{i}}"
+    },
+    "cat": {
+      "1": {
+        "title": "Take the row as it is",
+        "short": "{{row}}",
+        "detail": "CatBoost reads categories as text ({{cats}}); it turns each category into a number itself (a target statistic computed in a random order), so nothing is one-hot encoded."
+      },
+      "2": {
+        "title": "Tree 1: one question per level",
+        "short": "{{q}} → leaf {{leaf}} of {{leaves}}",
+        "detail": "CatBoost trees are symmetric: every node on a level asks the same question, so {{depth}} answers pick one of {{leaves}} leaves. This leaf adds {{lv}}."
+      },
+      "3": {
+        "title": "Add up all {{n}} trees",
+        "short": "score = {{score}}",
+        "detail": "Each tree was fitted to what the trees before it still got wrong; their leaf values, each shrunk by the learning rate {{lr}}, add up to the raw score, starting from {{base}}."
+      },
+      "4": {
+        "title": "Turn the score into a probability",
+        "short": "σ({{score}}) = {{p}} → {{pick}}",
+        "detail": "The sigmoid maps the score to the probability of the second class: {{pick}} — {{verdict}}"
+      },
+      "rowTitle": "What CatBoost receives",
+      "asText": "category",
+      "rowHint": "Categories go in as text — no one-hot columns.",
+      "rowHintNoCats": "This dataset has only numbers; with a text column CatBoost would read it directly.",
+      "treeTitle": "Tree 1 · {{n}} levels, {{leaves}} leaves",
+      "level": "level {{i}}",
+      "ctrAsk": "statistic of {{f}} = “{{v}}” above its border?",
+      "ctrQ": "statistic of {{f}}",
+      "yes": "yes",
+      "no": "no",
+      "leaf": "→ leaf {{i}} of {{n}}",
+      "treeHint": "Same question across a whole level: that is what makes CatBoost trees fast and hard to overfit.",
+      "regOut": "Predicted value",
+      "noCats": "no categorical columns here"
+    },
+    "catMulti": {
+      "4": {
+        "title": "Pick the highest probability",
+        "short": "{{pick}} · {{p}}",
+        "detail": "Each class has its own score; softmax turns them into probabilities that sum to 1. {{pick}} wins — {{verdict}}"
+      }
+    },
+    "catReg": {
+      "4": {
+        "title": "The score is the prediction",
+        "short": "{{target}} ≈ {{y}}",
+        "detail": "For regression the raw score is the answer: {{y}}. The true value is {{truth}} (error {{err}})."
+      }
+    }
+  },
+  "keys": {
+    "space": "Space",
+    "altClick": "Alt + click"
+  },
+  "perf": {
+    "label": "Performance overlay",
+    "fps": "UI fps",
+    "render": "render",
+    "engineFps": "engine frames/s",
+    "grid": "grid",
+    "paramFrame": "param → frame",
+    "longTasks": "long tasks",
+    "max": "max",
+    "points": "points",
+    "heap": "JS heap"
+  },
+  "cb": {
+    "catTag": "cat_features: {{cols}} — read as text, no one-hot",
+    "catTip": "CatBoost gets {{cols}} as categories (cat_features) and turns each value into a target statistic itself. The other models in Sightline see these columns one-hot encoded.",
+    "noCats": "No categorical columns — add an “Aa” column in the generator to see CatBoost's native categories",
+    "noCatsTip": "CatBoost's strength is categorical data: Data → Generator → switch a column to Aa, or import a CSV with text columns."
+  },
+  "hb": {
+    "introTitle": "Start here: how models learn",
+    "contents": "Handbook contents",
+    "basics": "Basics",
+    "whatHow": "What & how",
+    "try": "Try it in the app",
+    "tryWith": "Opens {{model}} with {{data}} loaded",
+    "tryGenerated": "a generated table with a text column",
+    "copy": "Copy",
+    "copied": "Copied"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "engine", "runtimeExecutable": "node", "runtimeArgs": ["scripts/engine.mjs"], "port": 8765 },
+    { "name": "web", "runtimeExecutable": "npx", "runtimeArgs": ["vite"], "port": 1420 }
+  ]
+}
