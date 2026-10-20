@@ -1,25 +1,12 @@
-// Measures the numbers in the brief on the real app.
-//   Tauri:   WEBVIEW2_ADDITIONAL_BROWSER_ARGUMENTS=--remote-debugging-port=9333 npm run tauri dev
-//            node e2e/perf.mjs cdp
-//   Browser: npm run engine & npm run dev; node e2e/perf.mjs browser
-import { chromium } from "@playwright/test";
+// Measures the numbers in the brief in the bundled Chromium (dev server + engine running):
+//   npm run engine & npm run dev; node e2e/perf.mjs [out-dir]
 import { launchChromium } from "./browser.mjs";
 import { writeFileSync } from "node:fs";
 
-const mode = process.argv[2] ?? "cdp";
-const outDir = process.argv[3] ?? ".";
-let browser, page;
-if (mode === "cdp") {
-  browser = await chromium.connectOverCDP("http://127.0.0.1:9333");
-  const ctx = browser.contexts()[0];
-  page = ctx.pages().find((p) => !p.url().includes("popout")) ?? ctx.pages()[0];
-  await page.reload();
-  await page.waitForTimeout(2500);
-} else {
-  browser = await launchChromium();
-  page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  await page.goto(process.env.APP_URL ?? "http://localhost:1420/");
-}
+const outDir = process.argv[2] ?? ".";
+const browser = await launchChromium();
+const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+await page.goto(process.env.APP_URL ?? "http://localhost:1420/");
 const wait = (ms) => page.waitForTimeout(ms);
 const results = {};
 page.on("pageerror", (e) => console.log("page error:", e.message));
@@ -140,5 +127,4 @@ results.paramToFrameMs = lat;
 results.idle = await measure(2);
 console.log(JSON.stringify(results, null, 2));
 writeFileSync(`${outDir}/perf.json`, JSON.stringify(results, null, 2));
-if (mode !== "cdp") await browser.close();
-else await browser.close().catch(() => undefined);
+await browser.close();

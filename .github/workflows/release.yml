@@ -36,13 +36,19 @@ jobs:
             os: macos-latest
             bundles: dmg
           - name: macos-x64
-            os: macos-15-intel
+            # Intel build on an Apple Silicon runner: Rust cross-compiles to x86_64, the engine is
+            # frozen by an x86_64 Python running under Rosetta 2 (no queue for scarce Intel runners)
+            os: macos-latest
             bundles: dmg
+            target: x86_64-apple-darwin
+            python: cpython-3.12-macos-x86_64-none
           - name: linux-x64
             # the oldest supported Ubuntu, so the AppImage runs on older glibc too
             os: ubuntu-22.04
             bundles: deb,rpm,appimage
     runs-on: ${{ matrix.os }}
+    # a hung build fails after an hour instead of the 6-hour default
+    timeout-minutes: 60
     env:
       # signing switches on only when these secrets exist (see README → Releasing)
       WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
@@ -53,6 +59,7 @@ jobs:
       SECRET_APPLE_ID: ${{ secrets.APPLE_ID }}
       SECRET_APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
       SECRET_APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      TARGET: ${{ matrix.target }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -66,12 +73,16 @@ jobs:
       - name: Tag matches the version in package.json
         run: node scripts/version.mjs --tag "${{ env.TAG }}"
 
+      - name: Rosetta 2 (x86_64 Python on Apple Silicon)
+        if: matrix.target == 'x86_64-apple-darwin'
+        run: sudo softwareupdate --install-rosetta --agree-to-license
+
       - uses: astral-sh/setup-uv@v6
       - name: Python environment (pinned)
         working-directory: engine
         shell: bash
         run: |
-          uv venv --python 3.12 .venv
+          uv venv --python "${{ matrix.python || '3.12' }}" .venv
           if [ "$RUNNER_OS" = Windows ]; then py=.venv/Scripts/python.exe; else py=.venv/bin/python; fi
           uv pip install --python "$py" -r requirements.lock
 
@@ -81,9 +92,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.1-dev libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev libfuse2 file
       - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
       - uses: Swatinem/rust-cache@v2
         with:
           workspaces: src-tauri
+          key: ${{ matrix.name }}
 
       - name: Windows code signing (only with secrets)
         if: runner.os == 'Windows' && env.WINDOWS_CERTIFICATE != ''
@@ -113,18 +127,21 @@ jobs:
 
       - name: Engine (PyInstaller)
         run: npm run build:engine
+      - name: Engine architecture matches the target
+        if: matrix.target == 'x86_64-apple-darwin'
+        run: file engine/dist/sightline-engine/sightline-engine | tee /dev/stderr | grep -q x86_64
 
       - name: App and installers (Tauri)
         shell: bash
-        run: npx tauri build --config src-tauri/tauri.bundle.json ${SIGN_CONFIG:+--config "$SIGN_CONFIG"} --bundles "${{ matrix.bundles }}"
+        run: npx tauri build --config src-tauri/tauri.bundle.json ${SIGN_CONFIG:+--config "$SIGN_CONFIG"} ${TARGET:+--target "$TARGET"} --bundles "${{ matrix.bundles }}"
 
       - name: Collect installers
         shell: bash
         run: |
           mkdir out
-          cd src-tauri/target/release/bundle
-          find . -maxdepth 2 -type f \( -name '*.msi' -o -name '*-setup.exe' -o -name '*.dmg' -o -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' \) -exec cp {} ../../../../out/ \;
-          ls -la ../../../../out
+          # target/release/bundle, or target/<triple>/release/bundle for a cross build
+          find src-tauri/target -path '*/release/bundle/*' -type f \( -name '*.msi' -o -name '*-setup.exe' -o -name '*.dmg' -o -name '*.deb' -o -name '*.rpm' -o -name '*.AppImage' \) -exec cp {} out/ \;
+          ls -la out
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.name }}
