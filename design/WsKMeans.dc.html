@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Workspace — KMeans</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app,.app *{box-sizing:border-box}
+.app{--bg:#0C0E10;--g1:rgba(64,128,150,.26);--g2:rgba(170,128,84,.16);--glass:rgba(30,33,37,.6);--solid:#121417;--solid2:#181B1F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);--ink:#F1F2EF;--ink2:#C2C6C9;--ink3:#9BA0A4;--chip:rgba(255,255,255,.06);--chip2:rgba(255,255,255,.12);--acc:#C4EC6A;--acc-ink:#141A08;--acc-t:#C4EC6A;--acc-soft:rgba(196,236,106,.16);--gl:rgba(255,255,255,.06);--ax:rgba(255,255,255,.24);--warn:#E8B04A;--sh:0 24px 60px rgba(0,0,0,.4);--c0:#3E8EDE;--c1:#E69F00;--c2:#1FA37A;--c3:#D27AAE;--c4:#E3CF3A;font-family:'Onest',system-ui,'Segoe UI',sans-serif;color:var(--ink);background:radial-gradient(1000px 700px at 12% 0%,var(--g1),transparent 65%),radial-gradient(900px 700px at 95% 100%,var(--g2),transparent 65%),var(--bg);font-size:14px;line-height:1.4}
+.app.light{--bg:#E4E7EA;--g1:rgba(120,176,200,.5);--g2:rgba(230,198,160,.5);--glass:rgba(255,255,255,.6);--solid:#FBFBFA;--solid2:#F2F3F4;--line:rgba(16,20,24,.1);--line2:rgba(16,20,24,.2);--ink:#14171A;--ink2:#3D444A;--ink3:#596067;--chip:rgba(16,20,24,.05);--chip2:rgba(16,20,24,.1);--acc-t:#466A00;--acc-soft:rgba(120,170,20,.16);--gl:rgba(16,20,24,.07);--ax:rgba(16,20,24,.3);--warn:#9A6200;--sh:0 24px 60px rgba(40,50,60,.14)}
+.glass{background:var(--glass);backdrop-filter:blur(28px) saturate(1.3);-webkit-backdrop-filter:blur(28px) saturate(1.3);border:1px solid var(--line);border-radius:16px}
+.solid{background:var(--solid);border:1px solid var(--line);border-radius:16px}
+.btn{all:unset;box-sizing:border-box;height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:var(--chip);color:var(--ink);font:500 13px/1 'Onest',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--chip2)}
+.btn.pri{background:var(--acc);color:var(--acc-ink);border-color:transparent;font-weight:600}
+.btn.gh{background:transparent;border-color:transparent;color:var(--ink2)}
+.btn.ico{width:36px;padding:0}
+.btn.sm{height:30px;padding:0 10px;border-radius:8px;font-size:12px}
+.btn[disabled]{opacity:.42;cursor:not-allowed}
+.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.seg{display:inline-flex;padding:3px;gap:2px;border-radius:11px;background:var(--chip);border:1px solid var(--line)}
+.seg button,.seg a{all:unset;box-sizing:border-box;height:30px;padding:0 12px;border-radius:8px;font:500 13px/30px 'Onest',system-ui,sans-serif;color:var(--ink2);cursor:pointer;white-space:nowrap}
+.seg.sm button{height:26px;line-height:26px;padding:0 10px;font-size:12px}
+.seg .on{background:var(--chip2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.lbl{font-size:12px;font-weight:500;color:var(--ink3)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Consolas,monospace}
+.hint{font-size:12px;line-height:1.45;color:var(--ink3)}
+.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink2);background:var(--chip);border:1px solid var(--line);white-space:nowrap}
+.inf{all:unset;width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink3);cursor:help;flex:none}
+.inf:hover{color:var(--ink);background:var(--chip)}
+.tip{position:absolute;z-index:20;width:290px;padding:12px 14px;border-radius:12px;background:var(--solid2);border:1px solid var(--line2);box-shadow:var(--sh);font-size:13px;line-height:1.5;color:var(--ink2)}
+.tip b{color:var(--ink);font-weight:600}
+.rng{-webkit-appearance:none;appearance:none;width:100%;height:20px;background:transparent;margin:0}
+.rng::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(var(--acc),var(--acc)) 0 0/var(--p,50%) 100% no-repeat,var(--chip2)}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-6px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 3px var(--solid2)}
+.wb{all:unset;width:46px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink2);cursor:pointer}
+.wb:hover{background:var(--chip2)}
+.wb.x:hover{background:#C42B1C;color:#fff}
+.pt{position:absolute;width:9px;height:9px;transform:translate(-50%,-50%);border-radius:50%;box-shadow:0 0 0 1.5px var(--solid)}
+.pt.k1{border-radius:1.5px}
+.pt.k2{border-radius:0;clip-path:polygon(50% 0,100% 100%,0 100%);width:11px;height:11px;box-shadow:none}
+.pt.k3{border-radius:1px;transform:translate(-50%,-50%) rotate(45deg);width:8px;height:8px}
+.k0{background:var(--c0)}.k1{background:var(--c1)}.k2{background:var(--c2)}.k3{background:var(--c3)}
+.hm{position:absolute;inset:0;display:grid;pointer-events:none}
+.h0{background:var(--c0)}.h1{background:var(--c1)}.h2{background:var(--c2)}.h3{background:var(--c3)}
+.ln{fill:none;vector-effect:non-scaling-stroke}
+.sa{stroke:var(--acc-t)}.si{stroke:var(--ink3)}.sk{stroke:var(--ink)}.sg{stroke:var(--gl)}.s2{stroke:var(--ink2)}
+.w1{stroke-width:1}.w15{stroke-width:1.5}.w2{stroke-width:2}.dsh{stroke-dasharray:4 4}
+.tk{position:absolute;font:500 12px 'JetBrains Mono',monospace;color:var(--ink3)}
+.param{display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px solid var(--line)}
+.prow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--ink)}
+.pk{font:500 12px 'JetBrains Mono',monospace;color:var(--ink3)}
+.val{font:600 13px 'JetBrains Mono',monospace;color:var(--ink);padding:3px 8px;border-radius:6px;background:var(--chip);border:1px solid var(--line)}
+.ctr{position:absolute;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:var(--solid);border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;font:700 11px 'JetBrains Mono',monospace;color:var(--ink);box-shadow:0 4px 14px rgba(0,0,0,.3)}
+.trd{position:absolute;width:7px;height:7px;transform:translate(-50%,-50%);border-radius:50%;border:1.5px solid var(--ink2);background:var(--solid)}
+a{color:var(--acc-t)}a:hover{color:var(--ink)}
+</style>
+</helmet>
+<div class="{{appCls}}" style="width: 100%; height: 100vh; min-height: 720px; display: grid; grid-template-rows: 36px 60px minmax(0, 1fr); overflow: hidden">
+<header style="display: flex; align-items: center; justify-content: space-between; padding-left: 14px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink3)">
+<svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
+<span style="color: var(--ink2); font-weight: 600">Sightline</span><span>KMeans · Blobs</span>
+</div>
+<div style="display: flex">
+<button class="wb" aria-label="Minimize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg></button>
+<button class="wb" aria-label="Maximize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1"></rect></svg></button>
+<button class="wb x" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"></path></svg></button>
+</div>
+</header>
+<nav style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 16px">
+<div style="display: flex; align-items: center; gap: 10px; min-width: 0">
+<a class="btn gh ico" href="Main.dc.html" aria-label="Back to all models"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<div style="display: flex; flex-direction: column; min-width: 0"><span class="mono" style="font-size: 15px; font-weight: 600">KMeans</span><span class="lbl">Unsupervised · clustering</span></div>
+</div>
+<div class="seg"><a class="on" href="WsKMeans.dc.html">Workspace</a><a href="DataPresets.dc.html">Data</a><a href="DataInsights.dc.html">Insights</a><a href="DecideKMeans.dc.html">How it decides</a></div>
+<div style="display: flex; align-items: center; gap: 8px">
+<div class="seg" aria-label="Interface language"><button class="on">EN</button><button>RU</button></div>
+<button class="btn ico" aria-label="Switch light or dark theme" onClick="{{toggle}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"></path></svg></button>
+<button class="btn ico" aria-label="Help"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.4c-.6.3-1 .8-1 1.5v.5M12 17v.01"></path></svg></button>
+</div>
+</nav>
+<main style="min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 340px; grid-template-rows: minmax(0, 1fr) auto; gap: 12px; padding: 0 16px 16px">
+
+<section class="solid" style="grid-column: 1; grid-row: 1; display: flex; flex-direction: column; min-height: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px 8px">
+<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap">
+<h2 style="margin: 0; font-size: 15px; font-weight: 600">Clusters and centers</h2>
+<button class="inf" aria-label="How KMeans groups points"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button>
+<span class="tag" style="color: var(--acc-t)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 12px; height: 12px"><path d="M5 12l5 5 9-10"></path></svg>Converged at iteration 7</span>
+<span class="hint">No target used — colours are the groups it found, not true classes.</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
+<div class="seg sm" aria-label="Layers"><button class="on">Regions</button><button class="on">Center paths</button><button>Points only</button></div>
+<a class="btn sm" href="DecideKMeans.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2"></circle><circle cx="18" cy="6" r="2"></circle><path d="M8 18h6a3 3 0 0 0 0-6h-4a3 3 0 0 1 0-6h6"></path></svg>How it decides</a>
+</div>
+</div>
+<div style="position: relative; flex: 1; min-height: 0; margin: 6px 22px 36px 54px">
+<div class="hm" style="grid-template-columns: repeat(48, 1fr); grid-template-rows: repeat(28, 1fr); border-radius: 6px; overflow: hidden">
+<sc-for list="{{cells}}" as="c" hint-placeholder-count="48"><div class="{{c.cls}}" style="opacity: 0.1"></div></sc-for>
+</div>
+<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible">
+<path class="ln sg w1" d="M25 0V100M50 0V100M75 0V100M0 25H100M0 50H100M0 75H100"></path>
+<path class="ln si w1" d="M0 100H100M0 0V100"></path>
+<path class="ln s2 w15 dsh" d="M46 44L33 36L25 30L22 28M50 50L55 57L57.5 61L58 62M54 40L68 31L76 25.5L78 24M44 56L36 68L31 76L30 78"></path>
+</svg>
+<sc-for list="{{pts}}" as="p" hint-placeholder-count="60"><div class="{{p.cls}}" style="left: {{p.x}}%; top: {{p.y}}%"></div></sc-for>
+<div class="trd" style="left: 46%; top: 44%"></div><div class="trd" style="left: 33%; top: 36%"></div><div class="trd" style="left: 25%; top: 30%"></div>
+<div class="trd" style="left: 50%; top: 50%"></div><div class="trd" style="left: 55%; top: 57%"></div><div class="trd" style="left: 57.5%; top: 61%"></div>
+<div class="trd" style="left: 54%; top: 40%"></div><div class="trd" style="left: 68%; top: 31%"></div><div class="trd" style="left: 76%; top: 25.5%"></div>
+<div class="trd" style="left: 44%; top: 56%"></div><div class="trd" style="left: 36%; top: 68%"></div><div class="trd" style="left: 31%; top: 76%"></div>
+<div class="ctr" style="left: 22%; top: 28%">1</div>
+<div class="ctr" style="left: 58%; top: 62%">2</div>
+<div class="ctr" style="left: 78%; top: 24%">3</div>
+<div class="ctr" style="left: 30%; top: 78%">4</div>
+<div class="tk" style="left: calc(46% + 8px); top: calc(44% - 22px); color: var(--ink2)">start</div>
+<div class="tk" style="top: calc(100% + 6px); right: 0; color: var(--ink2)">x1 →</div>
+<div class="tk" style="left: -44px; top: -4px; color: var(--ink2)">x2 ↑</div>
+<div class="tk" style="top: calc(100% + 6px); left: calc(25% - 6px)">−5</div>
+<div class="tk" style="top: calc(100% + 6px); left: calc(50% - 4px)">0</div>
+<div class="tk" style="top: calc(100% + 6px); left: calc(75% - 4px)">5</div>
+<div class="tk" style="left: -26px; top: calc(25% - 8px)">5</div>
+<div class="tk" style="left: -26px; top: calc(50% - 8px)">0</div>
+<div class="tk" style="left: -32px; top: calc(75% - 8px)">−5</div>
+<div style="position: absolute; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 8px; padding: 10px 12px; border-radius: 10px; background: var(--solid2); border: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 8px"><div class="ctr" style="position: static; transform: none; width: 20px; height: 20px; font-size: 10px">1</div><span class="hint">center (mean of its points)</span></div>
+<div style="display: flex; align-items: center; gap: 8px"><svg width="20" height="8" aria-hidden="true"><path class="ln s2 w15 dsh" d="M0 4H20"></path></svg><span class="hint">where each center moved, iteration by iteration</span></div>
+</div>
+</div>
+</section>
+
+<aside class="glass" style="grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; min-height: 0; overflow: auto; padding: 16px 18px">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 16px">
+<div class="prow"><span class="lbl">Dataset</span><a class="btn sm gh" href="DataPresets.dc.html" style="color: var(--acc-t)">Change</a></div>
+<div style="display: flex; align-items: center; gap: 12px">
+<div style="width: 44px; height: 36px; border-radius: 8px; background: var(--solid); border: 1px solid var(--line); position: relative"><span class="pt k0" style="left: 30%; top: 32%; width: 7px; height: 7px"></span><span class="pt k1" style="left: 70%; top: 30%; width: 7px; height: 7px"></span><span class="pt k2" style="left: 50%; top: 68%; width: 8px; height: 8px"></span></div>
+<div style="display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">Blobs</span><span class="hint">400 rows · 2 features · target ignored</span></div>
+</div>
+</div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; padding: 14px 0 4px; border-top: 1px solid var(--line)"><h2 style="margin: 0; font-size: 15px; font-weight: 600">Main parameters</h2><span class="hint">Changes restart training</span></div>
+<div class="param" style="border-top: 0">
+<div class="prow"><label class="pn" for="k-n">Number of groups <span class="pk">n_clusters</span><button class="inf" aria-label="About n_clusters"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></label><span class="val">4</span></div>
+<input id="k-n" class="rng" type="range" min="2" max="10" value="4" style="--p: 25%">
+<div class="hint">How many groups to look for. KMeans always finds exactly this many, even if the data has fewer. Default is 8.</div>
+</div>
+<div class="param">
+<div class="prow"><span class="pn">Starting centers <span class="pk">init</span><button class="inf" aria-label="About init"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></span></div>
+<div class="seg sm" style="align-self: flex-start"><button class="on mono">'k-means++'</button><button class="mono">'random'</button></div>
+<div class="hint">Where centers start. k-means++ spreads them apart, so it usually converges faster.</div>
+</div>
+<div class="param">
+<div class="prow"><span class="pn">Restarts <span class="pk">n_init</span><button class="inf" aria-label="About n_init"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></span></div>
+<div class="seg sm" style="align-self: flex-start"><button class="on mono">'auto'</button><button class="mono">1</button><button class="mono">5</button><button class="mono">10</button></div>
+<div class="hint">Run several times from different starts and keep the best. 'auto' = 1 run with k-means++.</div>
+</div>
+<div class="param">
+<div class="prow"><label class="pn" for="k-mi">Max iterations <span class="pk">max_iter</span></label><span class="val">300</span></div>
+<input id="k-mi" class="rng" type="range" min="1" max="500" value="300" style="--p: 60%">
+<div class="hint">Upper limit on center moves. It stops earlier once the centers stop moving.</div>
+</div>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line)">
+<button class="btn" style="justify-content: space-between; width: 100%"><span style="display: flex; align-items: center; gap: 8px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"></path><circle cx="15" cy="7" r="2"></circle><circle cx="9" cy="17" r="2"></circle></svg>Advanced</span><span class="hint">4 more</span></button>
+<button class="btn gh sm" style="align-self: flex-start">Reset to defaults</button>
+</div>
+</aside>
+
+<section class="glass" style="grid-column: 1; grid-row: 2; display: grid; grid-template-columns: 270px minmax(0, 1fr) 240px; gap: 12px; padding: 12px; height: 200px">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 4px">
+<button class="btn pri" style="width: 100%; height: 40px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="fill: currentColor"><path d="M8 5.5l10 6.5-10 6.5z"></path></svg>Train again</button>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+<button class="btn sm" disabled><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"></path></svg>Pause</button>
+<button class="btn sm" title="Move centers once"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l8 6-8 6zM18 6v12"></path></svg>Step</button>
+<button class="btn sm"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v4h4"></path></svg>Reset</button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 2px">
+<div class="prow"><span class="lbl">Iteration</span><span class="mono" style="font-size: 12px; color: var(--ink2)">7 · stopped early</span></div>
+<div style="height: 4px; border-radius: 2px; background: var(--chip2)"><div style="width: 100%; height: 100%; border-radius: 2px; background: var(--acc)"></div></div>
+</div>
+<div class="prow"><span class="lbl">Speed</span><div class="seg sm"><button class="on">½×</button><button>1×</button><button>2×</button><button>4×</button></div></div>
+</div>
+<div class="solid" style="display: flex; flex-direction: column; padding: 10px 14px; min-width: 0">
+<div class="prow">
+<div style="display: flex; align-items: center; gap: 6px"><span style="font-size: 13px; font-weight: 600">Inertia</span><span class="pk">instead of loss</span><button class="inf" aria-label="What is inertia?"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button><span class="hint">total squared distance from points to their center · lower = tighter groups</span></div>
+</div>
+<div style="position: relative; flex: 1; margin: 10px 6px 18px 40px">
+<svg viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible">
+<path class="ln sg w1" d="M0 0H300M0 50H300"></path>
+<path class="ln si w1" d="M0 100H300"></path>
+<path class="ln si w1 dsh" d="M200 0V100"></path>
+<path class="ln sa w2" d="M0 8L33.3 54L66.7 69.5L100 75.1L133.3 76.4L166.7 76.6L200 76.6"></path>
+</svg>
+<sc-for list="{{inertia}}" as="d" hint-placeholder-count="7"><div style="position: absolute; left: {{d.x}}%; top: {{d.y}}%; width: 7px; height: 7px; border-radius: 50%; background: var(--acc); transform: translate(-50%, -50%)"></div></sc-for>
+<div class="tk" style="left: calc(66.7% + 8px); top: 4px; color: var(--ink2)">converged · centers moved &lt; tol</div>
+<div class="tk" style="left: calc(66.7% + 8px); top: calc(76.6% - 24px); color: var(--ink)">468</div>
+<div class="tk" style="left: -40px; top: -8px">2 000</div>
+<div class="tk" style="left: -40px; top: calc(50% - 8px)">1 000</div>
+<div class="tk" style="left: -14px; top: calc(100% - 8px)">0</div>
+<div class="tk" style="top: calc(100% + 2px); left: 0">1</div>
+<div class="tk" style="top: calc(100% + 2px); left: calc(66.7% - 4px)">7</div>
+<div class="tk" style="top: calc(100% + 2px); right: 0">iteration</div>
+</div>
+</div>
+<div class="solid" style="position: relative; display: flex; flex-direction: column; gap: 4px; padding: 12px 16px">
+<div class="tip" style="bottom: calc(100% + 10px); right: 0; width: 310px"><b>Silhouette</b> — how well each point sits in its own group compared with the nearest other group. From −1 (wrong group) to 1 (clearly separated). Above 0.5 is a good split.</div>
+<div style="display: flex; align-items: center; gap: 6px"><span class="lbl" style="color: var(--ink2)">Silhouette score</span><button class="inf" aria-label="What is the silhouette score?" style="color: var(--ink); background: var(--chip2)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></div>
+<div class="mono" style="font-size: 52px; line-height: 1; font-weight: 600; letter-spacing: -0.02em">0.62</div>
+<div class="hint" style="font-size: 13px">groups are well separated</div>
+<div style="margin-top: auto; display: flex; gap: 14px; font-size: 12px; color: var(--ink3)"><span>inertia <span class="mono" style="color: var(--ink2)">468</span></span><span>groups <span class="mono" style="color: var(--ink2)">4</span></span></div>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":1440,"height":900}}'>
+function rnd(s) { return function () { s |= 0; s = s + 0x6D2B79F5 | 0; var t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gau(r) { var u = r() || 1e-9, v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2832 * v); }
+class Component extends DCLogic {
+  renderVals() {
+    var self = this;
+    var th = (this.state && this.state.t) || this.props.theme || 'dark';
+    var C = [[22, 28], [58, 62], [78, 24], [30, 78]];
+    var r = rnd(5), pts = [];
+    for (var i = 0; i < 360; i++) {
+      var k = i % 4, x = C[k][0] + gau(r) * 6.5, y = C[k][1] + gau(r) * 8;
+      x = Math.max(1, Math.min(99, x)); y = Math.max(1, Math.min(99, y));
+      var best = 0, bd = 1e9;
+      for (var q = 0; q < 4; q++) { var d = Math.pow(x - C[q][0], 2) + Math.pow(y - C[q][1], 2); if (d < bd) { bd = d; best = q; } }
+      pts.push({ cls: 'pt k' + best, x: x.toFixed(2), y: y.toFixed(2) });
+    }
+    var cells = [];
+    for (var j = 0; j < 28; j++) for (var m = 0; m < 48; m++) {
+      var cx = (m + 0.5) / 48 * 100, cy = (j + 0.5) / 28 * 100, b = 0, bb = 1e9;
+      for (var n = 0; n < 4; n++) { var dd = Math.pow(cx - C[n][0], 2) + Math.pow(cy - C[n][1], 2); if (dd < bb) { bb = dd; b = n; } }
+      cells.push({ cls: 'h' + b });
+    }
+    var iv = [1840, 920, 610, 498, 472, 468, 468];
+    var inertia = iv.map(function (v, idx) { return { x: (idx / 6 * 66.7).toFixed(2), y: (100 - v / 2000 * 100).toFixed(2) }; });
+    return {
+      appCls: 'app' + (th === 'light' ? ' light' : ''),
+      toggle: function () { self.setState({ t: th === 'light' ? 'dark' : 'light' }); },
+      pts: pts, cells: cells, inertia: inertia
+    };
+  }
+}
+</script>
+</body>
+</html>

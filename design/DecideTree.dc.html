@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>How it decides — DecisionTreeClassifier</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app,.app *{box-sizing:border-box}
+.app{--bg:#0C0E10;--g1:rgba(64,128,150,.26);--g2:rgba(170,128,84,.16);--glass:rgba(30,33,37,.6);--solid:#121417;--solid2:#181B1F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);--ink:#F1F2EF;--ink2:#C2C6C9;--ink3:#9BA0A4;--chip:rgba(255,255,255,.06);--chip2:rgba(255,255,255,.12);--acc:#C4EC6A;--acc-ink:#141A08;--acc-t:#C4EC6A;--acc-soft:rgba(196,236,106,.16);--gl:rgba(255,255,255,.06);--sh:0 24px 60px rgba(0,0,0,.4);--c0:#3E8EDE;--c1:#E69F00;font-family:'Onest',system-ui,'Segoe UI',sans-serif;color:var(--ink);background:radial-gradient(1000px 700px at 12% 0%,var(--g1),transparent 65%),radial-gradient(900px 700px at 95% 100%,var(--g2),transparent 65%),var(--bg);font-size:14px;line-height:1.4}
+.app.light{--bg:#E4E7EA;--g1:rgba(120,176,200,.5);--g2:rgba(230,198,160,.5);--glass:rgba(255,255,255,.6);--solid:#FBFBFA;--solid2:#F2F3F4;--line:rgba(16,20,24,.1);--line2:rgba(16,20,24,.2);--ink:#14171A;--ink2:#3D444A;--ink3:#596067;--chip:rgba(16,20,24,.05);--chip2:rgba(16,20,24,.1);--acc-t:#466A00;--acc-soft:rgba(120,170,20,.16);--gl:rgba(16,20,24,.07);--sh:0 24px 60px rgba(40,50,60,.14)}
+.glass{background:var(--glass);backdrop-filter:blur(28px) saturate(1.3);-webkit-backdrop-filter:blur(28px) saturate(1.3);border:1px solid var(--line);border-radius:16px}
+.solid{background:var(--solid);border:1px solid var(--line);border-radius:16px}
+.btn{all:unset;box-sizing:border-box;height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:var(--chip);color:var(--ink);font:500 13px/1 'Onest',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--chip2)}
+.btn.pri{background:var(--acc);color:var(--acc-ink);border-color:transparent;font-weight:600}
+.btn.gh{background:transparent;border-color:transparent;color:var(--ink2)}
+.btn.ico{width:36px;padding:0}
+.btn.sm{height:30px;padding:0 10px;border-radius:8px;font-size:12px}
+.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.seg{display:inline-flex;padding:3px;gap:2px;border-radius:11px;background:var(--chip);border:1px solid var(--line)}
+.seg button,.seg a{all:unset;box-sizing:border-box;height:30px;padding:0 12px;border-radius:8px;font:500 13px/30px 'Onest',system-ui,sans-serif;color:var(--ink2);cursor:pointer;white-space:nowrap}
+.seg .on{background:var(--chip2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.lbl{font-size:12px;font-weight:500;color:var(--ink3)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Consolas,monospace}
+.hint{font-size:12px;line-height:1.45;color:var(--ink3)}
+.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink2);background:var(--chip);border:1px solid var(--line);white-space:nowrap}
+.wb{all:unset;width:46px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink2);cursor:pointer}
+.wb:hover{background:var(--chip2)}
+.wb.x:hover{background:#C42B1C;color:#fff}
+.pt{position:absolute;width:5px;height:5px;transform:translate(-50%,-50%);border-radius:50%;opacity:.7}
+.pt.k1{border-radius:1px}
+.k0{background:var(--c0)}.k1{background:var(--c1)}
+.ln{fill:none;vector-effect:non-scaling-stroke}
+.sl{stroke:var(--line2)}.sa{stroke:var(--acc-t)}
+.w15{stroke-width:1.5}.w3{stroke-width:3}
+.tk{position:absolute;font:500 12px 'JetBrains Mono',monospace;color:var(--ink3)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.dot.sq{border-radius:1.5px}
+.node{position:absolute;transform:translateX(-50%);width:15%;min-width:124px;max-width:176px;padding:8px 10px;border-radius:10px;background:var(--solid2);border:1px solid var(--line2);display:flex;flex-direction:column;gap:5px;opacity:.7;transition:opacity .2s,box-shadow .2s}
+.node .q{font:600 13px 'JetBrains Mono',monospace;color:var(--ink)}
+.node .m{font-size:12px;color:var(--ink3)}
+.node.dim{opacity:.28}
+.node.on{opacity:1;border-color:var(--ink2)}
+.node.cur{border-color:var(--acc-t);box-shadow:0 0 0 4px var(--acc-soft)}
+.bar{display:flex;height:6px;border-radius:3px;overflow:hidden;gap:1px}
+.ans{position:absolute;transform:translate(-50%,-50%);font:600 12px 'JetBrains Mono',monospace;color:var(--acc-ink);background:var(--acc);padding:2px 7px;border-radius:6px;white-space:nowrap}
+.sp{position:absolute;background:var(--ink3);opacity:.35}
+.sp.on{background:var(--ink);opacity:.9}
+.sp.cur{background:var(--acc-t);opacity:1}
+.st{all:unset;box-sizing:border-box;width:100%;display:grid;grid-template-columns:28px minmax(0,1fr);gap:2px 12px;padding:10px 12px;border-radius:12px;cursor:pointer}
+.st .num{grid-row:span 2;width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line2);display:flex;align-items:center;justify-content:center;font:600 12px 'JetBrains Mono',monospace;color:var(--ink2)}
+.st .tt{font-size:14px;font-weight:600;color:var(--ink)}
+.st .sh{font-size:13px;color:var(--ink3)}
+.st.done .num{background:var(--chip2);border-color:transparent}
+.st.cur{background:var(--chip);box-shadow:inset 0 0 0 1px var(--line2)}
+.st.cur .num{background:var(--acc);border-color:transparent;color:var(--acc-ink)}
+.st.todo .tt,.st.todo .sh{opacity:.55}
+.pg{flex:1;height:4px;border-radius:2px;background:var(--chip2)}
+.pg.on{background:var(--acc)}
+a{color:var(--acc-t)}a:hover{color:var(--ink)}
+</style>
+</helmet>
+<div class="{{appCls}}" style="width: 100%; height: 100vh; min-height: 720px; display: grid; grid-template-rows: 36px 60px minmax(0, 1fr); overflow: hidden">
+<header style="display: flex; align-items: center; justify-content: space-between; padding-left: 14px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink3)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><circle cx="12" cy="12" r="2.5"></circle></svg><span style="color: var(--ink2); font-weight: 600">Sightline</span><span>DecisionTreeClassifier · XOR</span></div>
+<div style="display: flex">
+<button class="wb" aria-label="Minimize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg></button>
+<button class="wb" aria-label="Maximize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1"></rect></svg></button>
+<button class="wb x" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"></path></svg></button>
+</div>
+</header>
+<nav style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 16px">
+<div style="display: flex; align-items: center; gap: 10px; min-width: 0">
+<a class="btn gh ico" href="WsTree.dc.html" aria-label="Back to workspace"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<div style="display: flex; flex-direction: column; min-width: 0"><span class="mono" style="font-size: 15px; font-weight: 600">DecisionTreeClassifier</span><span class="lbl">Trees · classification</span></div>
+</div>
+<div class="seg"><a href="WsTree.dc.html">Workspace</a><a href="DataPresets.dc.html">Data</a><a href="DataInsights.dc.html">Insights</a><a class="on" href="DecideTree.dc.html">How it decides</a></div>
+<div style="display: flex; align-items: center; gap: 8px">
+<div class="seg" aria-label="Interface language"><button class="on">EN</button><button>RU</button></div>
+<button class="btn ico" aria-label="Switch light or dark theme" onClick="{{toggle}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"></path></svg></button>
+</div>
+</nav>
+<main style="min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 12px; padding: 0 16px 16px">
+<section class="solid" style="display: flex; flex-direction: column; min-height: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+<span class="tag" style="height: 30px; padding: 0 12px; font-size: 13px; color: var(--ink)"><span class="dot sq k1"></span>Point #212</span>
+<span class="mono" style="font-size: 13px; color: var(--ink2)">x1 = 0.62 · x2 = 0.71 · true class B</span>
+</div>
+<div style="display: flex; align-items: center; gap: 8px"><span class="hint">or click any point on the plot</span><button class="btn sm"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="7"></circle><path d="M12 2v4M12 18v4M2 12h4M18 12h4"></path></svg>Pick another point</button></div>
+</div>
+<div style="flex: 1; min-height: 0; display: grid; grid-template-rows: minmax(0, 1fr) 230px; gap: 14px; padding: 14px 18px 18px">
+<div style="position: relative">
+<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%">
+<path class="ln sl w15" d="M46 20C46 24 22 24 22 28M22 45C22 49 9 49 9 53M22 45C22 49 34 49 34 53M70 45C70 49 58 49 58 53M34 70C34 74 26 74 26 78M34 70C34 74 42 74 42 78M82 70C82 74 74 74 74 78"></path>
+<path class="{{e1}}" d="M46 20C46 24 70 24 70 28"></path>
+<path class="{{e2}}" d="M70 45C70 49 82 49 82 53"></path>
+<path class="{{e3}}" d="M82 70C82 74 90 74 90 78"></path>
+</svg>
+<div class="node {{nRoot}}" style="left: 46%; top: 3%"><span class="q">x1 ≤ 0.02</span><span class="m">400 samples · gini 0.50</span><div class="bar"><div class="k0" style="width: 49%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node dim" style="left: 22%; top: 28%"><span class="q">x2 ≤ −0.01</span><span class="m">196 samples</span><div class="bar"><div class="k0" style="width: 47%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node {{nR}}" style="left: 70%; top: 28%"><span class="q">x2 ≤ 0.03</span><span class="m">204 samples · gini 0.50</span><div class="bar"><div class="k0" style="width: 51%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node dim" style="left: 9%; top: 53%"><span class="q">Leaf → B</span><span class="m">95 samples</span></div>
+<div class="node dim" style="left: 34%; top: 53%"><span class="q">x2 ≤ 0.08</span><span class="m">101 samples</span></div>
+<div class="node dim" style="left: 58%; top: 53%"><span class="q">Leaf → A</span><span class="m">102 samples</span></div>
+<div class="node {{nRR}}" style="left: 82%; top: 53%"><span class="q">x1 ≤ 0.11</span><span class="m">102 samples · gini 0.16</span><div class="bar"><div class="k0" style="width: 9%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node dim" style="left: 26%; top: 78%"><span class="q">Leaf → B</span><span class="m">9 samples</span></div>
+<div class="node dim" style="left: 42%; top: 78%"><span class="q">Leaf → A</span><span class="m">92 samples</span></div>
+<div class="node dim" style="left: 74%; top: 78%"><span class="q">Leaf → A</span><span class="m">8 samples</span></div>
+<div class="node {{nLeaf}}" style="left: 90%; top: 78%"><span class="q" style="display: flex; align-items: center; gap: 6px"><span class="dot sq k1"></span>Leaf → B</span><span class="m">94 samples · 90 B</span><div class="bar"><div class="k0" style="width: 4%"></div><div class="k1" style="flex: 1"></div></div></div>
+<sc-if value="{{a1}}" hint-placeholder-val="{{true}}"><span class="ans" style="left: 59%; top: 23.5%">0.62 &gt; 0.02 · no</span></sc-if>
+<sc-if value="{{a2}}" hint-placeholder-val="{{true}}"><span class="ans" style="left: 76%; top: 48.5%">0.71 &gt; 0.03 · no</span></sc-if>
+<sc-if value="{{a3}}" hint-placeholder-val="{{false}}"><span class="ans" style="left: 86%; top: 73.5%">0.62 &gt; 0.11 · no</span></sc-if>
+</div>
+<div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr); gap: 14px; min-height: 0">
+<div style="display: flex; flex-direction: column; gap: 8px; padding: 12px 14px; border-radius: 14px; background: var(--solid2); border: 1px solid var(--line)">
+<div style="display: flex; justify-content: space-between"><span class="lbl">Each question cuts the plane</span><span class="hint">x1 → , x2 ↑</span></div>
+<div style="position: relative; flex: 1; border-radius: 6px; overflow: hidden; border: 1px solid var(--line)">
+<sc-for list="{{xor}}" as="p" hint-placeholder-count="40"><div class="{{p.cls}}" style="left: {{p.x}}%; top: {{p.y}}%"></div></sc-for>
+<div style="position: absolute; left: {{reg.l}}%; top: {{reg.t}}%; width: {{reg.w}}%; height: {{reg.h}}%; box-shadow: inset 0 0 0 2px var(--acc-t); background: var(--acc-soft); border-radius: 2px"></div>
+<div class="{{sp1}}" style="left: 51%; top: 0; width: 2px; height: 100%"></div>
+<div class="{{sp2}}" style="left: 51%; top: 48.5%; width: 49%; height: 2px"></div>
+<div class="{{sp3}}" style="left: 55.5%; top: 0; width: 2px; height: 48.5%"></div>
+<div style="position: absolute; left: 81%; top: 14.5%; width: 12px; height: 12px; transform: translate(-50%, -50%); border-radius: 2px; background: var(--c1); box-shadow: 0 0 0 2px var(--solid2), 0 0 0 4px var(--ink)"></div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 14px 16px; border-radius: 14px; background: var(--solid2); border: 1px solid var(--acc-t); box-shadow: 0 0 0 3px var(--acc-soft)">
+<span class="lbl">{{q.label}}</span>
+<span style="font-size: 18px; font-weight: 600">{{q.title}}</span>
+<sc-if value="{{q.isLeaf}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; height: 22px; border-radius: 5px; overflow: hidden; gap: 2px"><div class="k0" style="width: 4.3%"></div><div class="k1" style="flex: 1; display: flex; align-items: center; padding-left: 8px; font: 600 12px 'JetBrains Mono', monospace; color: #1a1200">90 B</div></div>
+<span class="hint" style="font-size: 13px">4 A · 90 B → majority B. Confidence 90 / 94 = 96%.</span>
+</div>
+</sc-if>
+<sc-if value="{{q.isQ}}" hint-placeholder-val="{{true}}">
+<div style="position: relative; height: 54px; margin: 0 8px">
+<div style="position: absolute; left: 0; right: 0; top: 24px; height: 4px; border-radius: 2px; background: var(--chip2)"></div>
+<div style="position: absolute; left: 0; width: {{q.thr}}%; top: 24px; height: 4px; border-radius: 2px; background: var(--ink3)"></div>
+<div style="position: absolute; left: {{q.thr}}%; top: 12px; width: 2px; height: 28px; background: var(--ink); transform: translateX(-50%)"></div>
+<div class="tk" style="left: {{q.thr}}%; top: 40px; transform: translateX(-50%); color: var(--ink)">{{q.thrTxt}}</div>
+<div style="position: absolute; left: {{q.val}}%; top: 26px; width: 14px; height: 14px; border-radius: 2px; background: var(--c1); transform: translate(-50%, -50%); box-shadow: 0 0 0 3px var(--solid2)"></div>
+<div class="tk" style="left: {{q.val}}%; top: -4px; transform: translateX(-50%); color: var(--ink)">{{q.valTxt}}</div>
+<div class="tk" style="left: 0; top: 40px">−1</div><div class="tk" style="right: 0; top: 40px">1</div>
+</div>
+<span class="hint" style="font-size: 13px">{{q.note}}</span>
+</sc-if>
+</div>
+</div>
+</div>
+</section>
+
+<aside class="glass" style="display: flex; flex-direction: column; min-height: 0; padding: 18px">
+<div style="display: flex; align-items: baseline; justify-content: space-between; padding: 0 4px 12px"><h2 style="margin: 0; font-size: 17px; font-weight: 600">How it decides</h2><span class="mono hint">step {{step}} of 5</span></div>
+<div style="flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 4px">
+<sc-for list="{{steps}}" as="st" hint-placeholder-count="5">
+<button class="{{st.cls}}" onClick="{{st.go}}">
+<span class="num">{{st.n}}</span><span class="tt">{{st.title}}</span><span class="sh">{{st.short}}</span>
+<sc-if value="{{st.isCur}}" hint-placeholder-val="{{false}}"><span style="grid-column: 2; margin-top: 8px; padding: 10px 12px; border-radius: 10px; background: var(--solid); border: 1px solid var(--line); font-size: 13px; line-height: 1.5; color: var(--ink2)">{{st.detail}}</span></sc-if>
+</button>
+</sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 12px; padding-top: 14px; border-top: 1px solid var(--line)">
+<div style="display: flex; gap: 4px"><sc-for list="{{steps}}" as="st" hint-placeholder-count="5"><div class="{{st.pg}}"></div></sc-for></div>
+<div style="display: flex; gap: 8px">
+<button class="btn" style="flex: 1" onClick="{{back}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>Back</button>
+<button class="btn pri" style="flex: 1.4" onClick="{{next}}">Next step<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></button>
+</div>
+<label style="display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink2)"><input type="checkbox" style="accent-color: var(--acc)">Play all steps automatically</label>
+</div>
+</aside>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"step":{"editor":"int","min":1,"max":5,"default":3},"$preview":{"width":1440,"height":900}}'>
+function rnd(s) { return function () { s |= 0; s = s + 0x6D2B79F5 | 0; var t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+class Component extends DCLogic {
+  renderVals() {
+    var self = this, S = this.state || {};
+    var th = S.t || this.props.theme || 'dark';
+    var s = S.s || this.props.step || 3;
+    var r = rnd(11), xor = [];
+    for (var i = 0; i < 160; i++) {
+      var x = r() * 2 - 1, y = r() * 2 - 1, c = x * y > 0 ? 1 : 0;
+      if (r() < 0.05) c = 1 - c;
+      xor.push({ cls: 'pt k' + c, x: ((x + 1) * 50).toFixed(1), y: ((1 - y) * 50).toFixed(1) });
+    }
+    function node(n, last) { return s < n ? '' : (s === n || (last && s > n)) ? 'on cur' : 'on'; }
+    function edge(n) { return s >= n ? 'ln sa w3' : 'ln sl w15'; }
+    function sp(n) { return 'sp' + (s >= n ? ' on' : '') + (s === n ? ' cur' : ''); }
+    var regs = [{ l: 0, t: 0, w: 100, h: 100 }, { l: 51, t: 0, w: 49, h: 100 }, { l: 51, t: 0, w: 49, h: 48.5 }, { l: 55.5, t: 0, w: 44.5, h: 48.5 }, { l: 55.5, t: 0, w: 44.5, h: 48.5 }];
+    var qs = [
+      { label: 'Question at the root', title: 'Is x1 ≤ 0.02 ?', isQ: true, thr: 51, val: 81, thrTxt: '0.02', valTxt: 'x1 = 0.62', note: 'The first cut splits the plane into left and right halves.' },
+      { label: 'Answer', title: 'x1 = 0.62 is bigger → “no”, go right', isQ: true, thr: 51, val: 81, thrTxt: '0.02', valTxt: 'x1 = 0.62', note: 'Points on the right of the threshold follow the “no” branch.' },
+      { label: 'Question 2', title: 'Is x2 ≤ 0.03 ?  0.71 → “no”', isQ: true, thr: 51.5, val: 85.5, thrTxt: '0.03', valTxt: 'x2 = 0.71', note: 'Now we only look at the right half. This cut separates top from bottom.' },
+      { label: 'Question 3', title: 'Is x1 ≤ 0.11 ?  0.62 → “no”', isQ: true, thr: 55.5, val: 81, thrTxt: '0.11', valTxt: 'x1 = 0.62', note: 'A small correction near the border — our point is far from it.' },
+      { label: 'Leaf reached', title: 'Predict class B', isLeaf: true }
+    ];
+    var data = [
+      ['Start at the root', 'all 400 training points begin here', 'The root asks the most useful first question: is x1 ≤ 0.02? It was picked because no other single cut separates A from B better (lowest gini).'],
+      ['Answer: x1 ≤ 0.02?', 'x1 = 0.62 → no → go right', 'Our point has x1 = 0.62, bigger than 0.02, so it follows the “no” branch to the right.'],
+      ['Answer: x2 ≤ 0.03?', 'x2 = 0.71 → no → go right', 'x2 = 0.71 is above 0.03, so right again. 102 training points reached this node and 93 of them are B.'],
+      ['Answer: x1 ≤ 0.11?', 'x1 = 0.62 → no → reach a leaf', 'This last question trims a thin strip near the border. Our point is far from it, so it lands in the big leaf.'],
+      ['Read the leaf', '90 of 94 points here are B → B (96%)', 'A leaf doesn’t calculate anything. It reports the majority class of the training points that ended up in it: 90 of 94 are B.']
+    ];
+    var steps = data.map(function (d, idx) {
+      var n = idx + 1;
+      return { n: n, title: d[0], short: d[1], detail: d[2], isCur: n === s, cls: 'st' + (n < s ? ' done' : n === s ? ' cur' : ' todo'), pg: 'pg' + (n <= s ? ' on' : ''), go: function () { self.setState({ s: n }); } };
+    });
+    return {
+      appCls: 'app' + (th === 'light' ? ' light' : ''),
+      toggle: function () { self.setState({ t: th === 'light' ? 'dark' : 'light' }); },
+      step: s, steps: steps, xor: xor,
+      nRoot: node(1), nR: node(2), nRR: node(3), nLeaf: node(4, true),
+      e1: edge(2), e2: edge(3), e3: edge(4),
+      a1: s >= 2, a2: s >= 3, a3: s >= 4,
+      sp1: sp(1), sp2: sp(2), sp3: sp(3),
+      reg: regs[s - 1], q: qs[s - 1],
+      next: function () { self.setState({ s: Math.min(5, s + 1) }); },
+      back: function () { self.setState({ s: Math.max(1, s - 1) }); }
+    };
+  }
+}
+</script>
+</body>
+</html>

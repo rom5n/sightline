@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Loss panel states for every model type</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app,.app *{box-sizing:border-box}
+.app{--bg:#0C0E10;--g1:rgba(64,128,150,.26);--g2:rgba(170,128,84,.16);--glass:rgba(30,33,37,.6);--solid:#121417;--solid2:#181B1F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);--ink:#F1F2EF;--ink2:#C2C6C9;--ink3:#9BA0A4;--chip:rgba(255,255,255,.06);--chip2:rgba(255,255,255,.12);--acc:#C4EC6A;--acc-ink:#141A08;--acc-t:#C4EC6A;--acc-soft:rgba(196,236,106,.14);--gl:rgba(255,255,255,.07);--c0:#3E8EDE;--c1:#E69F00;font-family:'Onest',system-ui,'Segoe UI',sans-serif;color:var(--ink);background:radial-gradient(1000px 700px at 12% 0%,var(--g1),transparent 65%),radial-gradient(900px 700px at 95% 100%,var(--g2),transparent 65%),var(--bg);font-size:14px;line-height:1.4}
+.app.light{--bg:#E4E7EA;--g1:rgba(120,176,200,.5);--g2:rgba(230,198,160,.5);--glass:rgba(255,255,255,.6);--solid:#FBFBFA;--solid2:#F2F3F4;--line:rgba(16,20,24,.1);--line2:rgba(16,20,24,.2);--ink:#14171A;--ink2:#3D444A;--ink3:#596067;--chip:rgba(16,20,24,.05);--chip2:rgba(16,20,24,.1);--acc-t:#466A00;--acc-soft:rgba(120,170,20,.14);--gl:rgba(16,20,24,.08)}
+.solid{background:var(--solid);border:1px solid var(--line);border-radius:16px}
+.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wb{all:unset;width:46px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink2)}
+.lbl{font-size:12px;font-weight:500;color:var(--ink3)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Consolas,monospace}
+.hint{font-size:12px;line-height:1.45;color:var(--ink3)}
+.tag{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink2);background:var(--chip);border:1px solid var(--line);white-space:nowrap}
+.lc{display:flex;flex-direction:column;gap:8px;padding:14px 16px;min-width:0}
+.lt{font-size:15px;font-weight:600}
+.used{font:500 12px 'JetBrains Mono',monospace;color:var(--ink2);line-height:1.5}
+.chart{position:relative;height:150px;margin:6px 4px 16px 32px}
+.chart svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.ln{fill:none;vector-effect:non-scaling-stroke}
+.sa{stroke:var(--acc-t);stroke-width:2}.s2{stroke:var(--ink2);stroke-width:1.5;stroke-dasharray:4 4}.sg{stroke:var(--gl);stroke-width:1}.si{stroke:var(--ink3);stroke-width:1}.sv{stroke:var(--ink3);stroke-width:1.2;stroke-dasharray:3 3}
+.tk{position:absolute;font:500 11.5px 'JetBrains Mono',monospace;color:var(--ink3);white-space:nowrap}
+.dt{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--acc);transform:translate(-50%,-50%)}
+.lg{display:flex;gap:12px;font-size:12px;color:var(--ink3)}
+.lg span{display:flex;align-items:center;gap:6px}
+.foot{margin:auto 0 0;font-size:12.5px;line-height:1.5;color:var(--ink2)}
+.ok{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:600}
+</style>
+</helmet>
+<div class="{{appCls}}" style="width: 100%; min-height: 100vh; display: flex; flex-direction: column">
+<header style="height: 36px; flex: none; display: flex; align-items: center; justify-content: space-between; padding-left: 14px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink3)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><circle cx="12" cy="12" r="2.5"></circle></svg><span style="color: var(--ink2); font-weight: 600">Sightline</span><span>Design reference · bottom “Loss” panel</span></div>
+<div style="display: flex"><span class="wb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg></span><span class="wb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1"></rect></svg></span><span class="wb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"></path></svg></span></div>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 18px 20px 20px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-size: 22px; font-weight: 600">The Loss panel is never an empty chart</h1>
+<p style="margin: 0; font-size: 14px; color: var(--ink2)">Each of the 20 models maps to one of these 8 panel states. The title always says what is plotted, in plain words.</p>
+</div>
+<div style="flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); gap: 12px">
+
+<section class="solid lc">
+<div style="display: flex; justify-content: space-between; align-items: center"><span class="lt">Loss per iteration</span><span class="tag">live curve</span></div>
+<span class="used">LogisticRegression · SGDClassifier · MLPClassifier · Lasso · ElasticNet</span>
+<div class="lg"><span><svg width="16" height="4" aria-hidden="true"><path class="ln sa" d="M0 2H16"></path></svg>train</span><span><svg width="16" height="4" aria-hidden="true"><path class="ln s2" d="M0 2H16"></path></svg>test</span></div>
+<div class="chart"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"><path class="ln sg" d="M0 0H200M0 50H200"></path><path class="ln si" d="M0 100H200"></path><path class="ln s2" d="M0 10C20 40 40 58 70 66S140 72 200 72"></path><path class="ln sa" d="M0 8C20 40 40 60 70 70S140 80 200 82"></path></svg><div class="tk" style="left: -28px; top: -7px">0.7</div><div class="tk" style="left: -16px; top: calc(100% - 8px)">0</div><div class="tk" style="right: 0; top: calc(100% + 2px)">epochs / iterations →</div></div>
+<p class="foot">One point per iteration or epoch. For Lasso and ElasticNet it’s the objective after each pass of coordinate descent.</p>
+</section>
+
+<section class="solid lc">
+<div style="display: flex; justify-content: space-between; align-items: center"><span class="lt">Inertia per iteration</span><span class="tag">live curve</span></div>
+<span class="used">KMeans</span>
+<div class="lg"><span><svg width="16" height="4" aria-hidden="true"><path class="ln sa" d="M0 2H16"></path></svg>inertia</span><span><svg width="16" height="4" aria-hidden="true"><path class="ln sv" d="M0 2H16"></path></svg>converged</span></div>
+<div class="chart"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"><path class="ln sg" d="M0 0H200M0 50H200"></path><path class="ln si" d="M0 100H200"></path><path class="ln sv" d="M150 0V100"></path><path class="ln sa" d="M0 8L25 54L50 69.5L75 75.1L100 76.4L125 76.6L150 76.6"></path></svg><div class="tk" style="left: calc(75% + 6px); top: 0; color: var(--ink2)">stopped at 7</div><div class="tk" style="left: -34px; top: -7px">2 000</div><div class="tk" style="left: -16px; top: calc(100% - 8px)">0</div><div class="tk" style="right: 0; top: calc(100% + 2px)">iteration →</div></div>
+<p class="foot">KMeans has no loss. Inertia = total squared distance from points to their center; it only goes down.</p>
+</section>
+
+<section class="solid lc">
+<div style="display: flex; justify-content: space-between; align-items: center"><span class="lt">Error per boosting stage</span><span class="tag">live curve</span></div>
+<span class="used">GradientBoosting · HistGradientBoosting · AdaBoost</span>
+<div class="lg"><span><svg width="16" height="4" aria-hidden="true"><path class="ln sa" d="M0 2H16"></path></svg>train</span><span><svg width="16" height="4" aria-hidden="true"><path class="ln s2" d="M0 2H16"></path></svg>validation</span></div>
+<div class="chart"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"><path class="ln sg" d="M0 0H200M0 50H200"></path><path class="ln si" d="M0 100H200"></path><path class="ln sv" d="M126 0V100"></path><path class="ln s2" d="M0 12C40 50 90 66 126 68S170 66 200 63"></path><path class="ln sa" d="M0 10C40 50 100 75 200 88"></path></svg><div class="tk" style="left: calc(63% + 6px); top: 0; color: var(--ink2)">best stage 63</div><div class="tk" style="left: -16px; top: calc(100% - 8px)">0</div><div class="tk" style="right: 0; top: calc(100% + 2px)">trees added →</div></div>
+<p class="foot">Each stage adds one small tree. When validation stops improving, more trees only memorise noise.</p>
+</section>
+
+<section class="solid lc">
+<div style="display: flex; justify-content: space-between; align-items: center"><span class="lt">Accuracy as trees are added</span><span class="tag">live curve</span></div>
+<span class="used">RandomForest · ExtraTrees · Bagging</span>
+<div class="lg"><span><svg width="16" height="4" aria-hidden="true"><path class="ln sa" d="M0 2H16"></path></svg>test accuracy</span></div>
+<div class="chart"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"><path class="ln sg" d="M0 0H200M0 50H200"></path><path class="ln si" d="M0 100H200"></path><path class="ln sa" d="M2 70C10 40 30 25 60 20S140 16 200 15"></path></svg><div class="dt" style="left: 100%; top: 15%"></div><div class="tk" style="left: -34px; top: -7px">1.00</div><div class="tk" style="left: -34px; top: calc(50% - 8px)">0.75</div><div class="tk" style="left: 4px; top: calc(70% + 4px)">1 tree 0.80</div><div class="tk" style="right: 0; top: calc(15% + 8px); color: var(--ink)">100 trees 0.93</div><div class="tk" style="right: 0; top: calc(100% + 2px)">trees →</div></div>
+<p class="foot">Trees are trained independently, so there is no loss to follow. The curve shows the forest getting steadier as it grows.</p>
+</section>
+
+<section class="solid lc">
+<div style="display: flex; justify-content: space-between; align-items: center"><span class="lt">Fitted in one step</span><span class="tag">summary</span></div>
+<span class="used">GaussianNB · SVC · DBSCAN · DecisionTree</span>
+<div class="ok"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t); width: 20px; height: 20px"><circle cx="12" cy="12" r="9"></circle><path d="M8 12l3 3 5-6"></path></svg>Done in 4 ms — nothing to animate</div>
+<div style="border-radius: 10px; border: 1px solid var(--line); overflow: hidden">
+<div class="mono" style="display: grid; grid-template-columns: 60px repeat(3, minmax(0, 1fr)); font-size: 12px; color: var(--ink3); padding: 6px 10px; border-bottom: 1px solid var(--line)"><span>class</span><span>prior</span><span>mean x1</span><span>mean x2</span></div>
+<div class="mono" style="display: grid; grid-template-columns: 60px repeat(3, minmax(0, 1fr)); font-size: 12.5px; padding: 6px 10px; border-bottom: 1px solid var(--line)"><span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 50%; background: var(--c0)"></span>A</span><span>0.50</span><span>−0.01</span><span>0.62</span></div>
+<div class="mono" style="display: grid; grid-template-columns: 60px repeat(3, minmax(0, 1fr)); font-size: 12.5px; padding: 6px 10px"><span style="display: flex; align-items: center; gap: 6px"><span style="width: 8px; height: 8px; border-radius: 1.5px; background: var(--c1)"></span>B</span><span>0.50</span><span>1.00</span><span>−0.13</span></div>
+</div>
+<p class="foot">Shows what was learned instead of a curve. SVC: number of support vectors. DBSCAN: clusters and noise points. DecisionTree: accuracy by depth, replayable.</p>
+</section>
+
+<section class="solid lc">
+<div style="display: flex; justify-content: space-between; align-items: center"><span class="lt">Fitted in one step · errors</span><span class="tag">summary</span></div>
+<span class="used">LinearRegression · Ridge</span>
+<div style="display: flex; align-items: flex-end; gap: 16px">
+<div style="display: flex; flex-direction: column"><span class="lbl">R²</span><span class="mono" style="font-size: 34px; font-weight: 600; line-height: 1.1">0.91</span></div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 4px"><span class="lbl">Residuals (real − predicted)</span>
+<div style="display: flex; align-items: flex-end; gap: 2px; height: 70px; border-bottom: 1px solid var(--line2)"><i style="flex: 1; height: 6%; background: var(--ink3); opacity: .7; border-radius: 2px 2px 0 0"></i><i style="flex: 1; height: 14%; background: var(--ink3); opacity: .7; border-radius: 2px 2px 0 0"></i><i style="flex: 1; height: 32%; background: var(--ink3); opacity: .7; border-radius: 2px 2px 0 0"></i><i style="flex: 1; height: 62%; background: var(--ink3); opacity: .7; border-radius: 2px 2px 0 0"></i><i style="flex: 1; height: 92%; background: var(--acc); border-radius: 2px 2px 0 0"></i><i style="flex: 1; height: 100%; background: var(--acc); border-radius: 2px 2px 0 0"></i><i style="flex: 1; height: 66%; background: var(--ink3); opacity: .7; border-radius: 2px 2px 0 0"></i><i style="flex: 1; height: 30%; background: var(--ink3); opacity: .7; border-radius: 2px 2px 0 0"></i><i style="flex: 1; height: 12%; background: var(--ink3); opacity: .7; border-radius: 2px 2px 0 0"></i><i style="flex: 1; height: 5%; background: var(--ink3); opacity: .7; border-radius: 2px 2px 0 0"></i></div>
+<div class="mono hint" style="display: flex; justify-content: space-between"><span>−30</span><span>0</span><span>+30</span></div></div>
+</div>
+<p class="foot">Solved with one formula — no iterations. Errors bunched around 0 mean a good fit; a lopsided shape means a missed pattern.</p>
+</section>
+
+<section class="solid lc">
+<div style="display: flex; justify-content: space-between; align-items: center"><span class="lt">Nothing to train · try k</span><span class="tag">what-if curve</span></div>
+<span class="used">KNeighborsClassifier</span>
+<div class="lg"><span><svg width="16" height="4" aria-hidden="true"><path class="ln sa" d="M0 2H16"></path></svg>test accuracy for each k</span></div>
+<div class="chart"><svg viewBox="0 0 200 100" preserveAspectRatio="none" aria-hidden="true"><path class="ln sg" d="M0 0H200M0 50H200"></path><path class="ln si" d="M0 100H200"></path><path class="ln sv" d="M33.3 0V100"></path><path class="ln sa" d="M6.7 55L20 38L33.3 30L46.7 20L66.7 22L100 27L133 33L167 40L200 45"></path></svg><div class="dt" style="left: 16.7%; top: 30%"></div><div class="tk" style="left: calc(16.7% + 6px); top: calc(30% + 6px); color: var(--ink)">k = 5 · 0.89</div><div class="tk" style="left: calc(23.3% + 6px); top: calc(20% - 18px)">best k = 7</div><div class="tk" style="left: -34px; top: -7px">0.95</div><div class="tk" style="left: -34px; top: calc(100% - 8px)">0.75</div><div class="tk" style="right: 0; top: calc(100% + 2px)">k = 1 … 30</div></div>
+<p class="foot">KNN just stores the training points. Instead of a loss, see how the number of neighbours changes the score.</p>
+</section>
+
+<section class="solid lc">
+<div style="display: flex; justify-content: space-between; align-items: center"><span class="lt">Variance kept per component</span><span class="tag">summary</span></div>
+<span class="used">PCA</span>
+<div style="flex: 1; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; align-items: end; min-height: 130px; border-bottom: 1px solid var(--line2); padding: 0 6px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end"><span class="mono" style="font-size: 12px">62%</span><div style="width: 70%; height: 62%; background: var(--acc); border-radius: 3px 3px 0 0"></div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end"><span class="mono" style="font-size: 12px">27%</span><div style="width: 70%; height: 27%; background: var(--acc); border-radius: 3px 3px 0 0"></div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end"><span class="mono hint">8%</span><div style="width: 70%; height: 8%; background: var(--ink3); opacity: .6; border-radius: 3px 3px 0 0"></div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end"><span class="mono hint">3%</span><div style="width: 70%; height: 3%; background: var(--ink3); opacity: .6; border-radius: 3px 3px 0 0"></div></div>
+</div>
+<div class="mono hint" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); text-align: center; gap: 10px"><span>PC1</span><span>PC2</span><span>PC3</span><span>PC4</span></div>
+<p class="foot">PCA has no loss. The 2 kept components hold <b>89%</b> of the data’s spread (n_components = 2).</p>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var th = this.props.theme || 'dark';
+    return { appCls: 'app' + (th === 'light' ? ' light' : '') };
+  }
+}
+</script>
+</body>
+</html>

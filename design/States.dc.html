@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Empty, first-run and incompatible-data states</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app,.app *{box-sizing:border-box}
+.app{--bg:#0C0E10;--g1:rgba(64,128,150,.26);--g2:rgba(170,128,84,.16);--glass:rgba(30,33,37,.6);--solid:#121417;--solid2:#181B1F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);--ink:#F1F2EF;--ink2:#C2C6C9;--ink3:#9BA0A4;--chip:rgba(255,255,255,.06);--chip2:rgba(255,255,255,.12);--acc:#C4EC6A;--acc-ink:#141A08;--acc-t:#C4EC6A;--acc-soft:rgba(196,236,106,.14);--gl:rgba(255,255,255,.06);--warn:#E8B04A;--warn-soft:rgba(232,176,74,.12);--c0:#3E8EDE;--c1:#E69F00;font-family:'Onest',system-ui,'Segoe UI',sans-serif;color:var(--ink);background:radial-gradient(1000px 700px at 12% 0%,var(--g1),transparent 65%),radial-gradient(900px 700px at 95% 100%,var(--g2),transparent 65%),var(--bg);font-size:14px;line-height:1.4}
+.app.light{--bg:#E4E7EA;--g1:rgba(120,176,200,.5);--g2:rgba(230,198,160,.5);--glass:rgba(255,255,255,.6);--solid:#FBFBFA;--solid2:#F2F3F4;--line:rgba(16,20,24,.1);--line2:rgba(16,20,24,.2);--ink:#14171A;--ink2:#3D444A;--ink3:#596067;--chip:rgba(16,20,24,.05);--chip2:rgba(16,20,24,.1);--acc-t:#466A00;--acc-soft:rgba(120,170,20,.14);--gl:rgba(16,20,24,.07);--warn:#9A6200;--warn-soft:rgba(200,140,20,.12)}
+.glass{background:var(--glass);backdrop-filter:blur(28px) saturate(1.3);-webkit-backdrop-filter:blur(28px) saturate(1.3);border:1px solid var(--line);border-radius:16px}
+.solid{background:var(--solid);border:1px solid var(--line);border-radius:16px}
+.btn{all:unset;box-sizing:border-box;height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:var(--chip);color:var(--ink);font:500 13px/1 'Onest',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--chip2)}
+.btn.pri{background:var(--acc);color:var(--acc-ink);border-color:transparent;font-weight:600}
+.btn.gh{background:transparent;border-color:transparent;color:var(--ink2)}
+.btn.sm{height:30px;padding:0 11px;border-radius:8px;font-size:12px}
+.btn[disabled]{opacity:.42;cursor:not-allowed}
+.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wb{all:unset;width:46px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink2)}
+.lbl{font-size:12px;font-weight:500;color:var(--ink3)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Consolas,monospace}
+.hint{font-size:12px;line-height:1.45;color:var(--ink3)}
+.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink2);background:var(--chip);border:1px solid var(--line);white-space:nowrap}
+.cap{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3)}
+.cap b{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:var(--chip2);color:var(--ink);font:600 11px 'JetBrains Mono',monospace;letter-spacing:0}
+.pt{position:absolute;width:7px;height:7px;transform:translate(-50%,-50%);border-radius:50%}
+.pt.k1{border-radius:1.5px}
+.k0{background:var(--c0)}.k1{background:var(--c1)}
+.plot{position:relative;flex:1;min-height:0;border-radius:10px;border:1px dashed var(--line2);background:var(--solid2)}
+.mini{display:grid;grid-template-columns:150px minmax(0,1fr) 90px;gap:10px;padding:10px;border-radius:12px}
+.ghost{position:relative;border-radius:8px;border:1px dashed var(--line2);display:flex;align-items:center;justify-content:center;padding:8px;text-align:center}
+.fix{display:grid;grid-template-columns:22px minmax(0,1fr);gap:4px 10px;padding:12px 0;border-top:1px solid var(--line)}
+.fix .n{width:22px;height:22px;border-radius:50%;background:var(--chip2);display:flex;align-items:center;justify-content:center;font:600 11px 'JetBrains Mono',monospace}
+a{color:var(--acc-t)}a:hover{color:var(--ink)}
+</style>
+</helmet>
+<div class="{{appCls}}" style="width: 100%; min-height: 100vh; display: flex; flex-direction: column">
+<header style="height: 36px; flex: none; display: flex; align-items: center; justify-content: space-between; padding-left: 14px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink3)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><circle cx="12" cy="12" r="2.5"></circle></svg><span style="color: var(--ink2); font-weight: 600">Sightline</span><span>Design reference · empty and first-run states</span></div>
+<div style="display: flex"><span class="wb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg></span><span class="wb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1"></rect></svg></span><span class="wb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"></path></svg></span></div>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 14px; padding: 18px 20px 20px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span class="cap"><b>0</b>Home · very first launch</span>
+<section class="glass" style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding: 18px 22px">
+<div style="display: flex; align-items: center; gap: 18px">
+<div style="width: 72px; height: 54px; border-radius: 10px; background: var(--solid); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center"><svg width="60" height="40" viewBox="0 0 96 64" aria-hidden="true"><path d="M0 0H96L0 64Z" style="fill: var(--c0); opacity: .18"></path><path d="M96 0V64H0Z" style="fill: var(--c1); opacity: .18"></path><path d="M0 64L96 0" style="stroke: var(--ink); stroke-width: 2; fill: none"></path><circle cx="18" cy="16" r="4.5" style="fill: var(--c0)"></circle><circle cx="32" cy="10" r="4.5" style="fill: var(--c0)"></circle><rect x="64" y="44" width="8" height="8" rx="1" style="fill: var(--c1)"></rect><rect x="78" y="34" width="8" height="8" rx="1" style="fill: var(--c1)"></rect></svg></div>
+<div style="display: flex; flex-direction: column; gap: 4px; max-width: 640px">
+<span style="font-size: 17px; font-weight: 600">New to machine learning? Start here.</span>
+<span style="font-size: 14px; color: var(--ink2)">A 2-minute guided run: LogisticRegression learns to separate Two moons while you watch the border move. “Recently used” fills up once you’ve trained something.</span>
+</div>
+</div>
+<div style="display: flex; gap: 8px"><button class="btn gh">Skip, I’ll explore</button><a class="btn pri" href="WsLogistic.dc.html">Start the guided run</a></div>
+</section>
+</div>
+
+<div style="flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<span class="cap"><b>1</b>Workspace · no dataset yet</span>
+<section class="solid" style="flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 14px">
+<div class="plot" style="display: flex; align-items: center; justify-content: center; padding: 24px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; max-width: 330px">
+<svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true" class="i" style="width: 40px; height: 40px; color: var(--ink3); stroke-width: 1.3"><rect x="4" y="5" width="16" height="14" rx="2"></rect><path d="M4 10h16M10 10v9"></path></svg>
+<span style="font-size: 18px; font-weight: 600">No data yet</span>
+<span style="font-size: 14px; color: var(--ink2); line-height: 1.5">A model learns from examples. Pick a ready-made shape — it takes one click.</span>
+<a class="btn pri" href="DataPresets.dc.html" style="margin-top: 4px">Choose a preset</a>
+<div style="display: flex; gap: 6px"><a class="btn sm" href="DataGenerator.dc.html">Generate data</a><a class="btn sm" href="DataManual.dc.html">Build a table</a></div>
+<span class="hint">Not sure? Two moons works with every classifier.</span>
+</div>
+</div>
+<div class="mini glass">
+<button class="btn pri" disabled title="Add data first">Train</button>
+<div class="ghost"><span class="hint">Loss appears here once training starts</span></div>
+<div class="ghost"><span class="mono" style="color: var(--ink3)">—</span></div>
+</div>
+</section>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<span class="cap"><b>2</b>Workspace · data loaded, not trained</span>
+<section class="solid" style="flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 14px">
+<div class="plot" style="border-style: solid; border-color: var(--line)">
+<sc-for list="{{pts}}" as="p" hint-placeholder-count="50"><div class="{{p.c}}" style="left: {{p.x}}%; top: {{p.y}}%"></div></sc-for>
+<div style="position: absolute; left: 50%; top: 14px; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 10px; background: var(--solid); border: 1px solid var(--line2); white-space: nowrap; font-size: 13px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><path d="M8 5.5l10 6.5-10 6.5z"></path></svg>Press <b>Train</b> to watch the model draw its border</div>
+</div>
+<div class="mini glass">
+<button class="btn pri" style="box-shadow: 0 0 0 4px var(--acc-soft)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="fill: currentColor"><path d="M8 5.5l10 6.5-10 6.5z"></path></svg>Train</button>
+<div class="ghost" style="flex-direction: column; gap: 4px"><svg width="100%" height="28" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"><path d="M2 3C20 20 40 24 98 25" style="fill: none; stroke: var(--ink3); stroke-width: 1.5; stroke-dasharray: 3 4; vector-effect: non-scaling-stroke"></path></svg><span class="hint">Loss will fall here as it learns. Lower is better.</span></div>
+<div class="ghost" style="flex-direction: column"><span class="mono" style="font-size: 18px; color: var(--ink3)">—</span><span class="hint">accuracy after training</span></div>
+</div>
+</section>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+<span class="cap"><b>3</b>Workspace · incompatible data</span>
+<section class="solid" style="flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 14px">
+<div style="flex: 1; display: flex; flex-direction: column; padding: 16px 18px; border-radius: 12px; background: var(--warn-soft); border: 1px solid var(--warn)">
+<div style="display: flex; gap: 12px; align-items: flex-start">
+<svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 22px; height: 22px; color: var(--warn); margin-top: 2px"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.01"></path></svg>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 16px; font-weight: 600; line-height: 1.35"><span class="mono">LinearRegression</span> predicts numbers, but your target is a category</span>
+<span style="font-size: 13px; color: var(--ink2); line-height: 1.5">The target column <span class="mono">type</span> holds labels — apple, lemon, pear. Linear regression can only output a number like 7.3, so it can’t learn labels.</span>
+</div>
+</div>
+<div style="margin-top: 12px; display: flex; flex-direction: column">
+<span class="lbl" style="padding-bottom: 4px">Three ways to fix it</span>
+<div class="fix"><span class="n">1</span><span style="font-size: 13px"><b>Switch to LogisticRegression</b> — the same idea, made for categories.</span><span></span><a class="btn sm pri" href="WsLogistic.dc.html" style="justify-self: start">Switch model</a></div>
+<div class="fix"><span class="n">2</span><span style="font-size: 13px"><b>Predict a number instead</b> — make <span class="mono">weight_g</span> the target.</span><span></span><a class="btn sm" href="DataManual.dc.html" style="justify-self: start">Change target</a></div>
+<div class="fix"><span class="n">3</span><span style="font-size: 13px"><b>Try regression data</b> — load the “Linear with noise” preset.</span><span></span><a class="btn sm" href="DataPresets.dc.html" style="justify-self: start">Use preset</a></div>
+</div>
+</div>
+<div class="mini glass">
+<button class="btn pri" disabled title="Fix the data first">Train</button>
+<div class="ghost"><span class="hint">Training is off until the target is numeric</span></div>
+<div class="ghost"><span class="mono" style="color: var(--ink3)">R² —</span></div>
+</div>
+</section>
+</div>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":1440,"height":900}}'>
+function rnd(s) { return function () { s |= 0; s = s + 0x6D2B79F5 | 0; var t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gau(r) { var u = r() || 1e-9, v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2832 * v); }
+class Component extends DCLogic {
+  renderVals() {
+    var th = this.props.theme || 'dark';
+    var r = rnd(7), pts = [];
+    for (var i = 0; i < 200; i++) {
+      var c = i % 2, t = Math.PI * r();
+      var x = (c ? 1 - Math.cos(t) : Math.cos(t)) + gau(r) * 0.14, y = (c ? 0.5 - Math.sin(t) : Math.sin(t)) + gau(r) * 0.14;
+      pts.push({ c: 'pt k' + c, x: ((x + 1.4) / 3.8 * 90 + 5).toFixed(1), y: ((1.4 - y) / 2.3 * 70 + 22).toFixed(1) });
+    }
+    return { appCls: 'app' + (th === 'light' ? ' light' : ''), pts: pts };
+  }
+}
+</script>
+</body>
+</html>

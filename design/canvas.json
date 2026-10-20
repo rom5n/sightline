@@ -1,0 +1,29 @@
+{"v":3,"createdOnFiles":{"v":1,"at":"2026-10-19T09:00:00Z"},"title":"Sightline — ML playground","launch":{"view":"canvas"},"pages":[],
+"boards":{
+"Main.dc.html":{"x":0,"y":0,"w":1440,"h":1400,"title":"Home — model selection","expand":"fill"},
+"States.dc.html":{"x":1520,"y":0,"w":1440,"h":900,"title":"Empty, first-run and incompatible-data states","expand":"fill"},
+"LossPanels.dc.html":{"x":3040,"y":0,"w":1440,"h":900,"title":"Loss panel — what it shows for every model type","expand":"fill"},
+"WsLogistic.dc.html":{"x":0,"y":1780,"w":1440,"h":900,"title":"Workspace — LogisticRegression","expand":"fill"},
+"WsTree.dc.html":{"x":1520,"y":1780,"w":1440,"h":900,"title":"Workspace — DecisionTreeClassifier","expand":"fill"},
+"WsKMeans.dc.html":{"x":3040,"y":1780,"w":1440,"h":900,"title":"Workspace — KMeans","expand":"fill"},
+"WsMLP.dc.html":{"x":4560,"y":1780,"w":1440,"h":900,"title":"Workspace — MLPClassifier (training)","expand":"fill"},
+"WsLogisticRU.dc.html":{"x":6080,"y":1780,"w":1440,"h":900,"title":"Workspace — LogisticRegression, RU + light","expand":"fill"},
+"Advanced.dc.html":{"x":7600,"y":1780,"w":1440,"h":900,"title":"Advanced settings drawer — MLPClassifier","expand":"fill"},
+"DecideLogistic.dc.html":{"x":0,"y":3060,"w":1440,"h":900,"title":"How it decides — LogisticRegression","expand":"fill","is_interactive":true},
+"DecideTree.dc.html":{"x":1520,"y":3060,"w":1440,"h":900,"title":"How it decides — DecisionTreeClassifier","expand":"fill","is_interactive":true},
+"DecideKMeans.dc.html":{"x":3040,"y":3060,"w":1440,"h":900,"title":"How it decides — KMeans","expand":"fill","is_interactive":true},
+"DecideMLP.dc.html":{"x":4560,"y":3060,"w":1440,"h":900,"title":"How it decides — MLPClassifier","expand":"fill","is_interactive":true},
+"DecideFamilies.dc.html":{"x":6080,"y":3060,"w":1440,"h":1040,"title":"How it decides — other families","expand":"fill"},
+"DataPresets.dc.html":{"x":0,"y":4480,"w":1440,"h":900,"title":"Dataset presets","expand":"fill"},
+"DataManual.dc.html":{"x":1520,"y":4480,"w":1440,"h":900,"title":"Dataset editor — manual table","expand":"fill"},
+"DataGenerator.dc.html":{"x":3040,"y":4480,"w":1440,"h":900,"title":"Dataset editor — generator","expand":"fill"},
+"DataInsights.dc.html":{"x":4560,"y":4480,"w":1440,"h":900,"title":"Dataset insights","expand":"fill"}
+},
+"order":["Main.dc.html","States.dc.html","LossPanels.dc.html","WsLogistic.dc.html","WsTree.dc.html","WsKMeans.dc.html","WsMLP.dc.html","WsLogisticRU.dc.html","Advanced.dc.html","DecideLogistic.dc.html","DecideTree.dc.html","DecideKMeans.dc.html","DecideMLP.dc.html","DecideFamilies.dc.html","DataPresets.dc.html","DataManual.dc.html","DataGenerator.dc.html","DataInsights.dc.html"],
+"notes":{
+"t1":{"x":0,"y":-260,"text":"1 · Choose a model, states","kind":"title1","maxW":4480},
+"t2":{"x":0,"y":1520,"text":"2 · Model workspace","kind":"title1","maxW":9040},
+"t3":{"x":0,"y":2800,"text":"3 · How it decides","kind":"title1","maxW":7520},
+"t4":{"x":0,"y":4220,"text":"4 · Data","kind":"title1","maxW":6000}
+},
+"designSystems":[]}

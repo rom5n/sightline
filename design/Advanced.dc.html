@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Advanced settings — MLPClassifier</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app,.app *{box-sizing:border-box}
+.app{--bg:#0C0E10;--g1:rgba(64,128,150,.26);--g2:rgba(170,128,84,.16);--glass:rgba(30,33,37,.6);--solid:#121417;--solid2:#181B1F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);--ink:#F1F2EF;--ink2:#C2C6C9;--ink3:#9BA0A4;--chip:rgba(255,255,255,.06);--chip2:rgba(255,255,255,.12);--acc:#C4EC6A;--acc-ink:#141A08;--acc-t:#C4EC6A;--acc-soft:rgba(196,236,106,.16);--gl:rgba(255,255,255,.06);--warn:#E8B04A;--dim:rgba(6,7,8,.6);--sh:0 24px 60px rgba(0,0,0,.4);--c0:#3E8EDE;--c1:#E69F00;font-family:'Onest',system-ui,'Segoe UI',sans-serif;color:var(--ink);background:radial-gradient(1000px 700px at 12% 0%,var(--g1),transparent 65%),radial-gradient(900px 700px at 95% 100%,var(--g2),transparent 65%),var(--bg);font-size:14px;line-height:1.4}
+.app.light{--bg:#E4E7EA;--g1:rgba(120,176,200,.5);--g2:rgba(230,198,160,.5);--glass:rgba(255,255,255,.6);--solid:#FBFBFA;--solid2:#F2F3F4;--line:rgba(16,20,24,.1);--line2:rgba(16,20,24,.2);--ink:#14171A;--ink2:#3D444A;--ink3:#596067;--chip:rgba(16,20,24,.05);--chip2:rgba(16,20,24,.1);--acc-t:#466A00;--acc-soft:rgba(120,170,20,.16);--gl:rgba(16,20,24,.07);--warn:#9A6200;--dim:rgba(170,176,182,.55);--sh:0 24px 60px rgba(40,50,60,.18)}
+.glass{background:var(--glass);backdrop-filter:blur(28px) saturate(1.3);-webkit-backdrop-filter:blur(28px) saturate(1.3);border:1px solid var(--line);border-radius:16px}
+.solid{background:var(--solid);border:1px solid var(--line);border-radius:16px}
+.btn{all:unset;box-sizing:border-box;height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:var(--chip);color:var(--ink);font:500 13px/1 'Onest',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--chip2)}
+.btn.pri{background:var(--acc);color:var(--acc-ink);border-color:transparent;font-weight:600}
+.btn.gh{background:transparent;border-color:transparent;color:var(--ink2)}
+.btn.ico{width:36px;padding:0}
+.btn.sm{height:30px;padding:0 10px;border-radius:8px;font-size:12px}
+.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.seg{display:inline-flex;padding:3px;gap:2px;border-radius:11px;background:var(--chip);border:1px solid var(--line)}
+.seg button{all:unset;box-sizing:border-box;height:26px;padding:0 9px;border-radius:8px;font:500 12px/26px 'JetBrains Mono',monospace;color:var(--ink2);cursor:pointer;white-space:nowrap}
+.seg .on{background:var(--chip2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.lbl{font-size:12px;font-weight:500;color:var(--ink3)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Consolas,monospace}
+.hint{font-size:12px;line-height:1.45;color:var(--ink3)}
+.tag{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink2);background:var(--chip);border:1px solid var(--line);white-space:nowrap}
+.wb{all:unset;width:46px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink2)}
+.tg{position:relative;display:inline-block;width:36px;height:20px;flex:none}
+.tg input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
+.tg span{position:absolute;inset:0;border-radius:10px;background:var(--chip2)}
+.tg span:after{content:"";position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--ink2)}
+.tg input:checked+span{background:var(--acc)}
+.tg input:checked+span:after{left:19px;background:var(--acc-ink)}
+.fld{all:unset;box-sizing:border-box;width:96px;height:30px;padding:0 10px;border-radius:8px;background:var(--chip);border:1px solid var(--line2);font:500 13px/30px 'JetBrains Mono',monospace;color:var(--ink);text-align:right}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 16px;align-items:center;padding:11px 0;border-top:1px solid var(--line)}
+.row .nm{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:var(--ink)}
+.row .k{font:500 12px 'JetBrains Mono',monospace;color:var(--ink3)}
+.row .hint{grid-column:1 / -1}
+.row.off .nm,.row.off .k,.row.off .ctl{opacity:.45}
+.ch{width:7px;height:7px;border-radius:50%;background:var(--acc);flex:none}
+.sec{all:unset;box-sizing:border-box;width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 0 8px;cursor:pointer}
+.sec h3{margin:0;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink2)}
+a{color:var(--acc-t)}
+</style>
+</helmet>
+<div class="{{appCls}}" style="position: relative; width: 100%; height: 100vh; min-height: 720px; display: grid; grid-template-rows: 36px 60px minmax(0, 1fr); overflow: hidden">
+<header style="display: flex; align-items: center; justify-content: space-between; padding-left: 14px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink3)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><circle cx="12" cy="12" r="2.5"></circle></svg><span style="color: var(--ink2); font-weight: 600">Sightline</span><span>MLPClassifier · Circles</span></div>
+<div style="display: flex"><span class="wb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg></span><span class="wb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1"></rect></svg></span><span class="wb"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"></path></svg></span></div>
+</header>
+<nav style="display: flex; align-items: center; justify-content: space-between; padding: 0 16px" aria-hidden="true">
+<div style="display: flex; flex-direction: column; padding-left: 46px"><span class="mono" style="font-size: 15px; font-weight: 600">MLPClassifier</span><span class="lbl">Neural network · classification</span></div>
+<div class="seg"><button class="on" style="font-family: Onest, sans-serif; font-size: 13px; height: 30px; padding: 0 12px">Workspace</button><button style="font-family: Onest, sans-serif; font-size: 13px; height: 30px; padding: 0 12px">Data</button><button style="font-family: Onest, sans-serif; font-size: 13px; height: 30px; padding: 0 12px">Insights</button><button style="font-family: Onest, sans-serif; font-size: 13px; height: 30px; padding: 0 12px">How it decides</button></div>
+<div style="width: 180px"></div>
+</nav>
+<main aria-hidden="true" style="min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 340px; grid-template-rows: minmax(0, 1fr) 200px; gap: 12px; padding: 0 16px 16px">
+<div class="solid" style="grid-column: 1; grid-row: 1; position: relative; overflow: hidden"><div style="position: absolute; left: 6%; top: 10%; width: 40%; height: 78%; border-radius: 8px; background: radial-gradient(circle at 50% 50%, rgba(230,159,0,.35) 0 22%, rgba(62,142,222,.25) 34% 70%, transparent 71%)"></div><div style="position: absolute; left: 56%; top: 14%; width: 38%; height: 70%; border-left: 1px solid var(--line)"></div></div>
+<div class="glass" style="grid-column: 2; grid-row: 1 / span 2"></div>
+<div class="glass" style="grid-column: 1; grid-row: 2"></div>
+</main>
+<div style="position: absolute; inset: 36px 0 0 0; background: var(--dim)"></div>
+
+<aside role="dialog" aria-label="Advanced settings" style="position: absolute; top: 48px; right: 12px; bottom: 12px; width: min(470px, 46vw); display: flex; flex-direction: column; border-radius: 18px; background: var(--solid); border: 1px solid var(--line2); box-shadow: var(--sh)">
+<div style="display: flex; flex-direction: column; gap: 12px; padding: 20px 22px 14px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 style="margin: 0; font-size: 18px; font-weight: 600">Advanced settings</h2>
+<span class="mono" style="font-size: 13px; color: var(--ink2)">MLPClassifier · 17 parameters</span>
+</div>
+<button class="btn ico gh" aria-label="Close advanced settings"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"></path></svg></button>
+</div>
+<p style="margin: 0; font-size: 13px; color: var(--ink2); line-height: 1.5">You rarely need these. Every value has a safe default — change one at a time and watch what the loss does.</p>
+<div style="display: flex; align-items: center; gap: 10px">
+<label style="flex: 1; display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 12px; border-radius: 10px; background: var(--chip); border: 1px solid var(--line)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--ink3)"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4 4"></path></svg><input type="search" placeholder="Filter, e.g. momentum" aria-label="Filter parameters" style="all: unset; flex: 1; font: 400 13px Onest, sans-serif; color: var(--ink)"></label>
+<span class="tag" style="color: var(--ink)"><span class="ch"></span>2 changed</span>
+</div>
+</div>
+
+<div style="flex: 1; min-height: 0; overflow: auto; padding: 0 22px 12px">
+<button class="sec" aria-expanded="true"><h3>Optimizer</h3><span class="hint" style="display: flex; align-items: center; gap: 6px">9 settings<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"></path></svg></span></button>
+<div class="row" style="border-top: 0"><span class="nm">Solver <span class="k">solver</span></span><div class="seg ctl"><button class="on">adam</button><button>sgd</button><button>lbfgs</button></div><span class="hint">The method that updates the weights. lbfgs suits small datasets but has no per-epoch loss curve.</span></div>
+<div class="row"><span class="nm">Batch size <span class="k">batch_size</span></span><input class="fld ctl" value="'auto'" aria-label="batch_size"><span class="hint">Points per weight update. 'auto' = min(200, number of rows).</span></div>
+<div class="row"><span class="nm"><span class="ch"></span>Adam β1 <span class="k">beta_1</span></span><input class="fld ctl" value="0.85" aria-label="beta_1"><span class="hint">How much the last updates keep pushing in the same direction. Default 0.9.</span></div>
+<div class="row"><span class="nm">Adam β2 <span class="k">beta_2</span></span><input class="fld ctl" value="0.999" aria-label="beta_2"><span class="hint">Memory for how big recent updates were. Leave as is.</span></div>
+<div class="row"><span class="nm">Adam ε <span class="k">epsilon</span></span><input class="fld ctl" value="1e-8" aria-label="epsilon"><span class="hint">Tiny number that prevents dividing by zero.</span></div>
+<div class="row off"><span class="nm">Learning-rate schedule <span class="k">learning_rate</span></span><div class="seg ctl"><button class="on">constant</button><button>invscaling</button><button>adaptive</button></div><span class="hint"><span class="tag" style="height: 20px; margin-right: 6px">solver='sgd' only</span>How the step size changes over time.</span></div>
+<div class="row off"><span class="nm">Momentum <span class="k">momentum</span></span><input class="fld ctl" value="0.9" aria-label="momentum" disabled><span class="hint"><span class="tag" style="height: 20px; margin-right: 6px">solver='sgd' only</span>Keeps moving in the previous direction, like a rolling ball.</span></div>
+<div class="row off"><span class="nm">Nesterov momentum <span class="k">nesterovs_momentum</span></span><span class="tg ctl"><input type="checkbox" checked disabled aria-label="nesterovs_momentum"><span></span></span><span class="hint"><span class="tag" style="height: 20px; margin-right: 6px">solver='sgd' only</span>A slightly smarter momentum that looks one step ahead.</span></div>
+<div class="row off"><span class="nm">Decay power <span class="k">power_t</span></span><input class="fld ctl" value="0.5" aria-label="power_t" disabled><span class="hint"><span class="tag" style="height: 20px; margin-right: 6px">sgd + invscaling only</span>How fast the step size shrinks.</span></div>
+
+<button class="sec" aria-expanded="true"><h3>When to stop</h3><span class="hint" style="display: flex; align-items: center; gap: 6px">5 settings<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 15l6-6 6 6"></path></svg></span></button>
+<div class="row" style="border-top: 0"><span class="nm"><span class="ch"></span>Early stopping <span class="k">early_stopping</span></span><span class="tg ctl"><input type="checkbox" checked aria-label="early_stopping"><span></span></span><span class="hint">Hold back part of the training data and stop when its score stops improving.</span></div>
+<div class="row"><span class="nm">Validation share <span class="k">validation_fraction</span></span><input class="fld ctl" value="0.1" aria-label="validation_fraction"><span class="hint">Share of training rows held back for early stopping.</span></div>
+<div class="row"><span class="nm">Patience <span class="k">n_iter_no_change</span></span><input class="fld ctl" value="10" aria-label="n_iter_no_change"><span class="hint">Epochs without improvement before it stops.</span></div>
+<div class="row"><span class="nm">Tolerance <span class="k">tol</span></span><input class="fld ctl" value="1e-4" aria-label="tol"><span class="hint">“Improvement” must be bigger than this to count.</span></div>
+<div class="row off"><span class="nm">Max function calls <span class="k">max_fun</span></span><input class="fld ctl" value="15000" aria-label="max_fun" disabled><span class="hint"><span class="tag" style="height: 20px; margin-right: 6px">solver='lbfgs' only</span>Upper limit on loss evaluations.</span></div>
+
+<button class="sec" aria-expanded="false"><h3>Reproducibility</h3><span class="hint" style="display: flex; align-items: center; gap: 6px">random_state · shuffle · warm_start<svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></span></button>
+</div>
+
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 22px; border-top: 1px solid var(--line)">
+<button class="btn gh sm">Reset all to defaults</button>
+<div style="display: flex; gap: 8px"><button class="btn">Cancel</button><a class="btn pri" href="WsMLP.dc.html">Apply and retrain</a></div>
+</div>
+</aside>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var th = this.props.theme || 'dark';
+    return { appCls: 'app' + (th === 'light' ? ' light' : '') };
+  }
+}
+</script>
+</body>
+</html>

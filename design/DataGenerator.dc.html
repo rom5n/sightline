@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dataset editor — generator</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app,.app *{box-sizing:border-box}
+.app{--bg:#0C0E10;--g1:rgba(64,128,150,.26);--g2:rgba(170,128,84,.16);--glass:rgba(30,33,37,.6);--solid:#121417;--solid2:#181B1F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);--ink:#F1F2EF;--ink2:#C2C6C9;--ink3:#9BA0A4;--chip:rgba(255,255,255,.06);--chip2:rgba(255,255,255,.12);--acc:#C4EC6A;--acc-ink:#141A08;--acc-t:#C4EC6A;--acc-soft:rgba(196,236,106,.14);--gl:rgba(255,255,255,.06);--c0:#3E8EDE;--c1:#E69F00;--c2:#1FA37A;font-family:'Onest',system-ui,'Segoe UI',sans-serif;color:var(--ink);background:radial-gradient(1000px 700px at 12% 0%,var(--g1),transparent 65%),radial-gradient(900px 700px at 95% 100%,var(--g2),transparent 65%),var(--bg);font-size:14px;line-height:1.4}
+.app.light{--bg:#E4E7EA;--g1:rgba(120,176,200,.5);--g2:rgba(230,198,160,.5);--glass:rgba(255,255,255,.6);--solid:#FBFBFA;--solid2:#F2F3F4;--line:rgba(16,20,24,.1);--line2:rgba(16,20,24,.2);--ink:#14171A;--ink2:#3D444A;--ink3:#596067;--chip:rgba(16,20,24,.05);--chip2:rgba(16,20,24,.1);--acc-t:#466A00;--acc-soft:rgba(120,170,20,.14);--gl:rgba(16,20,24,.07)}
+.glass{background:var(--glass);backdrop-filter:blur(28px) saturate(1.3);-webkit-backdrop-filter:blur(28px) saturate(1.3);border:1px solid var(--line);border-radius:16px}
+.solid{background:var(--solid);border:1px solid var(--line);border-radius:16px}
+.btn{all:unset;box-sizing:border-box;height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:var(--chip);color:var(--ink);font:500 13px/1 'Onest',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--chip2)}
+.btn.pri{background:var(--acc);color:var(--acc-ink);border-color:transparent;font-weight:600}
+.btn.gh{background:transparent;border-color:transparent;color:var(--ink2)}
+.btn.ico{width:36px;padding:0}
+.btn.sm{height:30px;padding:0 11px;border-radius:8px;font-size:12px}
+.btn.ico.sm{width:30px;padding:0}
+.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.seg{display:inline-flex;padding:3px;gap:2px;border-radius:11px;background:var(--chip);border:1px solid var(--line)}
+.seg button,.seg a{all:unset;box-sizing:border-box;height:30px;padding:0 12px;border-radius:8px;font:500 13px/30px 'Onest',system-ui,sans-serif;color:var(--ink2);cursor:pointer;white-space:nowrap}
+.seg.sm button{height:26px;line-height:26px;padding:0 10px;font-size:12px}
+.seg .on{background:var(--chip2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.lbl{font-size:12px;font-weight:500;color:var(--ink3)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Consolas,monospace}
+.hint{font-size:12px;line-height:1.45;color:var(--ink3)}
+.tag{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink2);background:var(--chip);border:1px solid var(--line);white-space:nowrap}
+.wb{all:unset;width:46px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink2);cursor:pointer}
+.wb:hover{background:var(--chip2)}
+.wb.x:hover{background:#C42B1C;color:#fff}
+.rng{-webkit-appearance:none;appearance:none;width:100%;height:20px;background:transparent;margin:0}
+.rng::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(var(--acc),var(--acc)) 0 0/var(--p,50%) 100% no-repeat,var(--chip2)}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-6px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 3px var(--solid2)}
+.fld{all:unset;box-sizing:border-box;width:100%;height:30px;padding:0 10px;border-radius:8px;background:var(--solid);border:1px solid var(--line2);font:500 13px/30px 'JetBrains Mono',monospace;color:var(--ink)}
+.col{display:flex;flex-direction:column;gap:10px;padding:12px 14px;border-radius:12px;background:var(--solid2);border:1px solid var(--line)}
+.col.tg{border-color:var(--acc-t)}
+.ch{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.cn{font:600 13px 'JetBrains Mono',monospace}
+.f2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr)) 96px;gap:8px;align-items:end}
+.f2 label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--ink3)}
+.hb{display:flex;align-items:flex-end;gap:2px;height:40px}
+.hb i{flex:1;background:var(--ink3);opacity:.55;border-radius:2px 2px 0 0}
+.pt{position:absolute;width:6px;height:6px;transform:translate(-50%,-50%);border-radius:50%}
+.pt.k1{border-radius:1px}
+.k0{background:var(--c0)}.k1{background:var(--c1)}.k2{background:var(--c2)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.dot.k1{border-radius:1.5px}
+.tr{display:grid;grid-template-columns:40px repeat(4,minmax(0,1fr));font:500 12.5px 'JetBrains Mono',monospace}
+.tr div{padding:7px 10px;border-bottom:1px solid var(--line)}
+.tr.hd div{font:600 12px 'JetBrains Mono',monospace;color:var(--ink3)}
+a{color:var(--acc-t)}a:hover{color:var(--ink)}
+</style>
+</helmet>
+<div class="{{appCls}}" style="width: 100%; height: 100vh; min-height: 720px; display: grid; grid-template-rows: 36px 60px auto minmax(0, 1fr); overflow: hidden">
+<header style="display: flex; align-items: center; justify-content: space-between; padding-left: 14px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink3)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><circle cx="12" cy="12" r="2.5"></circle></svg><span style="color: var(--ink2); font-weight: 600">Sightline</span><span>Generated dataset · not saved</span></div>
+<div style="display: flex">
+<button class="wb" aria-label="Minimize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg></button>
+<button class="wb" aria-label="Maximize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1"></rect></svg></button>
+<button class="wb x" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"></path></svg></button>
+</div>
+</header>
+<nav style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 16px">
+<div style="display: flex; align-items: center; gap: 10px; min-width: 0">
+<a class="btn gh ico" href="Main.dc.html" aria-label="Back to all models"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<div style="display: flex; flex-direction: column; min-width: 0"><span class="mono" style="font-size: 15px; font-weight: 600">LogisticRegression</span><span class="lbl">Linear · classification</span></div>
+</div>
+<div class="seg"><a href="WsLogistic.dc.html">Workspace</a><a class="on" href="DataPresets.dc.html">Data</a><a href="DataInsights.dc.html">Insights</a><a href="DecideLogistic.dc.html">How it decides</a></div>
+<div style="display: flex; align-items: center; gap: 8px">
+<div class="seg" aria-label="Interface language"><button class="on">EN</button><button>RU</button></div>
+<button class="btn ico" aria-label="Switch light or dark theme" onClick="{{toggle}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"></path></svg></button>
+</div>
+</nav>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 0 20px 14px">
+<div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap">
+<h1 style="margin: 0; font-size: 22px; font-weight: 600">Get data</h1>
+<div class="seg" aria-label="Data source"><a href="DataPresets.dc.html">Presets</a><a href="DataManual.dc.html">Build a table</a><a class="on" href="DataGenerator.dc.html">Generator</a></div>
+</div>
+<div style="display: flex; gap: 8px"><a class="btn sm" href="DataManual.dc.html">Open as table</a><a class="btn sm pri" href="WsLogistic.dc.html">Use this data</a></div>
+</div>
+<main style="min-height: 0; display: grid; grid-template-columns: minmax(380px, 460px) minmax(0, 1fr); gap: 12px; padding: 0 16px 16px">
+<aside class="glass" style="display: flex; flex-direction: column; min-height: 0">
+<div style="flex: 1; min-height: 0; overflow: auto; display: flex; flex-direction: column; gap: 14px; padding: 16px 16px 12px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div class="ch"><label class="lbl" for="g-rows" style="color: var(--ink2); font-size: 13px">Number of rows</label><span class="mono" style="font-weight: 600">500</span></div>
+<input id="g-rows" class="rng" type="range" min="20" max="5000" value="500" style="--p: 10%">
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span class="lbl" style="color: var(--ink2); font-size: 13px">How columns are filled</span>
+<div class="seg" style="align-self: flex-start"><button>Random</button><button class="on">Rules per column</button></div>
+<span class="hint">Random fills every column with noise. Rules let you set a range, a distribution or a list of values for each one.</span>
+</div>
+<div class="ch"><span class="lbl" style="color: var(--ink2); font-size: 13px">Columns · 4</span><div style="display: flex; align-items: center; gap: 6px"><span class="hint">seed</span><span class="mono" style="font-size: 13px">42</span><button class="btn ico sm" aria-label="New random seed"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h3c5 0 5 10 10 10h3M4 17h3c2 0 3-1.5 4-3.5M13 9.5c1-2 2-2.5 4-2.5h3M17 4l3 3-3 3M17 14l3 3-3 3"></path></svg></button></div></div>
+
+<div class="col">
+<div class="ch"><span class="cn">x1</span><span class="tag">123 Numeric</span></div>
+<div class="seg sm" style="align-self: flex-start"><button>Uniform</button><button class="on">Normal</button></div>
+<div class="f2"><label>mean<input class="fld" value="0"></label><label>std<input class="fld" value="1.0"></label><div class="hb" aria-hidden="true"><i style="height: 8%"></i><i style="height: 22%"></i><i style="height: 52%"></i><i style="height: 86%"></i><i style="height: 100%"></i><i style="height: 84%"></i><i style="height: 50%"></i><i style="height: 20%"></i><i style="height: 8%"></i></div></div>
+<span class="hint">Bell shape: most values near the mean, few far away.</span>
+</div>
+
+<div class="col">
+<div class="ch"><span class="cn">x2</span><span class="tag">123 Numeric</span></div>
+<div class="seg sm" style="align-self: flex-start"><button class="on">Uniform</button><button>Normal</button></div>
+<div class="f2"><label>min<input class="fld" value="−3"></label><label>max<input class="fld" value="3"></label><div class="hb" aria-hidden="true"><i style="height: 70%"></i><i style="height: 64%"></i><i style="height: 72%"></i><i style="height: 68%"></i><i style="height: 66%"></i><i style="height: 71%"></i><i style="height: 65%"></i><i style="height: 69%"></i><i style="height: 67%"></i></div></div>
+<span class="hint">Flat: every value in the range is equally likely.</span>
+</div>
+
+<div class="col">
+<div class="ch"><span class="cn">color</span><span class="tag">Aa Category · text</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<div style="display: grid; grid-template-columns: 70px 1fr 44px; gap: 10px; align-items: center"><span class="mono" style="font-size: 13px">red</span><div style="height: 6px; border-radius: 3px; background: var(--chip2)"><div style="width: 40%; height: 100%; border-radius: 3px; background: var(--ink3)"></div></div><span class="mono hint" style="text-align: right">40%</span></div>
+<div style="display: grid; grid-template-columns: 70px 1fr 44px; gap: 10px; align-items: center"><span class="mono" style="font-size: 13px">green</span><div style="height: 6px; border-radius: 3px; background: var(--chip2)"><div style="width: 35%; height: 100%; border-radius: 3px; background: var(--ink3)"></div></div><span class="mono hint" style="text-align: right">35%</span></div>
+<div style="display: grid; grid-template-columns: 70px 1fr 44px; gap: 10px; align-items: center"><span class="mono" style="font-size: 13px">blue</span><div style="height: 6px; border-radius: 3px; background: var(--chip2)"><div style="width: 25%; height: 100%; border-radius: 3px; background: var(--ink3)"></div></div><span class="mono hint" style="text-align: right">25%</span></div>
+</div>
+<button class="btn sm gh" style="align-self: flex-start; padding-left: 0"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Value</button>
+</div>
+
+<div class="col tg">
+<div class="ch"><span class="cn" style="display: flex; align-items: center; gap: 8px">label <span class="tag" style="height: 20px; background: var(--acc); color: var(--acc-ink); border-color: transparent">Target</span></span><span class="tag">Aa Category · A / B</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Labels come from</span><div class="seg sm" style="align-self: flex-start"><button>Random</button><button class="on">A rule on x1, x2</button></div></div>
+<div style="display: flex; flex-direction: column; gap: 6px"><span class="lbl">Border shape</span><div class="seg sm" style="align-self: flex-start"><button class="on">Straight line</button><button>Circle</button><button>XOR</button></div></div>
+<span class="mono" style="font-size: 13px; padding: 8px 10px; border-radius: 8px; background: var(--solid); border: 1px solid var(--line)">B if x1 + x2 &gt; 0, else A</span>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div class="ch"><label class="lbl" for="g-noise">Noise level · labels flipped at random</label><span class="mono" style="font-weight: 600">10%</span></div>
+<input id="g-noise" class="rng" type="range" min="0" max="50" value="10" style="--p: 20%">
+<span class="hint">0% = a perfectly clean border. More noise makes the task harder and more realistic.</span>
+</div>
+</div>
+<button class="btn sm" style="align-self: flex-start"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>Add column</button>
+</div>
+<div style="padding: 12px 16px; border-top: 1px solid var(--line)"><button class="btn pri" style="width: 100%; height: 40px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v4h4"></path></svg>Generate 500 rows</button></div>
+</aside>
+
+<section class="solid" style="display: flex; flex-direction: column; gap: 14px; min-height: 0; padding: 16px 18px">
+<div class="ch"><h2 style="margin: 0; font-size: 15px; font-weight: 600">Preview</h2><div style="display: flex; align-items: center; gap: 14px; font-size: 13px; color: var(--ink2)"><span style="display: flex; align-items: center; gap: 6px"><span class="dot k0"></span>A · 49%</span><span style="display: flex; align-items: center; gap: 6px"><span class="dot k1"></span>B · 51%</span><span class="hint">balanced</span></div></div>
+<div style="flex: 1; min-height: 0; display: flex; gap: 16px">
+<div style="position: relative; flex: 1; margin: 0 0 22px 30px; border-left: 1px solid var(--line2); border-bottom: 1px solid var(--line2)">
+<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%"><path d="M0 0L100 100" style="fill: none; stroke: var(--ink3); stroke-width: 1.5; stroke-dasharray: 5 5; vector-effect: non-scaling-stroke"></path><path d="M50 0V100M0 50H100" style="fill: none; stroke: var(--gl); stroke-width: 1; vector-effect: non-scaling-stroke"></path></svg>
+<sc-for list="{{pts}}" as="p" hint-placeholder-count="60"><div class="{{p.c}}" style="left: {{p.x}}%; top: {{p.y}}%"></div></sc-for>
+<span class="hint mono" style="position: absolute; right: 0; top: calc(100% + 4px)">x1 →</span>
+<span class="hint mono" style="position: absolute; left: -30px; top: 0">x2</span>
+<span class="hint" style="position: absolute; right: 8px; top: 8px; padding: 4px 8px; border-radius: 6px; background: var(--solid2)">dashed = the rule’s border · points on the wrong side = noise</span>
+</div>
+</div>
+<div style="border-radius: 10px; border: 1px solid var(--line); overflow: hidden">
+<div class="tr hd"><div>#</div><div>x1</div><div>x2</div><div>color</div><div>label</div></div>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="5"><div class="tr"><div style="color: var(--ink3)">{{r.n}}</div><div>{{r.a}}</div><div>{{r.b}}</div><div>{{r.c}}</div><div style="display: flex; align-items: center; gap: 6px"><span class="{{r.dot}}"></span>{{r.l}}</div></div></sc-for>
+<div class="hint" style="padding: 7px 10px">… 495 more rows</div>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"light"},"$preview":{"width":1440,"height":900}}'>
+function rnd(s) { return function () { s |= 0; s = s + 0x6D2B79F5 | 0; var t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gau(r) { var u = r() || 1e-9, v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2832 * v); }
+class Component extends DCLogic {
+  renderVals() {
+    var self = this;
+    var th = (this.state && this.state.t) || this.props.theme || 'light';
+    var r = rnd(42), pts = [], rows = [], cols = ['red', 'red', 'red', 'red', 'green', 'green', 'green', 'green', 'blue', 'blue'];
+    for (var i = 0; i < 260; i++) {
+      var a = Math.max(-2.95, Math.min(2.95, gau(r))), b = r() * 6 - 3, c = a + b > 0 ? 1 : 0;
+      if (r() < 0.1) c = 1 - c;
+      pts.push({ c: 'pt k' + c, x: ((a + 3) / 6 * 100).toFixed(1), y: ((3 - b) / 6 * 100).toFixed(1) });
+      if (i < 5) rows.push({ n: i + 1, a: a.toFixed(2).replace('-', '−'), b: b.toFixed(2).replace('-', '−'), c: cols[Math.floor(r() * 10)], l: c ? 'B' : 'A', dot: 'dot k' + c });
+    }
+    return {
+      appCls: 'app' + (th === 'light' ? ' light' : ''),
+      toggle: function () { self.setState({ t: th === 'light' ? 'dark' : 'light' }); },
+      pts: pts, rows: rows
+    };
+  }
+}
+</script>
+</body>
+</html>

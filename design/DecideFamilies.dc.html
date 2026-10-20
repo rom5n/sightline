@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>How it decides — step logic for other families</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app,.app *{box-sizing:border-box}
+.app{--bg:#0C0E10;--g1:rgba(64,128,150,.26);--g2:rgba(170,128,84,.16);--glass:rgba(30,33,37,.6);--solid:#121417;--solid2:#181B1F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);--ink:#F1F2EF;--ink2:#C2C6C9;--ink3:#9BA0A4;--chip:rgba(255,255,255,.06);--chip2:rgba(255,255,255,.12);--acc:#C4EC6A;--acc-ink:#141A08;--acc-t:#C4EC6A;--acc-soft:rgba(196,236,106,.16);--gl:rgba(255,255,255,.06);--c0:#3E8EDE;--c1:#E69F00;--c2:#1FA37A;font-family:'Onest',system-ui,'Segoe UI',sans-serif;color:var(--ink);background:radial-gradient(1000px 700px at 12% 0%,var(--g1),transparent 65%),radial-gradient(900px 700px at 95% 100%,var(--g2),transparent 65%),var(--bg);font-size:14px;line-height:1.4}
+.app.light{--bg:#E4E7EA;--g1:rgba(120,176,200,.5);--g2:rgba(230,198,160,.5);--glass:rgba(255,255,255,.6);--solid:#FBFBFA;--solid2:#F2F3F4;--line:rgba(16,20,24,.1);--line2:rgba(16,20,24,.2);--ink:#14171A;--ink2:#3D444A;--ink3:#596067;--chip:rgba(16,20,24,.05);--chip2:rgba(16,20,24,.1);--acc-t:#466A00;--acc-soft:rgba(120,170,20,.16);--gl:rgba(16,20,24,.07)}
+.solid{background:var(--solid);border:1px solid var(--line);border-radius:16px}
+.glass{background:var(--glass);backdrop-filter:blur(28px) saturate(1.3);-webkit-backdrop-filter:blur(28px) saturate(1.3);border:1px solid var(--line);border-radius:16px}
+.btn{all:unset;box-sizing:border-box;height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:var(--chip);color:var(--ink);font:500 13px/1 'Onest',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn.ico{width:36px;padding:0}
+.btn.gh{background:transparent;border-color:transparent;color:var(--ink2)}
+.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.wb{all:unset;width:46px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink2);cursor:pointer}
+.lbl{font-size:12px;font-weight:500;color:var(--ink3)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Consolas,monospace}
+.hint{font-size:12px;line-height:1.45;color:var(--ink3)}
+.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink2);background:var(--chip);border:1px solid var(--line);white-space:nowrap}
+.k0{background:var(--c0)}.k1{background:var(--c1)}.k2{background:var(--c2)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.dot.sq{border-radius:1.5px}
+.pt{position:absolute;width:7px;height:7px;transform:translate(-50%,-50%);border-radius:50%;opacity:.75}
+.pt.k1{border-radius:1.5px}
+.pt.nb{opacity:1;box-shadow:0 0 0 2px var(--solid2),0 0 0 3.5px var(--ink)}
+.pt.sv{opacity:1;box-shadow:0 0 0 2px var(--solid2),0 0 0 3.5px var(--ink)}
+.pt.nz{background:transparent;box-shadow:inset 0 0 0 1.5px var(--ink3);opacity:1}
+.pt.in{opacity:1;box-shadow:0 0 0 2px var(--acc-t)}
+.ln{fill:none;vector-effect:non-scaling-stroke}
+.panel{display:flex;flex-direction:column;gap:12px;padding:16px 18px;min-width:0}
+.viz{position:relative;border-radius:10px;background:var(--solid2);border:1px solid var(--line);overflow:hidden}
+.steps{display:flex;flex-direction:column;gap:4px;margin:0;padding:0;list-style:none}
+.steps li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:center;font-size:13px;color:var(--ink3);padding:3px 6px;border-radius:7px}
+.steps li span{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--line2);display:flex;align-items:center;justify-content:center;font:600 11px 'JetBrains Mono',monospace}
+.steps li.d{color:var(--ink2)}
+.steps li.d span{background:var(--chip2);border-color:transparent}
+.steps li.c{color:var(--ink);background:var(--chip);font-weight:500}
+.steps li.c span{background:var(--acc);color:var(--acc-ink);border-color:transparent}
+.out{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:10px;border-top:1px solid var(--line);font-size:13px;color:var(--ink2)}
+.tk{position:absolute;font:500 11.5px 'JetBrains Mono',monospace;color:var(--ink3)}
+.tree{display:flex;flex-direction:column;gap:5px;padding:7px 8px;border-radius:8px;background:var(--solid);border:1px solid var(--line)}
+.wf{display:grid;grid-template-columns:86px minmax(0,1fr) 46px;align-items:center;gap:8px;height:22px;font:500 12px 'JetBrains Mono',monospace;color:var(--ink2)}
+a{color:var(--acc-t)}
+</style>
+</helmet>
+<div class="{{appCls}}" style="width: 100%; min-height: 100vh; display: flex; flex-direction: column">
+<header style="height: 36px; flex: none; display: flex; align-items: center; justify-content: space-between; padding-left: 14px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink3)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><circle cx="12" cy="12" r="2.5"></circle></svg><span style="color: var(--ink2); font-weight: 600">Sightline</span><span>Design reference · “How it decides” per family</span></div>
+<div style="display: flex"><button class="wb" aria-label="Minimize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg></button><button class="wb" aria-label="Maximize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1"></rect></svg></button><button class="wb" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"></path></svg></button></div>
+</header>
+<main style="flex: 1; display: flex; flex-direction: column; gap: 16px; padding: 18px 20px 20px">
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-size: 22px; font-weight: 600">How it decides — what the steps show for each family</h1>
+<p style="margin: 0; font-size: 14px; color: var(--ink2)">Same stepper (Back / Next) for every model. The centre visual changes with the family. Highlighted step = the frame shown.</p>
+</div>
+<div style="display: flex; gap: 8px"><a class="btn" href="DecideLogistic.dc.html">Linear / logistic</a><a class="btn" href="DecideTree.dc.html">Decision tree</a><a class="btn" href="DecideKMeans.dc.html">KMeans</a><a class="btn" href="DecideMLP.dc.html">MLP</a></div>
+</div>
+<div style="flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px">
+
+<section class="solid panel">
+<div><h2 style="margin: 0; font-size: 15px; font-weight: 600">Ensembles that average</h2><span class="mono hint">RandomForest · ExtraTrees · Bagging</span></div>
+<div class="viz" style="padding: 10px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px">
+<sc-for list="{{forest}}" as="t" hint-placeholder-count="12"><div class="tree"><span class="mono" style="font-size: 11px; color: var(--ink3)">#{{t.n}}</span><div style="height: 5px; border-radius: 3px; display: flex; overflow: hidden"><div class="k0" style="flex: {{t.a}}"></div><div class="k1" style="flex: {{t.b}}"></div></div><span class="mono" style="font-size: 11.5px; color: var(--ink)">{{t.p}}</span></div></sc-for>
+</div>
+<div style="display: flex; align-items: center; gap: 10px"><span class="mono hint" style="width: 92px">average P(B)</span><div style="flex: 1; height: 12px; border-radius: 4px; display: flex; overflow: hidden; gap: 2px"><div class="k0" style="width: 22%"></div><div class="k1" style="flex: 1"></div></div><span class="mono" style="font-weight: 600">0.78</span></div>
+<span class="hint">Showing 12 of 100 trees. Each number is that tree’s P(B) for the point.</span>
+</div>
+<ul class="steps"><li class="d"><span>1</span>Send the point down every tree</li><li class="d"><span>2</span>Each tree answers with its own P(B)</li><li class="c"><span>3</span>Average the answers (soft vote)</li><li><span>4</span>Highest average wins</li></ul>
+<div class="out"><span>0.78 ≥ 0.5</span><span class="tag" style="color: var(--ink)"><span class="dot sq k1"></span>Class B · 78%</span></div>
+</section>
+
+<section class="solid panel">
+<div><h2 style="margin: 0; font-size: 15px; font-weight: 600">Boosting: corrections add up</h2><span class="mono hint">GradientBoosting · HistGradientBoosting · AdaBoost</span></div>
+<div class="viz" style="padding: 12px; display: flex; flex-direction: column; gap: 4px">
+<div class="wf"><span>base guess</span><div style="position: relative; height: 10px"><div style="position: absolute; left: 0; width: 1%; height: 100%; background: var(--ink3); border-radius: 2px"></div></div><span style="text-align: right">+0.02</span></div>
+<div class="wf"><span>tree 1</span><div style="position: relative; height: 10px"><div class="k1" style="position: absolute; left: 1%; width: 30.5%; height: 100%; border-radius: 2px"></div></div><span style="text-align: right">+0.61</span></div>
+<div class="wf"><span>tree 2</span><div style="position: relative; height: 10px"><div class="k1" style="position: absolute; left: 31.5%; width: 19%; height: 100%; border-radius: 2px"></div></div><span style="text-align: right">+0.38</span></div>
+<div class="wf"><span>tree 3</span><div style="position: relative; height: 10px"><div class="k0" style="position: absolute; left: 44.5%; width: 6%; height: 100%; border-radius: 2px"></div></div><span style="text-align: right">−0.12</span></div>
+<div class="wf"><span>trees 4–100</span><div style="position: relative; height: 10px"><div class="k1" style="position: absolute; left: 44.5%; width: 50.5%; height: 100%; border-radius: 2px; opacity: .6"></div></div><span style="text-align: right">+1.01</span></div>
+<div class="wf" style="border-top: 1px solid var(--line2); padding-top: 4px; height: 28px; color: var(--ink); font-weight: 600"><span>score</span><div style="position: relative; height: 10px"><div style="position: absolute; left: 0; width: 95%; height: 100%; background: var(--ink); border-radius: 2px"></div></div><span style="text-align: right">1.90</span></div>
+<span class="hint">AdaBoost variant: each stump votes, with a say that grows with its accuracy.</span>
+</div>
+<ul class="steps"><li class="d"><span>1</span>Start from the base guess (class shares)</li><li class="d"><span>2</span>Each small tree adds a correction</li><li class="d"><span>3</span>Add all corrections into one score</li><li class="c"><span>4</span>Squash the score: σ(1.90) = 0.87</li></ul>
+<div class="out"><span>0.87 ≥ 0.5</span><span class="tag" style="color: var(--ink)"><span class="dot sq k1"></span>Class B · 87%</span></div>
+</section>
+
+<section class="solid panel">
+<div><h2 style="margin: 0; font-size: 15px; font-weight: 600">Nearest neighbours vote</h2><span class="mono hint">KNeighborsClassifier · k = 5</span></div>
+<div class="viz" style="aspect-ratio: 2 / 1">
+<sc-for list="{{knn}}" as="p" hint-placeholder-count="40"><div class="{{p.cls}}" style="left: {{p.x}}%; top: {{p.y}}%"></div></sc-for>
+<div style="position: absolute; left: 52%; top: 50%; width: {{kr}}%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 1.5px dashed var(--ink2); background: var(--acc-soft)"></div>
+<div style="position: absolute; left: 52%; top: 50%; width: 12px; height: 12px; transform: translate(-50%, -50%) rotate(45deg); background: var(--acc); box-shadow: 0 0 0 2px var(--solid2)"></div>
+<div class="tk" style="right: 8px; bottom: 6px; color: var(--ink)">vote: 4 B · 1 A</div>
+</div>
+<ul class="steps"><li class="d"><span>1</span>Measure the distance to every training point</li><li class="d"><span>2</span>Keep the 5 closest (ringed)</li><li class="c"><span>3</span>They vote: 4 B, 1 A</li><li><span>4</span>Majority wins</li></ul>
+<div class="out"><span>4 of 5 neighbours</span><span class="tag" style="color: var(--ink)"><span class="dot sq k1"></span>Class B · 80%</span></div>
+</section>
+
+<section class="solid panel">
+<div><h2 style="margin: 0; font-size: 15px; font-weight: 600">Support vectors and the margin</h2><span class="mono hint">SVC · kernel='rbf'</span></div>
+<div class="viz" style="aspect-ratio: 2 / 1">
+<div style="position: absolute; inset: 0; background: linear-gradient(160deg, rgba(62,142,222,.12), transparent 48%, transparent 52%, rgba(230,159,0,.12))"></div>
+<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%">
+<path class="ln" d="{{svB}}" style="stroke: var(--ink); stroke-width: 2.5"></path>
+<path class="ln" d="{{svM1}}" style="stroke: var(--ink3); stroke-width: 1.2; stroke-dasharray: 4 4"></path>
+<path class="ln" d="{{svM2}}" style="stroke: var(--ink3); stroke-width: 1.2; stroke-dasharray: 4 4"></path>
+<path class="ln" d="M70 78L56 50" style="stroke: var(--acc-t); stroke-width: 2"></path>
+</svg>
+<sc-for list="{{svc}}" as="p" hint-placeholder-count="40"><div class="{{p.cls}}" style="left: {{p.x}}%; top: {{p.y}}%"></div></sc-for>
+<div style="position: absolute; left: 70%; top: 78%; width: 12px; height: 12px; transform: translate(-50%, -50%) rotate(45deg); background: var(--acc); box-shadow: 0 0 0 2px var(--solid2)"></div>
+<div class="tk" style="left: calc(63% + 10px); top: calc(64% - 8px); color: var(--ink)">+1.37</div>
+<div class="tk" style="left: 8px; bottom: 6px">ringed = support vectors (23 of 300)</div>
+</div>
+<ul class="steps"><li class="d"><span>1</span>Compare the point with each support vector</li><li class="c"><span>2</span>Weighted sum = signed distance to the border</li><li><span>3</span>The sign picks the side</li></ul>
+<div class="out"><span>decision value +1.37 &gt; 0</span><span class="tag" style="color: var(--ink)"><span class="dot sq k1"></span>Class B</span></div>
+</section>
+
+<section class="solid panel">
+<div><h2 style="margin: 0; font-size: 15px; font-weight: 600">Bell curves per class</h2><span class="mono hint">GaussianNB</span></div>
+<div class="viz" style="padding: 10px 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px">
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="mono hint">x1 = 0.84</span><div style="position: relative; height: 62px"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%"><path class="ln" d="{{g1a}}" style="stroke: var(--c0); stroke-width: 2"></path><path class="ln" d="{{g1b}}" style="stroke: var(--c1); stroke-width: 2"></path><path class="ln" d="M68 0V100" style="stroke: var(--ink); stroke-width: 1.5"></path></svg></div><span class="mono" style="font-size: 12px; color: var(--ink2)">A 0.21 · B 0.62</span></div>
+<div style="display: flex; flex-direction: column; gap: 4px"><span class="mono hint">x2 = −0.21</span><div style="position: relative; height: 62px"><svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%"><path class="ln" d="{{g2a}}" style="stroke: var(--c0); stroke-width: 2"></path><path class="ln" d="{{g2b}}" style="stroke: var(--c1); stroke-width: 2"></path><path class="ln" d="M40 0V100" style="stroke: var(--ink); stroke-width: 1.5"></path></svg></div><span class="mono" style="font-size: 12px; color: var(--ink2)">A 0.33 · B 0.48</span></div>
+<div class="mono" style="grid-column: 1 / -1; font-size: 12px; color: var(--ink2); display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; border-top: 1px solid var(--line); padding-top: 6px"><span style="color: var(--c0)">A</span><span>0.5 × 0.21 × 0.33 = 0.035</span><span style="color: var(--c1)">B</span><span>0.5 × 0.62 × 0.48 = 0.149</span></div>
+</div>
+<ul class="steps"><li class="d"><span>1</span>Start from class shares (priors 0.5 / 0.5)</li><li class="d"><span>2</span>How typical is x1 for each class?</li><li class="d"><span>3</span>…and x2? (features treated separately)</li><li class="c"><span>4</span>Multiply, then rescale to sum to 1</li></ul>
+<div class="out"><span>0.149 / (0.035 + 0.149)</span><span class="tag" style="color: var(--ink)"><span class="dot sq k1"></span>Class B · 81%</span></div>
+</section>
+
+<section class="solid panel">
+<div><h2 style="margin: 0; font-size: 15px; font-weight: 600">Density neighbourhood</h2><span class="mono hint">DBSCAN · eps = 0.5 · min_samples = 5</span></div>
+<div class="viz" style="aspect-ratio: 2 / 1">
+<sc-for list="{{db}}" as="p" hint-placeholder-count="40"><div class="{{p.cls}}" style="left: {{p.x}}%; top: {{p.y}}%"></div></sc-for>
+<div style="position: absolute; left: 34%; top: 52%; width: 22%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 1.5px solid var(--acc-t); background: var(--acc-soft)"></div>
+<div style="position: absolute; left: 34%; top: 52%; width: 12px; height: 12px; transform: translate(-50%, -50%) rotate(45deg); background: var(--acc); box-shadow: 0 0 0 2px var(--solid2)"></div>
+<div style="position: absolute; left: 88%; top: 82%; width: 22%; aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; border: 1.5px dashed var(--ink3)"></div>
+<div class="tk" style="left: calc(34% + 50px); top: 8%; color: var(--ink)">{{dbn}} neighbours ≥ 5 → core</div>
+<div class="tk" style="right: 8px; top: 52%">0 → noise</div>
+</div>
+<ul class="steps"><li class="d"><span>1</span>Draw a circle of radius eps around the point</li><li class="d"><span>2</span>Count the points inside</li><li class="c"><span>3</span>Enough neighbours → core point</li><li><span>4</span>Join the cluster it touches, or mark as noise</li></ul>
+<div class="out"><span>DBSCAN has no predict(): steps explain training points only</span><span class="tag" style="color: var(--ink)"><span class="dot k0"></span>Cluster 1</span></div>
+</section>
+</div>
+<div class="glass" style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; padding: 12px 16px; font-size: 13px; color: var(--ink2)">
+<span class="lbl" style="color: var(--ink)">Shared patterns</span>
+<span><span class="mono">SGDClassifier</span> → same frames as LogisticRegression, last step is the sign of z (hinge) instead of σ</span>
+<span><span class="mono">LinearRegression · Ridge · Lasso · ElasticNet</span> → weights × features → sum = the prediction (no squashing)</span>
+<span><span class="mono">PCA</span> → project the point onto component 1 and 2 (two dot products)</span>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":1440,"height":1040}}'>
+function rnd(s) { return function () { s |= 0; s = s + 0x6D2B79F5 | 0; var t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gau(r) { var u = r() || 1e-9, v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2832 * v); }
+function bell(mu, sd) { var d = ''; for (var x = 0; x <= 100; x += 2) { var y = Math.exp(-0.5 * Math.pow((x - mu) / sd, 2)); d += (d ? 'L' : 'M') + x + ' ' + (96 - y * 86).toFixed(1); } return d; }
+class Component extends DCLogic {
+  renderVals() {
+    var th = this.props.theme || 'dark';
+    var ps = [0.9, 1, 0.8, 0.2, 1, 0.7, 0.9, 0.4, 1, 0.6, 0.9, 0.95];
+    var forest = ps.map(function (p, i) { return { n: i + 1, p: p.toFixed(2), a: (1 - p).toFixed(2), b: p.toFixed(2) }; });
+    var r = rnd(9), knn = [], i, x, y, c;
+    for (i = 0; i < 70; i++) { c = i % 2; x = (c ? 64 : 36) + gau(r) * 15; y = 50 + gau(r) * 26; knn.push({ x: x, y: y, c: c }); }
+    knn.push({ x: 49, y: 40, c: 1 }, { x: 56, y: 58, c: 1 }, { x: 58, y: 44, c: 1 }, { x: 47, y: 60, c: 0 }, { x: 55, y: 36, c: 1 });
+    var ds = knn.map(function (p, idx) { return { idx: idx, d: Math.sqrt(Math.pow(p.x - 52, 2) + Math.pow((p.y - 50) / 2, 2)) }; }).sort(function (a, b) { return a.d - b.d; });
+    var near = {}; for (i = 0; i < 5; i++) near[ds[i].idx] = true;
+    var kr = (ds[4].d * 2 + 2).toFixed(1);
+    knn = knn.map(function (p, idx) { return { cls: 'pt k' + p.c + (near[idx] ? ' nb' : ''), x: p.x.toFixed(1), y: p.y.toFixed(1) }; });
+    function fb(x) { return 92 - 0.75 * x + 0.004 * Math.pow(x - 50, 2); }
+    function path(off) { var d = ''; for (var xx = 0; xx <= 100; xx += 4) d += (d ? 'L' : 'M') + xx + ' ' + (fb(xx) + off).toFixed(1); return d; }
+    var r2 = rnd(4), svc = [];
+    for (i = 0; i < 90; i++) {
+      x = r2() * 100; y = r2() * 100; var f = y - fb(x);
+      if (Math.abs(f) < 10) continue;
+      svc.push({ cls: 'pt k' + (f > 0 ? 1 : 0), x: x.toFixed(1), y: y.toFixed(1) });
+    }
+    [[22, 64, 0], [38, 52, 0], [60, 33, 0], [30, 84, 1], [48, 72, 1], [70, 54, 1]].forEach(function (p) { svc.push({ cls: 'pt sv k' + p[2], x: p[0], y: (fb(p[0]) + (p[2] ? 10 : -10)).toFixed(1) }); });
+    var r3 = rnd(17), db = [], n = 0;
+    for (i = 0; i < 46; i++) { x = 34 + gau(r3) * 8; y = 52 + gau(r3) * 16; var inside = Math.sqrt(Math.pow(x - 34, 2) + Math.pow((y - 52) / 2, 2)) < 11; if (inside) n++; db.push({ cls: 'pt k0' + (inside ? ' in' : ''), x: x.toFixed(1), y: y.toFixed(1) }); }
+    for (i = 0; i < 40; i++) { x = 70 + gau(r3) * 7; y = 40 + gau(r3) * 14; db.push({ cls: 'pt k1', x: x.toFixed(1), y: y.toFixed(1) }); }
+    [[88, 82], [10, 12], [92, 12], [55, 90], [8, 88]].forEach(function (p) { db.push({ cls: 'pt nz', x: p[0], y: p[1] }); });
+    return {
+      appCls: 'app' + (th === 'light' ? ' light' : ''),
+      forest: forest, knn: knn, kr: kr, svc: svc, svB: path(0), svM1: path(-10), svM2: path(10), db: db, dbn: n,
+      g1a: bell(40, 14), g1b: bell(70, 13), g2a: bell(58, 15), g2b: bell(36, 16)
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Рабочая область — LogisticRegression</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app,.app *{box-sizing:border-box}
+.app{--bg:#0C0E10;--g1:rgba(64,128,150,.26);--g2:rgba(170,128,84,.16);--glass:rgba(30,33,37,.6);--solid:#121417;--solid2:#181B1F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);--ink:#F1F2EF;--ink2:#C2C6C9;--ink3:#9BA0A4;--chip:rgba(255,255,255,.06);--chip2:rgba(255,255,255,.12);--acc:#C4EC6A;--acc-ink:#141A08;--acc-t:#C4EC6A;--acc-soft:rgba(196,236,106,.16);--gl:rgba(255,255,255,.06);--ax:rgba(255,255,255,.24);--warn:#E8B04A;--sh:0 24px 60px rgba(0,0,0,.4);--c0:#3E8EDE;--c1:#E69F00;--c2:#1FA37A;--c3:#D27AAE;--c4:#E3CF3A;font-family:'Onest',system-ui,'Segoe UI',sans-serif;color:var(--ink);background:radial-gradient(1000px 700px at 12% 0%,var(--g1),transparent 65%),radial-gradient(900px 700px at 95% 100%,var(--g2),transparent 65%),var(--bg);font-size:14px;line-height:1.4}
+.app.light{--bg:#E4E7EA;--g1:rgba(120,176,200,.5);--g2:rgba(230,198,160,.5);--glass:rgba(255,255,255,.6);--solid:#FBFBFA;--solid2:#F2F3F4;--line:rgba(16,20,24,.1);--line2:rgba(16,20,24,.2);--ink:#14171A;--ink2:#3D444A;--ink3:#596067;--chip:rgba(16,20,24,.05);--chip2:rgba(16,20,24,.1);--acc-t:#466A00;--acc-soft:rgba(120,170,20,.16);--gl:rgba(16,20,24,.07);--ax:rgba(16,20,24,.3);--warn:#9A6200;--sh:0 24px 60px rgba(40,50,60,.14)}
+.glass{background:var(--glass);backdrop-filter:blur(28px) saturate(1.3);-webkit-backdrop-filter:blur(28px) saturate(1.3);border:1px solid var(--line);border-radius:16px}
+.solid{background:var(--solid);border:1px solid var(--line);border-radius:16px}
+.btn{all:unset;box-sizing:border-box;height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:var(--chip);color:var(--ink);font:500 13px/1 'Onest',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--chip2)}
+.btn.pri{background:var(--acc);color:var(--acc-ink);border-color:transparent;font-weight:600}
+.btn.gh{background:transparent;border-color:transparent;color:var(--ink2)}
+.btn.ico{width:36px;padding:0}
+.btn.sm{height:30px;padding:0 10px;border-radius:8px;font-size:12px}
+.btn[disabled]{opacity:.42;cursor:not-allowed}
+.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.seg{display:inline-flex;padding:3px;gap:2px;border-radius:11px;background:var(--chip);border:1px solid var(--line)}
+.seg button,.seg a{all:unset;box-sizing:border-box;height:30px;padding:0 12px;border-radius:8px;font:500 13px/30px 'Onest',system-ui,sans-serif;color:var(--ink2);cursor:pointer;white-space:nowrap}
+.seg.sm button{height:26px;line-height:26px;padding:0 10px;font-size:12px}
+.seg .on{background:var(--chip2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.lbl{font-size:12px;font-weight:500;color:var(--ink3)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Consolas,monospace}
+.hint{font-size:12px;line-height:1.45;color:var(--ink3)}
+.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink2);background:var(--chip);border:1px solid var(--line);white-space:nowrap}
+.inf{all:unset;width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink3);cursor:help;flex:none}
+.inf:hover{color:var(--ink);background:var(--chip)}
+.tip{position:absolute;z-index:20;width:290px;padding:12px 14px;border-radius:12px;background:var(--solid2);border:1px solid var(--line2);box-shadow:var(--sh);font-size:13px;line-height:1.5;color:var(--ink2)}
+.tip b{color:var(--ink);font-weight:600}
+.rng{-webkit-appearance:none;appearance:none;width:100%;height:20px;background:transparent;margin:0}
+.rng::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(var(--acc),var(--acc)) 0 0/var(--p,50%) 100% no-repeat,var(--chip2)}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-6px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 3px var(--solid2)}
+.tg{position:relative;display:inline-block;width:36px;height:20px;flex:none}
+.tg input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
+.tg span{position:absolute;inset:0;border-radius:10px;background:var(--chip2)}
+.tg span:after{content:"";position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--ink2)}
+.tg input:checked+span{background:var(--acc)}
+.tg input:checked+span:after{left:19px;background:var(--acc-ink)}
+.wb{all:unset;width:46px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink2);cursor:pointer}
+.wb:hover{background:var(--chip2)}
+.wb.x:hover{background:#C42B1C;color:#fff}
+.pt{position:absolute;width:9px;height:9px;transform:translate(-50%,-50%);border-radius:50%;box-shadow:0 0 0 1.5px var(--solid)}
+.pt.k1{border-radius:1.5px}
+.k0{background:var(--c0)}.k1{background:var(--c1)}
+.hm{position:absolute;inset:0;display:grid;pointer-events:none}
+.h0{background:var(--c0)}.h1{background:var(--c1)}
+.ln{fill:none;vector-effect:non-scaling-stroke}
+.sa{stroke:var(--acc-t)}.si{stroke:var(--ink3)}.sk{stroke:var(--ink)}.sg{stroke:var(--gl)}.s2{stroke:var(--ink2)}
+.w1{stroke-width:1}.w15{stroke-width:1.5}.w2{stroke-width:2}.w25{stroke-width:2.5}.dsh{stroke-dasharray:4 4}
+.tk{position:absolute;font:500 12px 'JetBrains Mono',monospace;color:var(--ink3)}
+.param{position:relative;display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px solid var(--line)}
+.prow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--ink)}
+.pk{font:500 12px 'JetBrains Mono',monospace;color:var(--ink3)}
+.val{font:600 13px 'JetBrains Mono',monospace;color:var(--ink);padding:3px 8px;border-radius:6px;background:var(--chip);border:1px solid var(--line)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.dot.sq{border-radius:1.5px}
+a{color:var(--acc-t)}a:hover{color:var(--ink)}
+</style>
+</helmet>
+<div class="{{appCls}}" style="width: 100%; height: 100vh; min-height: 720px; display: grid; grid-template-rows: 36px 60px minmax(0, 1fr); overflow: hidden">
+<header style="display: flex; align-items: center; justify-content: space-between; padding-left: 14px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink3)">
+<svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
+<span style="color: var(--ink2); font-weight: 600">Sightline</span><span>LogisticRegression · Две луны</span>
+</div>
+<div style="display: flex">
+<button class="wb" aria-label="Свернуть"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg></button>
+<button class="wb" aria-label="Развернуть"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1"></rect></svg></button>
+<button class="wb x" aria-label="Закрыть"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"></path></svg></button>
+</div>
+</header>
+<nav style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 16px">
+<div style="display: flex; align-items: center; gap: 10px; min-width: 0">
+<a class="btn gh ico" href="Main.dc.html" aria-label="Ко всем моделям"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<div style="display: flex; flex-direction: column; min-width: 0"><span class="mono" style="font-size: 15px; font-weight: 600">LogisticRegression</span><span class="lbl">Линейная · классификация</span></div>
+</div>
+<div class="seg"><a class="on" href="WsLogisticRU.dc.html">Модель</a><a href="DataPresets.dc.html">Данные</a><a href="DataInsights.dc.html">Обзор данных</a><a href="DecideLogistic.dc.html">Как решает</a></div>
+<div style="display: flex; align-items: center; gap: 8px">
+<div class="seg" aria-label="Язык интерфейса"><button>EN</button><button class="on">RU</button></div>
+<button class="btn ico" aria-label="Светлая или тёмная тема" onClick="{{toggle}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4L7 17M17 7l1.4-1.4"></path></svg></button>
+<button class="btn ico" aria-label="Справка"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.4c-.6.3-1 .8-1 1.5v.5M12 17v.01"></path></svg></button>
+</div>
+</nav>
+<main style="min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 340px; grid-template-rows: minmax(0, 1fr) auto; gap: 12px; padding: 0 16px 16px">
+
+<section class="solid" style="grid-column: 1; grid-row: 1; display: flex; flex-direction: column; min-height: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px 8px">
+<div style="display: flex; align-items: center; gap: 10px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 600">Граница решений</h2>
+<button class="inf" aria-label="Что такое граница решений?"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button>
+<span class="tag" style="color: var(--warn)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 12px; height: 12px"><path d="M8 5v14M16 5v14"></path></svg>Пауза на итерации 38</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
+<div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--ink2)"><span style="display: flex; align-items: center; gap: 6px"><span class="dot k0"></span>Класс A</span><span style="display: flex; align-items: center; gap: 6px"><span class="dot sq k1"></span>Класс B</span></div>
+<div class="seg sm" aria-label="Слои графика"><button class="on">Вероятность</button><button>Только граница</button></div>
+<a class="btn sm" href="DecideLogistic.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2"></circle><circle cx="18" cy="6" r="2"></circle><path d="M8 18h6a3 3 0 0 0 0-6h-4a3 3 0 0 1 0-6h6"></path></svg>Как решает</a>
+</div>
+</div>
+<div style="position: relative; flex: 1; min-height: 0; margin: 6px 22px 36px 54px">
+<div class="hm" style="grid-template-columns: repeat(40, 1fr); grid-template-rows: repeat(25, 1fr); border-radius: 6px; overflow: hidden">
+<sc-for list="{{cells}}" as="c" hint-placeholder-count="40"><div class="{{c.cls}}" style="opacity: {{c.o}}"></div></sc-for>
+</div>
+<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible">
+<path class="ln sg w1" d="M10.5 0V100M36.8 0V100M63.2 0V100M89.5 0V100M0 17.4H100M0 39.1H100M0 60.9H100M0 82.6H100"></path>
+<path class="ln si w1" d="M0 100H100M0 0V100"></path>
+<path class="ln s2 w15 dsh" d="M0 66.5L100 34.2"></path>
+<path class="ln sk w25" d="M0 73L100 28.9"></path>
+</svg>
+<sc-for list="{{pts}}" as="p" hint-placeholder-count="60"><div class="{{p.cls}}" style="left: {{p.x}}%; top: {{p.y}}%"></div></sc-for>
+<div class="tk" style="left: -40px; top: calc(17.4% - 8px)">1.0</div>
+<div class="tk" style="left: -40px; top: calc(39.1% - 8px)">0.5</div>
+<div class="tk" style="left: -40px; top: calc(60.9% - 8px)">0.0</div>
+<div class="tk" style="left: -46px; top: calc(82.6% - 8px)">−0.5</div>
+<div class="tk" style="top: calc(100% + 6px); left: calc(10.5% - 10px)">−1</div>
+<div class="tk" style="top: calc(100% + 6px); left: calc(36.8% - 4px)">0</div>
+<div class="tk" style="top: calc(100% + 6px); left: calc(63.2% - 4px)">1</div>
+<div class="tk" style="top: calc(100% + 6px); left: calc(89.5% - 4px)">2</div>
+<div class="tk" style="top: calc(100% + 6px); right: 0; color: var(--ink2)">x1 →</div>
+<div class="tk" style="left: -44px; top: -4px; color: var(--ink2)">x2 ↑</div>
+<div style="position: absolute; right: 12px; bottom: 12px; display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border-radius: 10px; background: var(--solid2); border: 1px solid var(--line)">
+<span class="lbl">Цвет = насколько модель уверена</span>
+<div style="display: flex; align-items: center; gap: 8px"><span class="mono hint">A</span><div style="width: 150px; height: 8px; border-radius: 4px; background: linear-gradient(90deg, var(--c0), transparent 50%, var(--c1))"></div><span class="mono hint">B</span></div>
+<div style="display: flex; align-items: center; gap: 8px"><svg width="22" height="6" aria-hidden="true"><path class="ln sk w25" d="M0 3H22"></path></svg><span class="hint">граница сейчас</span><svg width="22" height="6" aria-hidden="true"><path class="ln s2 w15 dsh" d="M0 3H22"></path></svg><span class="hint">10 шагов назад</span></div>
+</div>
+</div>
+</section>
+
+<aside class="glass" style="grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; min-height: 0; overflow: visible; padding: 16px 18px">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 16px">
+<div class="prow"><span class="lbl">Данные</span><a class="btn sm gh" href="DataPresets.dc.html" style="color: var(--acc-t)">Сменить</a></div>
+<div style="display: flex; align-items: center; gap: 12px">
+<div style="width: 44px; height: 36px; border-radius: 8px; background: var(--solid); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center"><svg width="34" height="24" viewBox="0 0 34 24" aria-hidden="true"><path class="ln w2" style="stroke: var(--c0)" d="M3 16C6 4 16 2 20 12"></path><path class="ln w2" style="stroke: var(--c1)" d="M13 10C16 21 27 22 31 9"></path></svg></div>
+<div style="display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">Две луны</span><span class="hint">300 строк · 2 признака · 2 класса · 25% отложено для теста</span></div>
+</div>
+</div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; gap: 8px; padding: 14px 0 4px; border-top: 1px solid var(--line)"><h2 style="margin: 0; font-size: 15px; font-weight: 600">Основные параметры</h2><span class="hint" style="text-align: right">Изменение = обучение заново</span></div>
+
+<div class="param" style="border-top: 0">
+<div class="prow"><label class="pn" for="r-c">Регуляризация <span class="pk">C</span><button class="inf" aria-label="Про параметр C" style="color: var(--ink); background: var(--chip2)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></label><span class="val">1.0</span></div>
+<input id="r-c" class="rng" type="range" min="0" max="100" value="50" style="--p: 50%">
+<div class="prow hint mono" style="margin-top: -4px"><span>0.01</span><span>100</span></div>
+<div class="hint">Меньше C → граница проще и плавнее. Больше C → точнее подстраивается под точки.</div>
+<div class="tip" style="right: calc(100% + 30px); top: 0; width: 320px"><b>C — обратная сила регуляризации.</b> Регуляризация штрафует модель за слишком большие веса. Маленький C — сильный штраф: граница спокойная, отдельные точки почти не влияют. Большой C — штраф слабый: модель старается угадать каждую точку и может переобучиться.<br><span style="color: var(--ink3)">По умолчанию 1.0. Попробуйте 0.01 и 100 и сравните границу.</span></div>
+</div>
+<div class="param">
+<div class="prow"><label class="pn" for="r-mi">Макс. итераций <span class="pk">max_iter</span><button class="inf" aria-label="Про max_iter"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></label><span class="val">100</span></div>
+<input id="r-mi" class="rng" type="range" min="10" max="1000" value="100" style="--p: 9%">
+<div class="hint">Сколько шагов оптимизации разрешено. Обучение остановится раньше, если граница перестанет двигаться.</div>
+</div>
+<div class="param">
+<div class="prow"><label class="pn" for="r-fi">Свободный член <span class="pk">fit_intercept</span><button class="inf" aria-label="Про fit_intercept"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></label><span class="tg"><input id="r-fi" type="checkbox" checked><span></span></span></div>
+<div class="hint">Позволяет границе не проходить через центр (0, 0). Почти всегда включено.</div>
+</div>
+<div class="param">
+<div class="prow"><span class="pn">Веса классов <span class="pk">class_weight</span><button class="inf" aria-label="Про class_weight"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></span></div>
+<div class="seg sm" style="align-self: flex-start"><button class="on mono">None</button><button class="mono">'balanced'</button></div>
+<div class="hint">«balanced» усиливает редкие классы, чтобы модель их не игнорировала.</div>
+</div>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line)">
+<button class="btn" style="justify-content: space-between; width: 100%"><span style="display: flex; align-items: center; gap: 8px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"></path><circle cx="15" cy="7" r="2"></circle><circle cx="9" cy="17" r="2"></circle></svg>Дополнительно</span><span class="hint">ещё 7</span></button>
+<button class="btn gh sm" style="align-self: flex-start">Сбросить к умолчаниям</button>
+</div>
+</aside>
+
+<section class="glass" style="grid-column: 1; grid-row: 2; display: grid; grid-template-columns: 290px minmax(0, 1fr) 240px; gap: 12px; padding: 12px; height: 200px">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 4px">
+<button class="btn pri" style="width: 100%; height: 40px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="fill: currentColor"><path d="M8 5.5l10 6.5-10 6.5z"></path></svg>Продолжить обучение</button>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+<button class="btn sm" disabled><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"></path></svg>Пауза</button>
+<button class="btn sm"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l8 6-8 6zM18 6v12"></path></svg>Шаг</button>
+<button class="btn sm"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v4h4"></path></svg>Сброс</button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 2px">
+<div class="prow"><span class="lbl">Итерация</span><span class="mono" style="font-size: 12px; color: var(--ink2)">38 / 100</span></div>
+<div style="height: 4px; border-radius: 2px; background: var(--chip2)"><div style="width: 38%; height: 100%; border-radius: 2px; background: var(--acc)"></div></div>
+</div>
+<div class="prow"><span class="lbl">Скорость</span><div class="seg sm"><button>½×</button><button class="on">1×</button><button>2×</button><button>4×</button></div></div>
+</div>
+<div class="solid" style="display: flex; flex-direction: column; padding: 10px 14px 10px; min-width: 0">
+<div class="prow">
+<div style="display: flex; align-items: center; gap: 6px"><span style="font-size: 13px; font-weight: 600">Ошибка</span><span class="pk">log-loss</span><button class="inf" aria-label="Что такое функция потерь?"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button><span class="hint">чем ниже, тем лучше</span></div>
+<div style="display: flex; align-items: center; gap: 12px" class="hint"><span style="display: flex; align-items: center; gap: 6px"><svg width="18" height="6" aria-hidden="true"><path class="ln sa w2" d="M0 3H18"></path></svg>обучение</span><span style="display: flex; align-items: center; gap: 6px"><svg width="18" height="6" aria-hidden="true"><path class="ln s2 w15 dsh" d="M0 3H18"></path></svg>тест</span></div>
+</div>
+<div style="position: relative; flex: 1; margin: 8px 6px 18px 34px">
+<svg viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible">
+<path class="ln sg w1" d="M0 0H300M0 33.3H300M0 66.7H300M75 0V100M150 0V100M225 0V100"></path>
+<path class="ln si w1" d="M0 100H300"></path>
+<path class="ln s2 w15 dsh" d="M0 9C10 24 20 38 30 45S52 54 60 55.5S90 58.6 114 59.8"></path>
+<path class="ln sa w2" d="M0 7.6C10 22 20 36 30 42.7S52 51.5 60 52.7S90 55.6 114 56.7"></path>
+</svg>
+<div style="position: absolute; left: 38%; top: 56.7%; width: 9px; height: 9px; border-radius: 50%; background: var(--acc); transform: translate(-50%, -50%); box-shadow: 0 0 0 3px var(--acc-soft)"></div>
+<div class="tk" style="left: calc(38% + 10px); top: calc(56.7% - 22px); color: var(--ink)">0.325</div>
+<div class="tk" style="left: -34px; top: -8px">0.75</div>
+<div class="tk" style="left: -34px; top: calc(33.3% - 8px)">0.50</div>
+<div class="tk" style="left: -34px; top: calc(66.7% - 8px)">0.25</div>
+<div class="tk" style="top: calc(100% + 2px); left: 0">0</div>
+<div class="tk" style="top: calc(100% + 2px); left: calc(50% - 8px)">50</div>
+<div class="tk" style="top: calc(100% + 2px); right: 0">100 итераций</div>
+</div>
+</div>
+<div class="solid" style="display: flex; flex-direction: column; gap: 4px; padding: 12px 16px">
+<div style="display: flex; align-items: center; gap: 6px"><span class="lbl" style="color: var(--ink2)">Доля верных ответов</span><button class="inf" aria-label="Что такое accuracy?"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></div>
+<div class="mono" style="font-size: 52px; line-height: 1; font-weight: 600; letter-spacing: -0.02em">0.87</div>
+<div class="hint" style="font-size: 13px">accuracy на 75 тестовых точках</div>
+<div style="margin-top: auto; display: flex; gap: 14px; font-size: 12px; color: var(--ink3)"><span>обучение <span class="mono" style="color: var(--ink2)">0.88</span></span><span>log-loss <span class="mono" style="color: var(--ink2)">0.33</span></span></div>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"light"},"$preview":{"width":1440,"height":900}}'>
+function rnd(s) { return function () { s |= 0; s = s + 0x6D2B79F5 | 0; var t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gau(r) { var u = r() || 1e-9, v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2832 * v); }
+class Component extends DCLogic {
+  renderVals() {
+    var self = this;
+    var th = (this.state && this.state.t) || this.props.theme || 'light';
+    var X0 = -1.4, X1 = 2.4, Y0 = -0.9, Y1 = 1.4;
+    var r = rnd(7), pts = [];
+    for (var i = 0; i < 300; i++) {
+      var c = i % 2, t = Math.PI * r();
+      var x = c ? 1 - Math.cos(t) : Math.cos(t), y = c ? 0.5 - Math.sin(t) : Math.sin(t);
+      x += gau(r) * 0.14; y += gau(r) * 0.14;
+      pts.push({ cls: 'pt k' + c, x: ((x - X0) / (X1 - X0) * 100).toFixed(2), y: ((Y1 - y) / (Y1 - Y0) * 100).toFixed(2) });
+    }
+    var cells = [];
+    for (var j = 0; j < 25; j++) for (var k = 0; k < 40; k++) {
+      var cx = X0 + (k + 0.5) / 40 * (X1 - X0), cy = Y1 - (j + 0.5) / 25 * (Y1 - Y0);
+      var p = 1 / (1 + Math.exp(-(1.12 * cx - 4.2 * cy + 0.4)));
+      cells.push({ cls: p > 0.5 ? 'h1' : 'h0', o: (Math.abs(p - 0.5) * 0.5 + 0.03).toFixed(3) });
+    }
+    return {
+      appCls: 'app' + (th === 'light' ? ' light' : ''),
+      toggle: function () { self.setState({ t: th === 'light' ? 'dark' : 'light' }); },
+      pts: pts, cells: cells
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Workspace — DecisionTreeClassifier</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app,.app *{box-sizing:border-box}
+.app{--bg:#0C0E10;--g1:rgba(64,128,150,.26);--g2:rgba(170,128,84,.16);--glass:rgba(30,33,37,.6);--solid:#121417;--solid2:#181B1F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);--ink:#F1F2EF;--ink2:#C2C6C9;--ink3:#9BA0A4;--chip:rgba(255,255,255,.06);--chip2:rgba(255,255,255,.12);--acc:#C4EC6A;--acc-ink:#141A08;--acc-t:#C4EC6A;--acc-soft:rgba(196,236,106,.16);--gl:rgba(255,255,255,.06);--ax:rgba(255,255,255,.24);--warn:#E8B04A;--sh:0 24px 60px rgba(0,0,0,.4);--c0:#3E8EDE;--c1:#E69F00;--c2:#1FA37A;--c3:#D27AAE;--c4:#E3CF3A;font-family:'Onest',system-ui,'Segoe UI',sans-serif;color:var(--ink);background:radial-gradient(1000px 700px at 12% 0%,var(--g1),transparent 65%),radial-gradient(900px 700px at 95% 100%,var(--g2),transparent 65%),var(--bg);font-size:14px;line-height:1.4}
+.app.light{--bg:#E4E7EA;--g1:rgba(120,176,200,.5);--g2:rgba(230,198,160,.5);--glass:rgba(255,255,255,.6);--solid:#FBFBFA;--solid2:#F2F3F4;--line:rgba(16,20,24,.1);--line2:rgba(16,20,24,.2);--ink:#14171A;--ink2:#3D444A;--ink3:#596067;--chip:rgba(16,20,24,.05);--chip2:rgba(16,20,24,.1);--acc-t:#466A00;--acc-soft:rgba(120,170,20,.16);--gl:rgba(16,20,24,.07);--ax:rgba(16,20,24,.3);--warn:#9A6200;--sh:0 24px 60px rgba(40,50,60,.14)}
+.glass{background:var(--glass);backdrop-filter:blur(28px) saturate(1.3);-webkit-backdrop-filter:blur(28px) saturate(1.3);border:1px solid var(--line);border-radius:16px}
+.solid{background:var(--solid);border:1px solid var(--line);border-radius:16px}
+.btn{all:unset;box-sizing:border-box;height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:var(--chip);color:var(--ink);font:500 13px/1 'Onest',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--chip2)}
+.btn.pri{background:var(--acc);color:var(--acc-ink);border-color:transparent;font-weight:600}
+.btn.gh{background:transparent;border-color:transparent;color:var(--ink2)}
+.btn.ico{width:36px;padding:0}
+.btn.sm{height:30px;padding:0 10px;border-radius:8px;font-size:12px}
+.btn[disabled]{opacity:.42;cursor:not-allowed}
+.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.seg{display:inline-flex;padding:3px;gap:2px;border-radius:11px;background:var(--chip);border:1px solid var(--line)}
+.seg button,.seg a{all:unset;box-sizing:border-box;height:30px;padding:0 12px;border-radius:8px;font:500 13px/30px 'Onest',system-ui,sans-serif;color:var(--ink2);cursor:pointer;white-space:nowrap}
+.seg.sm button{height:26px;line-height:26px;padding:0 10px;font-size:12px}
+.seg .on{background:var(--chip2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.lbl{font-size:12px;font-weight:500;color:var(--ink3)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Consolas,monospace}
+.hint{font-size:12px;line-height:1.45;color:var(--ink3)}
+.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink2);background:var(--chip);border:1px solid var(--line);white-space:nowrap}
+.inf{all:unset;width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink3);cursor:help;flex:none}
+.inf:hover{color:var(--ink);background:var(--chip)}
+.rng{-webkit-appearance:none;appearance:none;width:100%;height:20px;background:transparent;margin:0}
+.rng::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:linear-gradient(var(--acc),var(--acc)) 0 0/var(--p,50%) 100% no-repeat,var(--chip2)}
+.rng::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;margin-top:-6px;border-radius:50%;background:var(--ink);box-shadow:0 0 0 3px var(--solid2)}
+.tg{position:relative;display:inline-block;width:36px;height:20px;flex:none}
+.tg input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
+.tg span{position:absolute;inset:0;border-radius:10px;background:var(--chip2)}
+.tg span:after{content:"";position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--ink2)}
+.tg input:checked+span{background:var(--acc)}
+.tg input:checked+span:after{left:19px;background:var(--acc-ink)}
+.wb{all:unset;width:46px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink2);cursor:pointer}
+.wb:hover{background:var(--chip2)}
+.wb.x:hover{background:#C42B1C;color:#fff}
+.pt{position:absolute;width:5px;height:5px;transform:translate(-50%,-50%);border-radius:50%}
+.pt.k1{border-radius:1px}
+.k0{background:var(--c0)}.k1{background:var(--c1)}
+.ln{fill:none;vector-effect:non-scaling-stroke}
+.sa{stroke:var(--acc-t)}.si{stroke:var(--ink3)}.sk{stroke:var(--ink)}.sg{stroke:var(--gl)}.s2{stroke:var(--ink2)}.sl{stroke:var(--line2)}
+.w1{stroke-width:1}.w15{stroke-width:1.5}.w2{stroke-width:2}
+.tk{position:absolute;font:500 12px 'JetBrains Mono',monospace;color:var(--ink3)}
+.param{display:flex;flex-direction:column;gap:8px;padding:14px 0;border-top:1px solid var(--line)}
+.prow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pn{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--ink)}
+.pk{font:500 12px 'JetBrains Mono',monospace;color:var(--ink3)}
+.val{font:600 13px 'JetBrains Mono',monospace;color:var(--ink);padding:3px 8px;border-radius:6px;background:var(--chip);border:1px solid var(--line)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.dot.sq{border-radius:1.5px}
+.node{position:absolute;transform:translateX(-50%);width:15%;min-width:124px;max-width:176px;padding:8px 10px;border-radius:10px;background:var(--solid2);border:1px solid var(--line2);display:flex;flex-direction:column;gap:5px}
+.node .q{font:600 13px 'JetBrains Mono',monospace;color:var(--ink)}
+.node .m{font-size:12px;color:var(--ink3)}
+.bar{display:flex;height:6px;border-radius:3px;overflow:hidden;gap:1px}
+.yn{position:absolute;font-size:12px;font-weight:500;color:var(--ink3);transform:translate(-50%,-50%);padding:0 4px;background:var(--solid)}
+.rg{position:absolute}
+a{color:var(--acc-t)}a:hover{color:var(--ink)}
+</style>
+</helmet>
+<div class="{{appCls}}" style="width: 100%; height: 100vh; min-height: 720px; display: grid; grid-template-rows: 36px 60px minmax(0, 1fr); overflow: hidden">
+<header style="display: flex; align-items: center; justify-content: space-between; padding-left: 14px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink3)">
+<svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
+<span style="color: var(--ink2); font-weight: 600">Sightline</span><span>DecisionTreeClassifier · XOR</span>
+</div>
+<div style="display: flex">
+<button class="wb" aria-label="Minimize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg></button>
+<button class="wb" aria-label="Maximize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1"></rect></svg></button>
+<button class="wb x" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"></path></svg></button>
+</div>
+</header>
+<nav style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 16px">
+<div style="display: flex; align-items: center; gap: 10px; min-width: 0">
+<a class="btn gh ico" href="Main.dc.html" aria-label="Back to all models"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<div style="display: flex; flex-direction: column; min-width: 0"><span class="mono" style="font-size: 15px; font-weight: 600">DecisionTreeClassifier</span><span class="lbl">Trees · classification</span></div>
+</div>
+<div class="seg"><a class="on" href="WsTree.dc.html">Workspace</a><a href="DataPresets.dc.html">Data</a><a href="DataInsights.dc.html">Insights</a><a href="DecideTree.dc.html">How it decides</a></div>
+<div style="display: flex; align-items: center; gap: 8px">
+<div class="seg" aria-label="Interface language"><button class="on">EN</button><button>RU</button></div>
+<button class="btn ico" aria-label="Switch light or dark theme" onClick="{{toggle}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"></path></svg></button>
+<button class="btn ico" aria-label="Help"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M9.6 9.4a2.5 2.5 0 1 1 3.4 2.4c-.6.3-1 .8-1 1.5v.5M12 17v.01"></path></svg></button>
+</div>
+</nav>
+<main style="min-height: 0; display: grid; grid-template-columns: minmax(0, 1fr) 340px; grid-template-rows: minmax(0, 1fr) auto; gap: 12px; padding: 0 16px 16px">
+
+<section class="solid" style="grid-column: 1; grid-row: 1; display: flex; flex-direction: column; min-height: 0">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 14px 18px 8px">
+<div style="display: flex; align-items: center; gap: 10px">
+<h2 style="margin: 0; font-size: 15px; font-weight: 600">Tree structure</h2>
+<button class="inf" aria-label="How to read the tree"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button>
+<span class="tag" style="color: var(--acc-t)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 12px; height: 12px"><path d="M5 12l5 5 9-10"></path></svg>Fitted · depth 3 · 6 leaves</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap">
+<div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--ink2)"><span style="display: flex; align-items: center; gap: 6px"><span class="dot k0"></span>Class A</span><span style="display: flex; align-items: center; gap: 6px"><span class="dot sq k1"></span>Class B</span></div>
+<div class="seg sm" aria-label="View"><button class="on">Tree</button><button>Regions</button></div>
+<a class="btn sm" href="DecideTree.dc.html"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="18" r="2"></circle><circle cx="18" cy="6" r="2"></circle><path d="M8 18h6a3 3 0 0 0 0-6h-4a3 3 0 0 1 0-6h6"></path></svg>How it decides</a>
+</div>
+</div>
+<div style="position: relative; flex: 1; min-height: 0; margin: 4px 18px 18px">
+<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" style="position: absolute; inset: 0; width: 100%; height: 100%">
+<path class="ln sl w15" d="M46 20C46 24 22 24 22 28M46 20C46 24 70 24 70 28M22 45C22 49 9 49 9 53M22 45C22 49 34 49 34 53M70 45C70 49 58 49 58 53M70 45C70 49 82 49 82 53M34 70C34 74 26 74 26 78M34 70C34 74 42 74 42 78M82 70C82 74 74 74 74 78M82 70C82 74 90 74 90 78"></path>
+</svg>
+<span class="yn" style="left: 33%; top: 24%">yes</span><span class="yn" style="left: 59%; top: 24%">no</span>
+<span class="yn" style="left: 14.5%; top: 49%">yes</span><span class="yn" style="left: 28.5%; top: 49%">no</span>
+<span class="yn" style="left: 63.5%; top: 49%">yes</span><span class="yn" style="left: 76.5%; top: 49%">no</span>
+<span class="yn" style="left: 29.5%; top: 74%">yes</span><span class="yn" style="left: 38.5%; top: 74%">no</span>
+<span class="yn" style="left: 77.5%; top: 74%">yes</span><span class="yn" style="left: 86.5%; top: 74%">no</span>
+
+<div class="node" style="left: 46%; top: 3%"><span class="q">x1 ≤ 0.02</span><span class="m">400 samples · gini 0.50</span><div class="bar"><div class="k0" style="width: 49%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node" style="left: 22%; top: 28%"><span class="q">x2 ≤ −0.01</span><span class="m">196 samples · gini 0.50</span><div class="bar"><div class="k0" style="width: 47%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node" style="left: 70%; top: 28%"><span class="q">x2 ≤ 0.03</span><span class="m">204 samples · gini 0.50</span><div class="bar"><div class="k0" style="width: 51%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node" style="left: 9%; top: 53%; border-color: var(--c1)"><span class="q" style="display: flex; align-items: center; gap: 6px"><span class="dot sq k1"></span>Leaf → B</span><span class="m">95 samples · 92 B</span><div class="bar"><div class="k0" style="width: 3%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node" style="left: 34%; top: 53%"><span class="q">x2 ≤ 0.08</span><span class="m">101 samples · gini 0.21</span><div class="bar"><div class="k0" style="width: 88%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node" style="left: 58%; top: 53%; border-color: var(--c0)"><span class="q" style="display: flex; align-items: center; gap: 6px"><span class="dot k0"></span>Leaf → A</span><span class="m">102 samples · 96 A</span><div class="bar"><div class="k0" style="width: 94%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node" style="left: 82%; top: 53%"><span class="q">x1 ≤ 0.11</span><span class="m">102 samples · gini 0.16</span><div class="bar"><div class="k0" style="width: 9%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node" style="left: 26%; top: 78%; border-color: var(--c1)"><span class="q" style="display: flex; align-items: center; gap: 6px"><span class="dot sq k1"></span>Leaf → B</span><span class="m">9 samples · 7 B</span><div class="bar"><div class="k0" style="width: 22%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node" style="left: 42%; top: 78%; border-color: var(--c0)"><span class="q" style="display: flex; align-items: center; gap: 6px"><span class="dot k0"></span>Leaf → A</span><span class="m">92 samples · 87 A</span><div class="bar"><div class="k0" style="width: 95%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node" style="left: 74%; top: 78%; border-color: var(--c0)"><span class="q" style="display: flex; align-items: center; gap: 6px"><span class="dot k0"></span>Leaf → A</span><span class="m">8 samples · 5 A</span><div class="bar"><div class="k0" style="width: 62%"></div><div class="k1" style="flex: 1"></div></div></div>
+<div class="node" style="left: 90%; top: 78%; border-color: var(--c1)"><span class="q" style="display: flex; align-items: center; gap: 6px"><span class="dot sq k1"></span>Leaf → B</span><span class="m">94 samples · 90 B</span><div class="bar"><div class="k0" style="width: 4%"></div><div class="k1" style="flex: 1"></div></div></div>
+
+<div style="position: absolute; right: 0; top: 0; width: 200px; display: flex; flex-direction: column; gap: 6px; padding: 10px; border-radius: 12px; background: var(--solid2); border: 1px solid var(--line)">
+<div class="prow"><span class="lbl">Regions it carved</span><button class="inf" aria-label="About regions"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></div>
+<div style="position: relative; height: 130px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line)">
+<div class="rg k1" style="left: 0; top: 50.5%; width: 51%; height: 49.5%; opacity: .2"></div>
+<div class="rg k0" style="left: 0; top: 0; width: 51%; height: 46%; opacity: .2"></div>
+<div class="rg k1" style="left: 0; top: 46%; width: 51%; height: 4.5%; opacity: .2"></div>
+<div class="rg k0" style="left: 51%; top: 48.5%; width: 49%; height: 51.5%; opacity: .2"></div>
+<div class="rg k0" style="left: 51%; top: 0; width: 4.5%; height: 48.5%; opacity: .2"></div>
+<div class="rg k1" style="left: 55.5%; top: 0; width: 44.5%; height: 48.5%; opacity: .2"></div>
+<sc-for list="{{xor}}" as="p" hint-placeholder-count="40"><div class="{{p.cls}}" style="left: {{p.x}}%; top: {{p.y}}%"></div></sc-for>
+</div>
+<span class="hint">Every split is a straight cut parallel to an axis.</span>
+</div>
+</div>
+</section>
+
+<aside class="glass" style="grid-column: 2; grid-row: 1 / span 2; display: flex; flex-direction: column; min-height: 0; overflow: auto; padding: 16px 18px">
+<div style="display: flex; flex-direction: column; gap: 10px; padding-bottom: 16px">
+<div class="prow"><span class="lbl">Dataset</span><a class="btn sm gh" href="DataPresets.dc.html" style="color: var(--acc-t)">Change</a></div>
+<div style="display: flex; align-items: center; gap: 12px">
+<div style="width: 44px; height: 36px; border-radius: 8px; background: var(--solid); border: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; padding: 6px; gap: 2px"><div class="k1" style="opacity: .7; border-radius: 2px"></div><div class="k0" style="opacity: .7; border-radius: 2px"></div><div class="k0" style="opacity: .7; border-radius: 2px"></div><div class="k1" style="opacity: .7; border-radius: 2px"></div></div>
+<div style="display: flex; flex-direction: column"><span style="font-size: 14px; font-weight: 600">XOR</span><span class="hint">400 rows · 2 features · 2 classes · 25% held out for test</span></div>
+</div>
+</div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; padding: 14px 0 4px; border-top: 1px solid var(--line)"><h2 style="margin: 0; font-size: 15px; font-weight: 600">Main parameters</h2><span class="hint">Changes refit instantly</span></div>
+<div class="param" style="border-top: 0">
+<div class="prow"><label class="pn" for="t-md">Max depth <span class="pk">max_depth</span><button class="inf" aria-label="About max_depth"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></label><span class="val">3</span></div>
+<input id="t-md" class="rng" type="range" min="1" max="12" value="3" style="--p: 18%">
+<label class="prow hint" for="t-nl" style="justify-content: flex-start; gap: 8px"><span class="tg"><input id="t-nl" type="checkbox"><span></span></span>No limit (<span class="mono">None</span>, the default)</label>
+<div class="hint">How many questions in a row it may ask. Deeper → finer borders, but it starts memorising noise.</div>
+</div>
+<div class="param">
+<div class="prow"><span class="pn">Split quality <span class="pk">criterion</span><button class="inf" aria-label="About criterion"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></span></div>
+<div class="seg sm" style="align-self: flex-start"><button class="on mono">gini</button><button class="mono">entropy</button><button class="mono">log_loss</button></div>
+<div class="hint">How a split is scored. The three usually give very similar trees.</div>
+</div>
+<div class="param">
+<div class="prow"><label class="pn" for="t-ms">Min. to split <span class="pk">min_samples_split</span></label><span class="val">2</span></div>
+<input id="t-ms" class="rng" type="range" min="2" max="50" value="2" style="--p: 0%">
+<div class="hint">A node needs at least this many points before it may be split.</div>
+</div>
+<div class="param">
+<div class="prow"><label class="pn" for="t-ml">Min. per leaf <span class="pk">min_samples_leaf</span></label><span class="val">1</span></div>
+<input id="t-ml" class="rng" type="range" min="1" max="50" value="1" style="--p: 0%">
+<div class="hint">Every leaf must keep at least this many points. Raise it to smooth the borders.</div>
+</div>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding-top: 14px; border-top: 1px solid var(--line)">
+<button class="btn" style="justify-content: space-between; width: 100%"><span style="display: flex; align-items: center; gap: 8px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"></path><circle cx="15" cy="7" r="2"></circle><circle cx="9" cy="17" r="2"></circle></svg>Advanced</span><span class="hint">9 more</span></button>
+<button class="btn gh sm" style="align-self: flex-start">Reset to defaults</button>
+</div>
+</aside>
+
+<section class="glass" style="grid-column: 1; grid-row: 2; display: grid; grid-template-columns: 270px minmax(0, 1fr) 240px; gap: 12px; padding: 12px; height: 200px">
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 4px">
+<button class="btn pri" style="width: 100%; height: 40px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="fill: currentColor"><path d="M8 5.5l10 6.5-10 6.5z"></path></svg>Train again</button>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+<button class="btn sm" disabled title="Nothing to pause: a tree is built in one pass"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"></path></svg>Pause</button>
+<button class="btn sm" title="Replay the growth one level at a time"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l8 6-8 6zM18 6v12"></path></svg>+1 level</button>
+<button class="btn sm"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3M4.5 4.5v4h4"></path></svg>Reset</button>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; margin-top: 2px">
+<div class="prow"><span class="lbl">Growth replay</span><span class="mono" style="font-size: 12px; color: var(--ink2)">depth 3 / 3</span></div>
+<div style="height: 4px; border-radius: 2px; background: var(--chip2)"><div style="width: 100%; height: 100%; border-radius: 2px; background: var(--acc)"></div></div>
+</div>
+<div class="prow"><span class="lbl">Replay speed</span><div class="seg sm"><button>½×</button><button class="on">1×</button><button>2×</button><button>4×</button></div></div>
+</div>
+<div class="solid" style="display: flex; gap: 18px; padding: 12px 16px; min-width: 0">
+<div style="display: flex; flex-direction: column; gap: 6px; width: 46%; min-width: 0">
+<div style="display: flex; align-items: center; gap: 8px"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><circle cx="12" cy="12" r="9"></circle><path d="M8 12l3 3 5-6"></path></svg><span style="font-size: 13px; font-weight: 600">Fitted in one step</span><span class="hint">9 ms</span></div>
+<p style="margin: 0; font-size: 13px; color: var(--ink2); line-height: 1.5">A tree has no training curve: it is built in a single pass, so there is no loss falling over time. The chart shows how accuracy changed as the tree grew deeper.</p>
+<span class="hint">Press <b style="color: var(--ink2)">+1 level</b> to replay the growth.</span>
+</div>
+<div style="flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<div class="prow"><span class="lbl">Accuracy by depth</span><span class="hint" style="display: flex; gap: 10px"><span style="display: flex; align-items: center; gap: 5px"><span class="dot" style="background: var(--ink3); border-radius: 2px"></span>train</span><span style="display: flex; align-items: center; gap: 5px"><span class="dot" style="background: var(--acc); border-radius: 2px"></span>test</span></span></div>
+<div style="flex: 1; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: end; border-bottom: 1px solid var(--line2); padding: 0 8px">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end"><span class="mono hint">0.53</span><div style="display: flex; gap: 3px; align-items: flex-end; height: 70%; width: 100%; justify-content: center"><div style="width: 30%; height: 55%; background: var(--ink3); border-radius: 3px 3px 0 0; opacity: .6"></div><div style="width: 30%; height: 53%; background: var(--acc); border-radius: 3px 3px 0 0"></div></div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end"><span class="mono hint">0.90</span><div style="display: flex; gap: 3px; align-items: flex-end; height: 70%; width: 100%; justify-content: center"><div style="width: 30%; height: 91%; background: var(--ink3); border-radius: 3px 3px 0 0; opacity: .6"></div><div style="width: 30%; height: 90%; background: var(--acc); border-radius: 3px 3px 0 0"></div></div></div>
+<div style="display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end"><span class="mono hint" style="color: var(--ink)">0.92</span><div style="display: flex; gap: 3px; align-items: flex-end; height: 70%; width: 100%; justify-content: center"><div style="width: 30%; height: 94%; background: var(--ink3); border-radius: 3px 3px 0 0; opacity: .6"></div><div style="width: 30%; height: 92%; background: var(--acc); border-radius: 3px 3px 0 0"></div></div></div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding: 0 8px; text-align: center" class="hint"><span>depth 1</span><span>depth 2</span><span>depth 3</span></div>
+</div>
+</div>
+<div class="solid" style="display: flex; flex-direction: column; gap: 4px; padding: 12px 16px">
+<div style="display: flex; align-items: center; gap: 6px"><span class="lbl" style="color: var(--ink2)">Accuracy</span><button class="inf" aria-label="What is accuracy?"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></div>
+<div class="mono" style="font-size: 52px; line-height: 1; font-weight: 600; letter-spacing: -0.02em">0.92</div>
+<div class="hint" style="font-size: 13px">on 100 test points</div>
+<div style="margin-top: auto; display: flex; gap: 14px; font-size: 12px; color: var(--ink3)"><span>train <span class="mono" style="color: var(--ink2)">0.94</span></span><span>leaves <span class="mono" style="color: var(--ink2)">6</span></span></div>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":1440,"height":900}}'>
+function rnd(s) { return function () { s |= 0; s = s + 0x6D2B79F5 | 0; var t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+class Component extends DCLogic {
+  renderVals() {
+    var self = this;
+    var th = (this.state && this.state.t) || this.props.theme || 'dark';
+    var r = rnd(11), xor = [];
+    for (var i = 0; i < 140; i++) {
+      var x = r() * 2 - 1, y = r() * 2 - 1, c = x * y > 0 ? 1 : 0;
+      if (r() < 0.05) c = 1 - c;
+      xor.push({ cls: 'pt k' + c, x: ((x + 1) * 50).toFixed(1), y: ((1 - y) * 50).toFixed(1) });
+    }
+    return {
+      appCls: 'app' + (th === 'light' ? ' light' : ''),
+      toggle: function () { self.setState({ t: th === 'light' ? 'dark' : 'light' }); },
+      xor: xor
+    };
+  }
+}
+</script>
+</body>
+</html>

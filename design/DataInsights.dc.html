@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dataset insights</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.app,.app *{box-sizing:border-box}
+.app{--bg:#0C0E10;--g1:rgba(64,128,150,.26);--g2:rgba(170,128,84,.16);--glass:rgba(30,33,37,.6);--solid:#121417;--solid2:#181B1F;--line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.16);--ink:#F1F2EF;--ink2:#C2C6C9;--ink3:#9BA0A4;--chip:rgba(255,255,255,.06);--chip2:rgba(255,255,255,.12);--acc:#C4EC6A;--acc-ink:#141A08;--acc-t:#C4EC6A;--acc-soft:rgba(196,236,106,.14);--gl:rgba(255,255,255,.06);--warn:#E8B04A;--c0:#3E8EDE;--c1:#E69F00;font-family:'Onest',system-ui,'Segoe UI',sans-serif;color:var(--ink);background:radial-gradient(1000px 700px at 12% 0%,var(--g1),transparent 65%),radial-gradient(900px 700px at 95% 100%,var(--g2),transparent 65%),var(--bg);font-size:14px;line-height:1.4}
+.app.light{--bg:#E4E7EA;--g1:rgba(120,176,200,.5);--g2:rgba(230,198,160,.5);--glass:rgba(255,255,255,.6);--solid:#FBFBFA;--solid2:#F2F3F4;--line:rgba(16,20,24,.1);--line2:rgba(16,20,24,.2);--ink:#14171A;--ink2:#3D444A;--ink3:#596067;--chip:rgba(16,20,24,.05);--chip2:rgba(16,20,24,.1);--acc-t:#466A00;--acc-soft:rgba(120,170,20,.14);--gl:rgba(16,20,24,.07);--warn:#9A6200}
+.glass{background:var(--glass);backdrop-filter:blur(28px) saturate(1.3);-webkit-backdrop-filter:blur(28px) saturate(1.3);border:1px solid var(--line);border-radius:16px}
+.solid{background:var(--solid);border:1px solid var(--line);border-radius:16px}
+.btn{all:unset;box-sizing:border-box;height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:var(--chip);color:var(--ink);font:500 13px/1 'Onest',system-ui,sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;cursor:pointer;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--chip2)}
+.btn.gh{background:transparent;border-color:transparent;color:var(--ink2)}
+.btn.ico{width:36px;padding:0}
+.btn.sm{height:28px;padding:0 10px;border-radius:8px;font-size:12px}
+.i{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.seg{display:inline-flex;padding:3px;gap:2px;border-radius:11px;background:var(--chip);border:1px solid var(--line)}
+.seg button,.seg a{all:unset;box-sizing:border-box;height:30px;padding:0 12px;border-radius:8px;font:500 13px/30px 'Onest',system-ui,sans-serif;color:var(--ink2);cursor:pointer;white-space:nowrap}
+.seg .on{background:var(--chip2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.lbl{font-size:12px;font-weight:500;color:var(--ink3)}
+.mono{font-family:'JetBrains Mono',ui-monospace,Consolas,monospace}
+.hint{font-size:12px;line-height:1.45;color:var(--ink3)}
+.tag{display:inline-flex;align-items:center;gap:6px;height:24px;padding:0 8px;border-radius:6px;font-size:12px;font-weight:500;color:var(--ink2);background:var(--chip);border:1px solid var(--line);white-space:nowrap}
+.inf{all:unset;width:20px;height:20px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink3);cursor:help;flex:none}
+.wb{all:unset;width:46px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--ink2);cursor:pointer}
+.wb:hover{background:var(--chip2)}
+.wb.x:hover{background:#C42B1C;color:#fff}
+.tg{position:relative;display:inline-block;width:36px;height:20px;flex:none}
+.tg input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer;z-index:1}
+.tg span{position:absolute;inset:0;border-radius:10px;background:var(--chip2)}
+.tg span:after{content:"";position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--ink2)}
+.tg input:checked+span{background:var(--acc)}
+.tg input:checked+span:after{left:19px;background:var(--acc-ink)}
+.card{display:flex;flex-direction:column;gap:10px;padding:14px 16px}
+.ch{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.ct{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600}
+.st{display:grid;grid-template-columns:52px repeat(4,minmax(0,1fr));font:500 12.5px 'JetBrains Mono',monospace}
+.st div{padding:6px 4px;border-bottom:1px solid var(--line);text-align:right}
+.st div:nth-child(5n+1){text-align:left;font-weight:600}
+.st.hd div{color:var(--ink3);font-weight:500}
+.pt{position:absolute;width:5px;height:5px;transform:translate(-50%,-50%);border-radius:50%;opacity:.8}
+.pt.k1{border-radius:1px}
+.pt.ol{width:9px;height:9px;opacity:1;background:transparent;box-shadow:0 0 0 2px var(--warn)}
+.k0{background:var(--c0)}.k1{background:var(--c1)}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.dot.k1{border-radius:1.5px}
+.cell{position:relative;border-radius:8px;background:var(--solid2);border:1px solid var(--line);min-height:0}
+.hist{position:absolute;inset:8px 8px 0;display:flex;gap:1px}
+.hist div{flex:1;display:flex;flex-direction:column-reverse}
+.hist i{display:block;flex:none}
+.ax{position:absolute;font:500 12px 'JetBrains Mono',monospace;color:var(--ink2)}
+.box{position:relative;height:30px}
+.olr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 10px;align-items:center;padding:8px 0;border-top:1px solid var(--line)}
+a{color:var(--acc-t)}a:hover{color:var(--ink)}
+</style>
+</helmet>
+<div class="{{appCls}}" style="width: 100%; height: 100vh; min-height: 720px; display: grid; grid-template-rows: 36px 60px auto minmax(0, 1fr); overflow: hidden">
+<header style="display: flex; align-items: center; justify-content: space-between; padding-left: 14px; border-bottom: 1px solid var(--line)">
+<div style="display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--ink3)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: var(--acc-t)"><circle cx="12" cy="12" r="8.5"></circle><path d="M3.5 12h17"></path><circle cx="12" cy="12" r="2.5"></circle></svg><span style="color: var(--ink2); font-weight: 600">Sightline</span><span>LogisticRegression · Two moons</span></div>
+<div style="display: flex">
+<button class="wb" aria-label="Minimize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg></button>
+<button class="wb" aria-label="Maximize"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="6.5" y="6.5" width="11" height="11" rx="1"></rect></svg></button>
+<button class="wb x" aria-label="Close"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7L7 17"></path></svg></button>
+</div>
+</header>
+<nav style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 0 16px">
+<div style="display: flex; align-items: center; gap: 10px; min-width: 0">
+<a class="btn gh ico" href="Main.dc.html" aria-label="Back to all models"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg></a>
+<div style="display: flex; flex-direction: column; min-width: 0"><span class="mono" style="font-size: 15px; font-weight: 600">LogisticRegression</span><span class="lbl">Linear · classification</span></div>
+</div>
+<div class="seg"><a href="WsLogistic.dc.html">Workspace</a><a href="DataPresets.dc.html">Data</a><a class="on" href="DataInsights.dc.html">Insights</a><a href="DecideLogistic.dc.html">How it decides</a></div>
+<div style="display: flex; align-items: center; gap: 8px">
+<div class="seg" aria-label="Interface language"><button class="on">EN</button><button>RU</button></div>
+<button class="btn ico" aria-label="Switch light or dark theme" onClick="{{toggle}}"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 14.5A7.5 7.5 0 0 1 9.5 5a7.5 7.5 0 1 0 9.5 9.5z"></path></svg></button>
+</div>
+</nav>
+<div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 0 20px 14px">
+<h1 style="margin: 0; font-size: 22px; font-weight: 600">Dataset insights</h1>
+<span class="tag">Two moons</span><span class="tag mono">303 rows</span><span class="tag mono">2 features</span><span class="tag">target: <span class="mono">class</span> · 2 classes</span>
+<span class="tag" style="color: var(--acc-t)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="M5 12l5 5 9-10"></path></svg>No missing values</span>
+<span class="tag" style="color: var(--warn)"><svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 13px; height: 13px"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.01"></path></svg>3 possible outliers</span>
+</div>
+<main style="min-height: 0; display: grid; grid-template-columns: 340px minmax(0, 1fr) 340px; gap: 12px; padding: 0 16px 16px">
+<div style="display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow: auto">
+<section class="solid card">
+<div class="ch"><span class="ct">Basic stats<button class="inf" aria-label="About the basic stats"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></span></div>
+<div>
+<div class="st hd"><div>feature</div><div>mean</div><div>std</div><div>min</div><div>max</div></div>
+<sc-for list="{{stats}}" as="s" hint-placeholder-count="2"><div class="st"><div>{{s.f}}</div><div>{{s.mean}}</div><div>{{s.std}}</div><div>{{s.min}}</div><div>{{s.max}}</div></div></sc-for>
+</div>
+<span class="hint">mean = typical value · std = how far values usually sit from the mean</span>
+</section>
+<section class="solid card">
+<div class="ch"><span class="ct">Class balance<button class="inf" aria-label="About class balance"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></span><span class="tag" style="color: var(--acc-t)">balanced</span></div>
+<div style="display: grid; grid-template-columns: 70px 1fr 40px; gap: 10px; align-items: center"><span style="display: flex; align-items: center; gap: 6px; font-size: 13px"><span class="dot k0"></span>A</span><div style="height: 12px; border-radius: 4px; background: var(--chip)"><div class="k0" style="width: 50%; height: 100%; border-radius: 4px"></div></div><span class="mono" style="text-align: right">152</span></div>
+<div style="display: grid; grid-template-columns: 70px 1fr 40px; gap: 10px; align-items: center"><span style="display: flex; align-items: center; gap: 6px; font-size: 13px"><span class="dot k1"></span>B</span><div style="height: 12px; border-radius: 4px; background: var(--chip)"><div class="k1" style="width: 49.5%; height: 100%; border-radius: 4px"></div></div><span class="mono" style="text-align: right">151</span></div>
+<span class="hint">If one class were much smaller, accuracy could look good while the model ignores it. Then try class_weight='balanced'.</span>
+</section>
+<section class="solid card">
+<div class="ch"><span class="ct">Outliers<button class="inf" aria-label="How outliers are found"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></span><label style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ink2)" for="hl">Show on plots<span class="tg"><input id="hl" type="checkbox" checked><span></span></span></label></div>
+<span class="hint">Points more than 1.5 × IQR outside the middle half of a feature.</span>
+<div class="olr"><span class="mono" style="font-size: 12.5px">#301 · x1 2.90 · x2 1.30</span><button class="btn sm gh">Remove</button><span class="hint">x1 far above the rest</span></div>
+<div class="olr"><span class="mono" style="font-size: 12.5px">#302 · x1 −1.80 · x2 −0.90</span><button class="btn sm gh">Remove</button><span class="hint">both features unusually low</span></div>
+<div class="olr"><span class="mono" style="font-size: 12.5px">#303 · x1 0.40 · x2 1.90</span><button class="btn sm gh">Remove</button><span class="hint">x2 far above the rest</span></div>
+</section>
+</div>
+
+<section class="solid card" style="min-height: 0">
+<div class="ch"><span class="ct">Pair plot<button class="inf" aria-label="How to read a pair plot"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></span><div style="display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--ink2)"><span style="display: flex; align-items: center; gap: 6px"><span class="dot k0"></span>A</span><span style="display: flex; align-items: center; gap: 6px"><span class="dot k1"></span>B</span><span style="display: flex; align-items: center; gap: 6px"><span style="width: 9px; height: 9px; border-radius: 50%; box-shadow: 0 0 0 2px var(--warn)"></span>outlier</span></div></div>
+<span class="hint">Diagonal: how each feature is spread (histogram, stacked by class). Off-diagonal: every pair of features plotted against each other.</span>
+<div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 26px repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)) 22px; gap: 8px">
+<div style="position: relative"><span class="ax" style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-90deg)">x1</span></div>
+<div class="cell"><div class="hist"><sc-for list="{{h1}}" as="b" hint-placeholder-count="16"><div><i class="k0" style="height: {{b.a}}%; opacity: .85"></i><i class="k1" style="height: {{b.b}}%; opacity: .85"></i></div></sc-for></div></div>
+<div class="cell" style="overflow: hidden"><sc-for list="{{sc21}}" as="p" hint-placeholder-count="50"><div class="{{p.c}}" style="left: {{p.x}}%; top: {{p.y}}%"></div></sc-for></div>
+<div style="position: relative"><span class="ax" style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-90deg)">x2</span></div>
+<div class="cell" style="overflow: hidden"><sc-for list="{{sc12}}" as="p" hint-placeholder-count="50"><div class="{{p.c}}" style="left: {{p.x}}%; top: {{p.y}}%"></div></sc-for></div>
+<div class="cell"><div class="hist"><sc-for list="{{h2}}" as="b" hint-placeholder-count="16"><div><i class="k0" style="height: {{b.a}}%; opacity: .85"></i><i class="k1" style="height: {{b.b}}%; opacity: .85"></i></div></sc-for></div></div>
+<div></div>
+<div style="position: relative"><span class="ax" style="left: 50%; transform: translateX(-50%)">x1</span></div>
+<div style="position: relative"><span class="ax" style="left: 50%; transform: translateX(-50%)">x2</span></div>
+</div>
+</section>
+
+<div style="display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow: auto">
+<section class="solid card">
+<div class="ch"><span class="ct">How spread out<button class="inf" aria-label="How to read a box plot"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.01"></path></svg></button></span><span class="hint">box = middle half</span></div>
+<sc-for list="{{boxes}}" as="b" hint-placeholder-count="2">
+<div style="display: flex; flex-direction: column; gap: 6px; padding: 6px 0 10px; border-bottom: 1px solid var(--line)">
+<div class="ch"><span class="mono" style="font-weight: 600">{{b.f}}</span><span class="mono hint">IQR {{b.iqr}} · range {{b.range}}</span></div>
+<div class="box">
+<div style="position: absolute; left: {{b.lo}}%; width: {{b.wW}}%; top: 14px; height: 2px; background: var(--ink3)"></div>
+<div style="position: absolute; left: {{b.q1}}%; width: {{b.bw}}%; top: 4px; height: 22px; border-radius: 4px; background: var(--acc-soft); border: 1.5px solid var(--acc-t)"></div>
+<div style="position: absolute; left: {{b.med}}%; top: 4px; width: 2px; height: 22px; background: var(--ink)"></div>
+<div style="position: absolute; left: {{b.lo}}%; top: 8px; width: 2px; height: 14px; background: var(--ink3)"></div>
+<div style="position: absolute; left: {{b.hi}}%; top: 8px; width: 2px; height: 14px; background: var(--ink3)"></div>
+<div style="position: absolute; left: {{b.ol}}%; top: 15px; width: 9px; height: 9px; transform: translate(-50%, -50%); border-radius: 50%; box-shadow: 0 0 0 2px var(--warn)"></div>
+</div>
+<div class="ch mono hint"><span>{{b.min}}</span><span>median {{b.medTxt}}</span><span>{{b.max}}</span></div>
+</div>
+</sc-for>
+<span class="hint">Same scale for both rows: −2 to 3.</span>
+</section>
+<section class="glass card">
+<span class="ct">What this means for training</span>
+<p style="margin: 0; font-size: 13px; line-height: 1.5; color: var(--ink2)"><span class="mono">x1</span> spreads about <b style="color: var(--ink)">{{ratio}}×</b> wider than <span class="mono">x2</span>. Models that measure distance (KNN, SVC) and neural networks can over-weight the wider feature.</p>
+<label style="display: flex; align-items: center; justify-content: space-between; gap: 10px; font-size: 13px" for="sc">Scale features before training<span class="tg"><input id="sc" type="checkbox"><span></span></span></label>
+<span class="hint">Uses StandardScaler: every feature gets mean 0 and std 1. Trees don’t need it.</span>
+<div class="ch" style="padding-top: 8px; border-top: 1px solid var(--line)"><span style="font-size: 13px; color: var(--ink2)">Correlation x1 ↔ x2</span><span class="mono" style="font-weight: 600">{{corr}}</span></div>
+<span class="hint">−1 … 1. Near 0: knowing one feature tells you little about the other.</span>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":1440,"height":900}}'>
+function rnd(s) { return function () { s |= 0; s = s + 0x6D2B79F5 | 0; var t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gau(r) { var u = r() || 1e-9, v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(6.2832 * v); }
+function f2(v) { return v.toFixed(2).replace('-', '−'); }
+class Component extends DCLogic {
+  renderVals() {
+    var self = this;
+    var th = (this.state && this.state.t) || this.props.theme || 'dark';
+    var r = rnd(7), D = [];
+    for (var i = 0; i < 300; i++) {
+      var c = i % 2, t = Math.PI * r();
+      D.push({ a: (c ? 1 - Math.cos(t) : Math.cos(t)) + gau(r) * 0.14, b: (c ? 0.5 - Math.sin(t) : Math.sin(t)) + gau(r) * 0.14, c: c, o: false });
+    }
+    D.push({ a: 2.9, b: 1.3, c: 1, o: true }, { a: -1.8, b: -0.9, c: 0, o: true }, { a: 0.4, b: 1.9, c: 0, o: true });
+    var A0 = -2, A1 = 3, B0 = -1.2, B1 = 2.2;
+    function st(k) { var v = D.map(function (d) { return d[k]; }).sort(function (x, y) { return x - y; }); var n = v.length, m = v.reduce(function (s, x) { return s + x; }, 0) / n; var sd = Math.sqrt(v.reduce(function (s, x) { return s + (x - m) * (x - m); }, 0) / n); return { v: v, m: m, sd: sd, min: v[0], max: v[n - 1], q1: v[Math.floor(n * 0.25)], med: v[Math.floor(n * 0.5)], q3: v[Math.floor(n * 0.75)] }; }
+    var sa = st('a'), sb = st('b');
+    var cov = D.reduce(function (s, d) { return s + (d.a - sa.m) * (d.b - sb.m); }, 0) / D.length;
+    function hist(k, lo, hi) { var bins = []; for (var j = 0; j < 16; j++) bins.push({ a: 0, b: 0 }); D.forEach(function (d) { var j = Math.min(15, Math.max(0, Math.floor((d[k] - lo) / (hi - lo) * 16))); if (d.c) bins[j].b++; else bins[j].a++; }); var mx = Math.max.apply(null, bins.map(function (x) { return x.a + x.b; })); return bins.map(function (x) { return { a: (x.a / mx * 92).toFixed(1), b: (x.b / mx * 92).toFixed(1) }; }); }
+    function sc(kx, ky, x0, x1, y0, y1) { return D.map(function (d) { return { c: d.o ? 'pt ol' : 'pt k' + d.c, x: ((d[kx] - x0) / (x1 - x0) * 92 + 4).toFixed(1), y: ((y1 - d[ky]) / (y1 - y0) * 92 + 4).toFixed(1) }; }); }
+    function pc(v) { return ((v - (-2)) / 5 * 100).toFixed(1); }
+    function box(f, s, ol) { var iqr = s.q3 - s.q1, lo = Math.max(s.min, s.q1 - 1.5 * iqr), hi = Math.min(s.max, s.q3 + 1.5 * iqr); return { f: f, iqr: f2(iqr), range: f2(s.max - s.min), lo: pc(lo), hi: pc(hi), wW: (pc(hi) - pc(lo)).toFixed(1), q1: pc(s.q1), bw: (pc(s.q3) - pc(s.q1)).toFixed(1), med: pc(s.med), medTxt: f2(s.med), min: f2(s.min), max: f2(s.max), ol: pc(ol) }; }
+    return {
+      appCls: 'app' + (th === 'light' ? ' light' : ''),
+      toggle: function () { self.setState({ t: th === 'light' ? 'dark' : 'light' }); },
+      stats: [{ f: 'x1', mean: f2(sa.m), std: f2(sa.sd), min: f2(sa.min), max: f2(sa.max) }, { f: 'x2', mean: f2(sb.m), std: f2(sb.sd), min: f2(sb.min), max: f2(sb.max) }],
+      h1: hist('a', A0, A1), h2: hist('b', B0, B1),
+      sc21: sc('b', 'a', B0, B1, A0, A1), sc12: sc('a', 'b', A0, A1, B0, B1),
+      boxes: [box('x1', sa, 2.9), box('x2', sb, 1.9)],
+      ratio: (sa.sd / sb.sd).toFixed(1), corr: f2(cov / (sa.sd * sb.sd))
+    };
+  }
+}
+</script>
+</body>
+</html>
